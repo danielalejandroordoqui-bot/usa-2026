@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🇺🇸 Road Trip USA — Mapa Interactivo</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --flight: #4f8ef7;
+      --drive: #f97316;
+      --stay: #22c55e;
+      --alert-red: #ef4444;
+      --alert-yellow: #eab308;
+      --alert-green: #22c55e;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card2: #263248;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+
+    /* LAYOUT */
+    .layout { display: flex; height: 100vh; }
+    .sidebar { width: 400px; min-width: 360px; height: 100vh; overflow-y: auto; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .map-area { flex: 1; position: relative; }
+    #map { width: 100%; height: 100%; }
+
+    /* SCROLLBAR */
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: var(--bg); }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* HEADER */
+    .header { padding: 20px 20px 16px; background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); border-bottom: 1px solid var(--border); }
+    .header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
+    .header h1 span { color: #60a5fa; }
+    .header p { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .legend { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--muted); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* TABS */
+    .tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .tab { flex: 1; padding: 11px 8px; text-align: center; font-size: 0.72rem; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; letter-spacing: 0.3px; text-transform: uppercase; }
+    .tab:hover { color: var(--text); background: var(--card2); }
+    .tab.active { color: #60a5fa; border-bottom: 2px solid #60a5fa; }
+
+    /* CONTENT PANELS */
+    .panel { display: none; flex-direction: column; gap: 0; }
+    .panel.active { display: flex; }
+
+    /* SEGMENT CARDS */
+    .segment { padding: 14px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+    .segment:hover { background: var(--card2); }
+    .segment.highlighted { background: var(--card2); border-left: 3px solid #60a5fa; }
+    .seg-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .seg-icon { font-size: 1.1rem; }
+    .seg-title { font-weight: 600; font-size: 0.85rem; }
+    .seg-subtitle { font-size: 0.7rem; color: var(--muted); margin-left: auto; }
+    .seg-tag { font-size: 0.62rem; padding: 2px 7px; border-radius: 20px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+    .tag-flight { background: rgba(79,142,247,0.15); color: var(--flight); }
+    .tag-drive { background: rgba(249,115,22,0.15); color: var(--drive); }
+    .tag-stay { background: rgba(34,197,94,0.15); color: var(--stay); }
+
+    .time-row { display: flex; gap: 10px; margin: 6px 0; }
+    .time-box { flex: 1; background: var(--card); border-radius: 6px; padding: 7px 10px; }
+    .time-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .time-val { font-size: 0.9rem; font-weight: 700; color: #60a5fa; }
+    .time-val.orange { color: var(--drive); }
+    .time-val.green { color: var(--stay); }
+
+    /* ALERTS */
+    .alert { display: flex; gap: 8px; align-items: flex-start; padding: 7px 10px; border-radius: 6px; margin-top: 5px; font-size: 0.72rem; line-height: 1.4; }
+    .alert.red { background: rgba(239,68,68,0.1); border-left: 3px solid var(--alert-red); color: #fca5a5; }
+    .alert.yellow { background: rgba(234,179,8,0.1); border-left: 3px solid var(--alert-yellow); color: #fde68a; }
+    .alert.green { background: rgba(34,197,94,0.1); border-left: 3px solid var(--alert-green); color: #bbf7d0; }
+    .alert-icon { font-size: 0.85rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* RESUMEN TAB */
+    .summary-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { background: var(--card); border-radius: 8px; padding: 14px; text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; }
+    .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+    .rules-section { padding: 0 16px 16px; }
+    .rules-title { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .rule-card { background: var(--card); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+    .rule-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .rule-text { font-size: 0.78rem; line-height: 1.5; }
+    .rule-text strong { color: #60a5fa; display: block; margin-bottom: 2px; }
+    .zone-table { padding: 0 16px 16px; }
+    .zone-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border-radius: 8px; margin-bottom: 6px; }
+    .zone-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .zone-name { font-size: 0.78rem; font-weight: 600; flex: 1; }
+    .zone-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; font-weight: 700; }
+    .badge-danger { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .badge-ok { background: rgba(34,197,94,0.2); color: #bbf7d0; }
+
+    /* ITINERARY */
+    .itinerary { padding: 12px 16px; }
+    .day-block { margin-bottom: 16px; }
+    .day-header { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .day-event { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(51,65,85,0.4); }
+    .day-time { font-size: 0.7rem; color: #60a5fa; font-weight: 700; width: 50px; flex-shrink: 0; padding-top: 1px; }
+    .day-desc { font-size: 0.78rem; line-height: 1.4; }
+    .day-desc .sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+    /* MAP OVERLAY INFO */
+    .map-info { position: absolute; top: 16px; right: 16px; z-index: 1000; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; max-width: 220px; backdrop-filter: blur(8px); }
+    .map-info h3 { font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: #60a5fa; }
+    .map-legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.7rem; }
+    .ml-line { width: 24px; height: 3px; border-radius: 2px; }
+    .ml-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; }
+
+    /* POPUP CUSTOM */
+    .leaflet-popup-content-wrapper { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 8px; }
+    .leaflet-popup-tip { background: #1e293b; }
+    .popup-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+    .popup-sub { font-size: 0.72rem; color: #94a3b8; }
+    .popup-time { margin-top: 6px; font-size: 0.75rem; color: #60a5fa; font-weight: 600; }
+    .popup-alert { margin-top: 5px; font-size: 0.7rem; color: #fca5a5; }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; height: 50vh; min-width: unset; border-right: none; border-bottom: 1px solid var(--border); overflow-y: auto; }
+      .map-area { height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="header">
+      <h1>🇺🇸 Road Trip <span>USA 2025</span></h1>
+      <p>Costa · Norte · Yellowstone · Tetons</p>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--flight)"></div> Vuelo</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--drive)"></div> Auto</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--stay)"></div> Hotel</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--alert-red)"></div> Alerta</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('ruta')">🛣️ Ruta</div>
+      <div class="tab" onclick="switchTab('tiempos')">⏱️ Tiempos</div>
+      <div class="tab" onclick="switchTab('resumen')">📊 Resumen</div>
+    </div>
+
+    <!-- PANEL RUTA -->
+    <div class="panel active" id="panel-ruta">
+
+      <div class="segment" onclick="focusSegment(0)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Llegada a Los Ángeles</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Migraciones + equipaje</div><div class="time-val">60–120 min</div></div>
+          <div class="time-box"><div class="time-label">Uber a hotel</div><div class="time-val orange">35–60 min</div></div>
+        </div>
+        <div class="alert red"><span class="alert-icon">⚠️</span> LAX es caótico. Punto de recogida específico: LAX-it (no en la puerta)</div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total real puerta a puerta: <strong>1h30 – 2h30</strong></div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(1)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Americas Best Value Inn Hollywood</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Base de llegada — Hollywood, LA</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(2)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">LA → San Francisco</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">~6h</div></div>
+          <div class="time-box"><div class="time-label">Realista (con paradas)</div><div class="time-val orange">7–8h</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Ruta por Highway 1 o US-101. Si vas por PCH (HWY 1) sumá 1h extra pero vale la pena.</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(3)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Hotel Julian — San Francisco</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Centro de SF, cerca de Union Square</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(4)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">SF → Santa Rosa</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">1h 20min</div></div>
+          <div class="time-box"><div class="time-label">Realista</div><div class="time-val orange">1h45 – 2h15</div></div>
+        </div>
+        <div class="alert red"><span class="alert-icon">🚨</span> NO salir entre 7–10 AM ni 16–19 PM. Golden Gate congestionado en esos horarios.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Salir antes de las 9 AM o después de las 7 PM</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(5)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">North Bay Inn — Santa Rosa</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona vino Sonoma, tranquila</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(6)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Santa Rosa → SFO → Seattle</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Drive → SFO</div><div class="time-val">1h – 1h30</div></div>
+          <div class="time-box"><div class="time-label">Check-in + seg.</div><div class="time-val orange">2h</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Devolver auto de alquiler en SFO antes de volar</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(7)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Harry Potter Sweet Suites — Seattle</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona céntrica Seattle</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(8)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Seattle SEA → Bozeman BZN</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Hotel → SEA</div><div class="time-val">30–45 min</div></div>
+          <div class="time-box"><div class="time-label">Vuelo + esperas</div><div class="time-val orange">3–4h</div></div>
+        </div>
+        <div class="alert red"><span class="alert-icon">🚨</span> Pocos vuelos directos → riesgo de escala. Confirmar con anticipación.</div>
+        <div class="alert red"><span class="alert-icon">🚨</span> Autos en BZN se agotan → reservar con MUCHA anticipación.</div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta SEA→West Yellowstone: 6–8 horas</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(9)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">Bozeman BZN → West Yellowstone</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Distancia</div><div class="time-val">~130 km</div></div>
+          <div class="time-box"><div class="time-label">Tiempo</div><div class="time-val orange">1h45</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Ruta directa y sencilla por US-191 South</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(10)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Ho Hum Motel — West Yellowstone</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Entrada oeste al parque — posición perfecta</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(11)">
+        <div class="seg-header">
+          <span class="seg-icon">🐃</span>
+          <span class="seg-title">Yellowstone — Circuito interno</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div style="background:var(--card); border-radius:6px; padding:10px; margin:6px 0; font-size:0.72rem;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; text-align:center; margin-bottom:8px;">
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">TRAMO</div>
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">GOOGLE</div>
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">REAL</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; text-align:center;">
+            <div>West → Old Faithful</div><div style="color:var(--muted)">1h</div><div style="color:var(--alert-red);font-weight:700;">1h30–2h</div>
+            <div>Old Faithful → Canyon</div><div style="color:var(--muted)">1h30</div><div style="color:var(--alert-red);font-weight:700;">2–2h30</div>
+            <div>Canyon → Mammoth</div><div style="color:var(--muted)">1h15</div><div style="color:var(--alert-red);font-weight:700;">1h45–2h15</div>
+          </div>
+        </div>
+        <div class="alert red"><span class="alert-icon">🦬</span> Bisontes en la ruta → frenan TODO. Podés perder 30–60 min fácil.</div>
+        <div class="alert red"><span class="alert-icon">🚗</span> Temporada alta (verano): parkings llenos desde las 9–10 AM.</div>
+        <div class="alert red"><span class="alert-icon">⛽</span> Pocas estaciones de nafta. NUNCA bajar de medio tanque.</div>
+        <div class="alert yellow"><span class="alert-icon">⏰</span> Regla de oro: todo tarda el DOBLE de lo que parece.</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(12)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Super 8 — Gardiner</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Salida norte del parque — posición estratégica para Tetons</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(13)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">Gardiner → Jackson Hole</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Google Maps</div><div class="time-val">2h 45min</div></div>
+          <div class="time-box"><div class="time-label">Real</div><div class="time-val orange">3h30 – 4h</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">🏔️</span> Ruta hermosa → te VAS a frenar. No planificarlo ajustado.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Pasás por Grand Teton NP antes de llegar a Jackson</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(14)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Cache House — Jackson Hole</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Centro de Jackson — acceso fácil a Tetons</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(15)">
+        <div class="seg-header">
+          <span class="seg-icon">🏔️</span>
+          <span class="seg-title">Grand Teton NP — Circuito</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">⏱️</span> Todo parece cerca... pero cualquier trayecto = 30–60 min mínimo.</div>
+        <div class="alert red"><span class="alert-icon">🌅</span> Amanecer = clave (mejor luz + animales activos).</div>
+        <div class="alert red"><span class="alert-icon">☀️</span> Mediodía = peor momento (luz plana + mucha gente).</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(16)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Jackson JAC → Los Ángeles LAX</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Hotel → JAC</div><div class="time-val">30–45 min</div></div>
+          <div class="time-box"><div class="time-label">Vuelo</div><div class="time-val orange">~2h30</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta JAC→hotel LA: 5–6 horas</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(17)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Ocean Park Hotel — Santa Monica</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona turística tranquila. Transición: naturaleza → ciudad</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(18)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">Ocean Park → Studio 6 (Gardena)</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">25–35 min</div></div>
+          <div class="time-box"><div class="time-label">Realista</div><div class="time-val orange">35–50 min</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">⚠️</span> Tráfico LA impredecible incluso fuera de hora pico. Ir con margen.</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(19)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Studio 6 — Gardena (última noche)</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Cerca de LAX — posición perfecta para el vuelo final</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(20)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Studio 6 → LAX (vuelo final)</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Traslado</div><div class="time-val">10–25 min</div></div>
+          <div class="time-box"><div class="time-label">Salida recomendada</div><div class="time-val green">7:45 AM</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">🎯</span> El cierre más bien resuelto del viaje. Transición perfecta: funcional → vuelo.</div>
+      </div>
+    </div>
+
+    <!-- PANEL TIEMPOS -->
+    <div class="panel" id="panel-tiempos">
+      <div style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+
+        <div style="background:var(--card); border-radius:8px; padding:14px; border-left:4px solid var(--alert-red);">
+          <div style="font-size:0.72rem; font-weight:700; color:#fca5a5; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🔴 ZONAS CRÍTICAS</div>
+          <div style="font-size:0.78rem; line-height:1.8;">
+            ⚠️ <strong>LAX</strong> — entrada y salida siempre caótica (+1h mental)<br>
+            ⚠️ <strong>Yellowstone interno</strong> — todo tarda el doble<br>
+            ⚠️ <strong>SEA → BZN</strong> — logística compleja (6–8h totales)<br>
+            ⚠️ <strong>SF → Santa Rosa</strong> — evitar horas pico obligatorio
+          </div>
+        </div>
+
+        <div style="background:var(--card); border-radius:8px; padding:14px; border-left:4px solid var(--alert-green);">
+          <div style="font-size:0.72rem; font-weight:700; color:#bbf7d0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🟢 ZONAS TRANQUILAS</div>
+          <div style="font-size:0.78rem; line-height:1.8;">
+            ✅ <strong>SF → Santa Rosa</strong> (fuera de hora pico)<br>
+            ✅ <strong>Jackson → JAC aeropuerto</strong> (30 min directo)<br>
+            ✅ <strong>Studio 6 → LAX</strong> (10–25 min, bien resuelto)<br>
+            ✅ <strong>BZN → West Yellowstone</strong> (1h45, sin complicaciones)
+          </div>
+        </div>
+
+        <div style="background:var(--card); border-radius:8px; padding:14px;">
+          <div style="font-size:0.72rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">⏱️ TABLA DE TIEMPOS REALES</div>
+          <table style="width:100%; font-size:0.72rem; border-collapse:collapse;">
+            <tr style="color:var(--muted); font-size:0.62rem; text-transform:uppercase;">
+              <td style="padding:4px 0; border-bottom:1px solid var(--border);">Tramo</td>
+              <td style="padding:4px; border-bottom:1px solid var(--border); text-align:right;">Google</td>
+              <td style="padding:4px 0; border-bottom:1px solid var(--border); text-align:right; color:#f97316;">Real</td>
+            </tr>
+            <tr><td style="padding:6px 0;">LAX llegada (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h30</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">LA → SF (drive)</td><td style="text-align:right; color:var(--muted);">~6h</td><td style="text-align:right; color:var(--drive); font-weight:700;">7–8h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SF → Santa Rosa</td><td style="text-align:right; color:var(--muted);">1h20</td><td style="text-align:right; color:var(--drive); font-weight:700;">1h45–2h15</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SEA → BZN (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">6–8h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">BZN → West Ystone</td><td style="text-align:right; color:var(--muted);">1h30</td><td style="text-align:right; color:var(--drive); font-weight:700;">1h45</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">West → Old Faithful</td><td style="text-align:right; color:var(--muted);">1h</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Old Faithful → Canyon</td><td style="text-align:right; color:var(--muted);">1h30</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">2–2h30</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Canyon → Mammoth</td><td style="text-align:right; color:var(--muted);">1h15</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h45–2h15</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Gardiner → Jackson</td><td style="text-align:right; color:var(--muted);">2h45</td><td style="text-align:right; color:var(--drive); font-weight:700;">3h30–4h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">JAC → LAX (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--drive); font-weight:700;">5–6h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Ocean Park → Gardena</td><td style="text-align:right; color:var(--muted);">25min</td><td style="text-align:right; color:var(--drive); font-weight:700;">35–50min</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Studio 6 → LAX</td><td style="text-align:right; color:var(--muted);">10min</td><td style="text-align:right; color:var(--stay); font-weight:700;">10–25min</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL RESUMEN -->
+    <div class="panel" id="panel-resumen">
+      <div class="summary-grid">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--flight);">5</div>
+          <div class="stat-label">Vuelos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--drive);">9</div>
+          <div class="stat-label">Tramos en auto</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--stay);">9</div>
+          <div class="stat-label">Hoteles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:#a78bfa;">4</div>
+          <div class="stat-label">Destinos clave</div>
+        </div>
+      </div>
+
+      <div class="zone-table">
+        <div class="rules-title">Estado por zona</div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">LAX (entrada/salida)</div>
+          <span class="zone-badge badge-danger">⚠️ Crítico</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">Yellowstone interno</div>
+          <span class="zone-badge badge-danger">⚠️ Crítico</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">Seattle → Bozeman</div>
+          <span class="zone-badge badge-danger">⚠️ Complejo</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-yellow)"></div>
+          <div class="zone-name">SF → Santa Rosa</div>
+          <span class="zone-badge" style="background:rgba(234,179,8,0.2);color:#fde68a;">⏰ Horario</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-green)"></div>
+          <div class="zone-name">Jackson Hole área</div>
+          <span class="zone-badge badge-ok">✅ Tranquilo</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-green)"></div>
+          <div class="zone-name">Cierre LA (Gardena → LAX)</div>
+          <span class="zone-badge badge-ok">✅ Bien resuelto</span>
+        </div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-title">Reglas de oro</div>
+        <div class="rule-card">
+          <div class="rule-icon">🐃</div>
+          <div class="rule-text">
+            <strong>Yellowstone: todo tarda el doble</strong>
+            No pongas horarios ajustados. Siempre planificá con buffer. Los bisontes mandan.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">✈️</div>
+          <div class="rule-text">
+            <strong>Aeropuertos: sumá +1h mental siempre</strong>
+            Especialmente LAX. Nunca llegar "justo". El costo es demasiado alto.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">🚗</div>
+          <div class="rule-text">
+            <strong>Ciudades: evitá horas pico siempre</strong>
+            7–10 AM y 16–19 PM son zonas de guerra en SF y LA.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">⛽</div>
+          <div class="rule-text">
+            <strong>Yellowstone: nunca menos de medio tanque</strong>
+            Las estaciones son pocas y están lejos. Esta regla te puede salvar el día.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">🚗</div>
+          <div class="rule-text">
+            <strong>Bozeman: reservar auto CON TIEMPO</strong>
+            BZN es aeropuerto pequeño. Los autos se agotan rápido en temporada alta.
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 0 16px 24px;">
+        <div style="background: linear-gradient(135deg, #1e3a5f, #1e293b); border-radius: 10px; padding: 16px; border: 1px solid #334155;">
+          <div style="font-size:0.72rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🏁 Evaluación del viaje</div>
+          <div style="font-size:0.78rem; line-height:1.7; color:#cbd5e1;">
+            Tu viaje está armado con estructura de Costa → Norte → Interior → Regreso. Sin zig-zag innecesario. Yellowstone optimizado: entrada oeste, salida norte. Cierre en LA bien ejecutado.<br><br>
+            <span style="color:#22c55e; font-weight:700;">→ No hay errores de planificación. Solo gestionar los tiempos.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-area">
+    <div id="map"></div>
+    <div class="map-info">
+      <h3>Mapa del viaje</h3>
+      <div class="map-legend-item"><div class="ml-line" style="background:var(--flight)"></div> Vuelo</div>
+      <div class="map-legend-item"><div class="ml-line" style="background:var(--drive);height:2px;border-top:2px dashed var(--drive);background:none;"></div> Auto</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:var(--flight);border-color:var(--flight)"></div> Aeropuerto</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:var(--stay);border-color:var(--stay)"></div> Hotel</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:#a78bfa;border-color:#a78bfa"></div> Parque</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Init map
+const map = L.map('map', {
+  center: [42.5, -113],
+  zoom: 5,
+  zoomControl: true
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// Coordinates
+const locs = {
+  lax:          [33.9416, -118.4085],
+  hollywood:    [34.0928, -118.3287],
+  sfo:          [37.6213, -122.3790],
+  sf_hotel:     [37.7851, -122.4094],
+  santa_rosa:   [38.4404, -122.7141],
+  sea:          [47.4502, -122.3088],
+  seattle:      [47.6062, -122.3321],
+  bzn:          [45.7775, -111.1605],
+  west_ystone:  [44.6601, -111.1037],
+  old_faithful: [44.4605, -110.8281],
+  canyon:       [44.7268, -110.4983],
+  mammoth:      [44.9764, -110.7014],
+  gardiner:     [45.0333, -110.7074],
+  jac:          [43.6073, -110.7377],
+  jackson:      [43.4799, -110.7624],
+  ocean_park:   [34.0007, -118.4912],
+  studio6:      [33.8875, -118.2729]
+};
+
+// Custom icons
+function makeIcon(color, emoji) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      background:${color};
+      border:2px solid white;
+      border-radius:50%;
+      width:28px;height:28px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      cursor:pointer;
+    ">${emoji}</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+}
+
+function makeSmallIcon(color) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      background:${color};
+      border:2px solid white;
+      border-radius:50%;
+      width:14px;height:14px;
+      box-shadow:0 1px 4px rgba(0,0,0,0.4);
+    "></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+  });
+}
+
+// Airports
+const airports = [
+  { pos: locs.lax, label: 'LAX', sub: 'Los Ángeles International' },
+  { pos: locs.sfo, label: 'SFO', sub: 'San Francisco International' },
+  { pos: locs.sea, label: 'SEA', sub: 'Seattle-Tacoma International' },
+  { pos: locs.bzn, label: 'BZN', sub: 'Bozeman Yellowstone International' },
+  { pos: locs.jac, label: 'JAC', sub: 'Jackson Hole Airport' },
+];
+
+airports.forEach(a => {
+  L.marker(a.pos, { icon: makeIcon('#4f8ef7', '✈️') })
+    .addTo(map)
+    .bindPopup(`<div class="popup-title">✈️ ${a.label}</div><div class="popup-sub">${a.sub}</div>`);
+});
+
+// Hotels
+const hotels = [
+  { pos: locs.hollywood, label: 'Americas Best Value Inn', sub: 'Hollywood, LA' },
+  { pos: locs.sf_hotel, label: 'Hotel Julian', sub: 'San Francisco' },
+  { pos: locs.santa_rosa, label: 'North Bay Inn', sub: 'Santa Rosa' },
+  { pos: locs.seattle, label: 'Harry Potter Sweet Suites', sub: 'Seattle' },
+  { pos: locs.west_ystone, label: 'Ho Hum Motel', sub: 'West Yellowstone' },
+  { pos: locs.gardiner, label: 'Super 8', sub: 'Gardiner, MT' },
+  { pos: locs.jackson, label: 'Cache House', sub: 'Jackson Hole' },
+  { pos: locs.ocean_park, label: 'Ocean Park Hotel', sub: 'Santa Monica, LA' },
+  { pos: locs.studio6, label: 'Studio 6', sub: 'Gardena (última noche)' },
+];
+
+hotels.forEach(h => {
+  L.marker(h.pos, { icon: makeIcon('#22c55e', '🏨') })
+    .addTo(map)
+    .bindPopup(`<div class="popup-title">🏨 ${h.label}</div><div class="popup-sub">${h.sub}</div>`);
+});
+
+// Park points
+[
+  { pos: locs.old_faithful, label: 'Old Faithful', alert: 'West→aquí: 1h30–2h (Google dice 1h)' },
+  { pos: locs.canyon, label: 'Grand Canyon of Yellowstone', alert: 'OF→Canyon: 2–2h30 (Google dice 1h30)' },
+  { pos: locs.mammoth, label: 'Mammoth Hot Springs', alert: 'Canyon→Mammoth: 1h45–2h15' },
+].forEach(p => {
+  L.marker(p.pos, { icon: makeSmallIcon('#a78bfa') })
+    .addTo(map)
+    .bindPopup(`<div class="popup-title">🌋 ${p.label}</div><div class="popup-alert">⏱️ ${p.alert}</div>`);
+});
+
+// ROUTES
+// Flights (solid blue curves)
+const flightColor = '#4f8ef7';
+const driveColor = '#f97316';
+
+function addCurvedLine(p1, p2, color, dashed = false) {
+  const latlngs = [];
+  const steps = 30;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const lat = p1[0] + (p2[0] - p1[0]) * t;
+    const lng = p1[1] + (p2[1] - p1[1]) * t;
+    // slight curve
+    const curve = Math.sin(Math.PI * t) * 1.2;
+    latlngs.push([lat + curve * 0.3, lng - curve * 0.5]);
+  }
+  const opts = { color, weight: dashed ? 2 : 3, opacity: 0.8 };
+  if (dashed) opts.dashArray = '8 5';
+  L.polyline(latlngs, opts).addTo(map);
+}
+
+function addStraightLine(points, color, dashed = false) {
+  const opts = { color, weight: dashed ? 2 : 2.5, opacity: 0.75 };
+  if (dashed) opts.dashArray = '8 6';
+  L.polyline(points, opts).addTo(map);
+}
+
+// Flights
+addCurvedLine(locs.lax, locs.lax, flightColor); // arrival (just marker)
+addCurvedLine(locs.sfo, locs.sea, flightColor);  // SF → Seattle
+addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
+addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
+
+// Drives (dashed orange)
+addStraightLine([locs.lax, locs.hollywood], driveColor, true);
+addStraightLine([locs.hollywood, locs.sfo], driveColor, true);  // LA → SF (approx)
+addStraightLine([locs.sf_hotel, locs.santa_rosa], driveColor, true);
+addStraightLine([locs.santa_rosa, locs.sfo], driveColor, true); // back to airport
+addStraightLine([locs.sea, locs.seattle], driveColor, true);
+addStraightLine([locs.bzn, locs.west_ystone], driveColor, true);
+addStraightLine([locs.west_ystone, locs.old_faithful, locs.canyon, locs.mammoth, locs.gardiner], driveColor, true);
+addStraightLine([locs.gardiner, locs.jackson], driveColor, true);
+addStraightLine([locs.jackson, locs.jac], driveColor, true);
+addStraightLine([locs.lax, locs.ocean_park], driveColor, true);
+addStraightLine([locs.ocean_park, locs.studio6], driveColor, true);
+addStraightLine([locs.studio6, locs.lax], driveColor, true);
+
+// Add LA label
+L.marker(locs.lax, { icon: L.divIcon({
+  className: '',
+  html: '<div style="color:#4f8ef7;font-size:11px;font-weight:700;text-shadow:0 1px 3px #000;white-space:nowrap;margin-left:16px;margin-top:-6px;">Los Ángeles</div>',
+  iconSize: [100, 20],
+  iconAnchor: [0, 10]
+})}).addTo(map);
+
+// Segment focus points
+const segmentViews = [
+  { center: locs.lax, zoom: 11 },          // 0 - LAX llegada
+  { center: locs.hollywood, zoom: 13 },    // 1 - Hollywood
+  { center: [35.5, -119.5], zoom: 7 },     // 2 - LA→SF drive
+  { center: locs.sf_hotel, zoom: 13 },     // 3 - Hotel Julian
+  { center: [37.9, -122.5], zoom: 10 },    // 4 - SF → Santa Rosa
+  { center: locs.santa_rosa, zoom: 13 },   // 5 - North Bay Inn
+  { center: [41, -122], zoom: 7 },         // 6 - SFO → SEA
+  { center: locs.seattle, zoom: 12 },      // 7 - Harry Potter
+  { center: [46.5, -117], zoom: 6 },       // 8 - SEA → BZN flight
+  { center: [44.8, -111.4], zoom: 9 },     // 9 - BZN → West Ystone
+  { center: locs.west_ystone, zoom: 12 },  // 10 - Ho Hum
+  { center: [44.7, -110.7], zoom: 9 },     // 11 - Yellowstone
+  { center: locs.gardiner, zoom: 12 },     // 12 - Super 8
+  { center: [44, -111], zoom: 8 },         // 13 - Gardiner → Jackson
+  { center: locs.jackson, zoom: 12 },      // 14 - Cache House
+  { center: [43.8, -110.7], zoom: 10 },    // 15 - Tetons
+  { center: [39, -112], zoom: 6 },         // 16 - JAC → LAX
+  { center: locs.ocean_park, zoom: 13 },   // 17 - Ocean Park
+  { center: [33.94, -118.4], zoom: 11 },   // 18 - Ocean Park → Studio 6
+  { center: locs.studio6, zoom: 13 },      // 19 - Studio 6
+  { center: locs.lax, zoom: 12 },          // 20 - Studio 6 → LAX
+];
+
+let currentHighlight = null;
+
+function focusSegment(idx) {
+  if (segmentViews[idx]) {
+    map.flyTo(segmentViews[idx].center, segmentViews[idx].zoom, { duration: 1.2 });
+  }
+  // Highlight segment
+  document.querySelectorAll('.segment').forEach((el, i) => {
+    el.classList.toggle('highlighted', i === idx);
+  });
+}
+
+// Tab switching
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`#panel-${name}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Reset map on load
+setTimeout(() => {
+  map.invalidateSize();
+}, 100);
+</script>
+</body>
+</html>
