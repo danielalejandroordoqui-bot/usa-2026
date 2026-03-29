@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🇺🇸 Road Trip USA — Mapa Interactivo</title>
+  <title>🇺🇸 Road Trip USA 2026 — Mapa Interactivo</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -138,7 +138,7 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="header">
-      <h1>🇺🇸 Road Trip <span>USA 2025</span></h1>
+      <h1>🇺🇸 Road Trip <span>USA 2026</span></h1>
       <p>Costa · Norte · Yellowstone · Tetons</p>
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:var(--flight)"></div> Vuelo</div>
@@ -182,15 +182,16 @@
 
       <div class="segment" onclick="focusSegment(2)">
         <div class="seg-header">
-          <span class="seg-icon">🚗</span>
-          <span class="seg-title">LA → San Francisco</span>
-          <span class="seg-tag tag-drive">Auto</span>
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">LAX → San Francisco SFO</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
         </div>
         <div class="time-row">
-          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">~6h</div></div>
-          <div class="time-box"><div class="time-label">Realista (con paradas)</div><div class="time-val orange">7–8h</div></div>
+          <div class="time-box"><div class="time-label">Vuelo</div><div class="time-val">~1h15</div></div>
+          <div class="time-box"><div class="time-label">Total puerta a puerta</div><div class="time-val orange">3–4h</div></div>
         </div>
-        <div class="alert yellow"><span class="alert-icon">💡</span> Ruta por Highway 1 o US-101. Si vas por PCH (HWY 1) sumá 1h extra pero vale la pena.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — LAX → SFO</div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Al llegar a SFO: retirar auto alquilado en el aeropuerto</div>
       </div>
 
       <div class="segment" onclick="focusSegment(3)">
@@ -205,13 +206,14 @@
       <div class="segment" onclick="focusSegment(4)">
         <div class="seg-header">
           <span class="seg-icon">🚗</span>
-          <span class="seg-title">SF → Santa Rosa</span>
-          <span class="seg-tag tag-drive">Auto</span>
+          <span class="seg-title">SF → Santa Rosa · Ruta 1 + Sonoma</span>
+          <span class="seg-tag tag-drive">Auto alquilado</span>
         </div>
         <div class="time-row">
           <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">1h 20min</div></div>
-          <div class="time-box"><div class="time-label">Realista</div><div class="time-val orange">1h45 – 2h15</div></div>
+          <div class="time-box"><div class="time-label">Realista (+ paradas)</div><div class="time-val orange">2h – 3h</div></div>
         </div>
+        <div class="alert green"><span class="alert-icon">🛣️</span> Ruta por Highway 1 costera + Sonoma Park en el camino — planificar con tiempo extra</div>
         <div class="alert red"><span class="alert-icon">🚨</span> NO salir entre 7–10 AM ni 16–19 PM. Golden Gate congestionado en esos horarios.</div>
         <div class="alert green"><span class="alert-icon">✅</span> Salir antes de las 9 AM o después de las 7 PM</div>
       </div>
@@ -235,7 +237,8 @@
           <div class="time-box"><div class="time-label">Drive → SFO</div><div class="time-val">1h – 1h30</div></div>
           <div class="time-box"><div class="time-label">Check-in + seg.</div><div class="time-val orange">2h</div></div>
         </div>
-        <div class="alert yellow"><span class="alert-icon">💡</span> Devolver auto de alquiler en SFO antes de volar</div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Devolver auto alquilado en SFO antes de volar — sumar 30–45 min extra</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — SFO → SEA</div>
       </div>
 
       <div class="segment" onclick="focusSegment(7)">
@@ -257,7 +260,8 @@
           <div class="time-box"><div class="time-label">Hotel → SEA</div><div class="time-val">30–45 min</div></div>
           <div class="time-box"><div class="time-label">Vuelo + esperas</div><div class="time-val orange">3–4h</div></div>
         </div>
-        <div class="alert red"><span class="alert-icon">🚨</span> Pocos vuelos directos → riesgo de escala. Confirmar con anticipación.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — SEA → BZN</div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Al llegar a BZN: retirar auto alquilado — lo usás hasta JAC</div>
         <div class="alert red"><span class="alert-icon">🚨</span> Autos en BZN se agotan → reservar con MUCHA anticipación.</div>
         <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta SEA→West Yellowstone: 6–8 horas</div>
       </div>
@@ -266,7 +270,7 @@
         <div class="seg-header">
           <span class="seg-icon">🚗</span>
           <span class="seg-title">Bozeman BZN → West Yellowstone</span>
-          <span class="seg-tag tag-drive">Auto</span>
+          <span class="seg-tag tag-drive">Auto alquilado</span>
         </div>
         <div class="time-row">
           <div class="time-box"><div class="time-label">Distancia</div><div class="time-val">~130 km</div></div>
@@ -361,6 +365,8 @@
           <div class="time-box"><div class="time-label">Hotel → JAC</div><div class="time-val">30–45 min</div></div>
           <div class="time-box"><div class="time-label">Vuelo</div><div class="time-val orange">~2h30</div></div>
         </div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Devolver auto alquilado en JAC antes de hacer check-in — sumar 30 min</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — JAC → LAX</div>
         <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta JAC→hotel LA: 5–6 horas</div>
       </div>
 
@@ -375,9 +381,9 @@
 
       <div class="segment" onclick="focusSegment(18)">
         <div class="seg-header">
-          <span class="seg-icon">🚗</span>
+          <span class="seg-icon">🚕</span>
           <span class="seg-title">Ocean Park → Studio 6 (Gardena)</span>
-          <span class="seg-tag tag-drive">Auto</span>
+          <span class="seg-tag tag-stay">Uber</span>
         </div>
         <div class="time-row">
           <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">25–35 min</div></div>
@@ -442,8 +448,8 @@
               <td style="padding:4px 0; border-bottom:1px solid var(--border); text-align:right; color:#f97316;">Real</td>
             </tr>
             <tr><td style="padding:6px 0;">LAX llegada (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h30</td></tr>
-            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">LA → SF (drive)</td><td style="text-align:right; color:var(--muted);">~6h</td><td style="text-align:right; color:var(--drive); font-weight:700;">7–8h</td></tr>
-            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SF → Santa Rosa</td><td style="text-align:right; color:var(--muted);">1h20</td><td style="text-align:right; color:var(--drive); font-weight:700;">1h45–2h15</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">LA → SF ✈️ (vuelo)</td><td style="text-align:right; color:var(--muted);">1h15</td><td style="text-align:right; color:var(--flight); font-weight:700;">3–4h total</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SF → Santa Rosa 🚗</td><td style="text-align:right; color:var(--muted);">1h20</td><td style="text-align:right; color:var(--drive); font-weight:700;">2–3h (Ruta 1)</td></tr>
             <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SEA → BZN (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">6–8h</td></tr>
             <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">BZN → West Ystone</td><td style="text-align:right; color:var(--muted);">1h30</td><td style="text-align:right; color:var(--drive); font-weight:700;">1h45</td></tr>
             <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">West → Old Faithful</td><td style="text-align:right; color:var(--muted);">1h</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h</td></tr>
@@ -721,14 +727,14 @@ function addStraightLine(points, color, dashed = false) {
 
 // Flights
 addCurvedLine(locs.lax, locs.lax, flightColor); // arrival (just marker)
+addCurvedLine(locs.lax, locs.sfo, flightColor);  // LA → SF vuelo (ya comprado)
 addCurvedLine(locs.sfo, locs.sea, flightColor);  // SF → Seattle
 addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
 addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
 
-// Drives (dashed orange)
-addStraightLine([locs.lax, locs.hollywood], driveColor, true);
-addStraightLine([locs.hollywood, locs.sfo], driveColor, true);  // LA → SF (approx)
-addStraightLine([locs.sf_hotel, locs.santa_rosa], driveColor, true);
+// Drives (dashed orange) — solo tramos con auto alquilado + Uber en ciudades
+addStraightLine([locs.lax, locs.hollywood], driveColor, true);  // Uber LAX→Hollywood
+addStraightLine([locs.sf_hotel, locs.santa_rosa], driveColor, true); // 🚗 alquilado: SF→SantaRosa
 addStraightLine([locs.santa_rosa, locs.sfo], driveColor, true); // back to airport
 addStraightLine([locs.sea, locs.seattle], driveColor, true);
 addStraightLine([locs.bzn, locs.west_ystone], driveColor, true);
