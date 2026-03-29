@@ -736,7 +736,20 @@ addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
 
 // Drives (dashed orange) — solo tramos con auto alquilado + Uber en ciudades
 addStraightLine([locs.lax, locs.hollywood], driveColor, true);  // Uber LAX→Hollywood
-addStraightLine([locs.sfo, locs.sf_hotel, locs.santa_rosa, locs.sts], driveColor, true); // 🚗 alquilado: SFO→SF→SantaRosa→STS
+// 🚗 alquilado: SFO → SF → Ruta 1 costera → Sonoma Coast → Santa Rosa → STS
+addStraightLine([
+  locs.sfo,
+  locs.sf_hotel,
+  [37.8309, -122.4789], // Golden Gate Norte
+  [37.8726, -122.5290], // Marin Headlands
+  [37.9019, -122.6442], // Stinson Beach
+  [38.0702, -122.8028], // Point Reyes Station
+  [38.3327, -123.0472], // Bodega Bay — Sonoma Coast State Park
+  [38.4482, -123.1258], // Jenner (Hwy 1 + Russian River)
+  [38.5067, -123.0034], // Guerneville
+  locs.santa_rosa,
+  locs.sts
+], driveColor, true);
 addStraightLine([locs.sea, locs.seattle], driveColor, true);
 addStraightLine([locs.bzn, locs.west_ystone], driveColor, true);
 addStraightLine([locs.west_ystone, locs.old_faithful, locs.canyon, locs.mammoth, locs.gardiner], driveColor, true);
