@@ -162,9 +162,10 @@
       </div>
     </div>
 
-    <div class="tabs">
+    <div class="tabs" style="font-size:0.65rem;">
       <div class="tab active" onclick="switchTab('ruta')">🛣️ Ruta</div>
       <div class="tab" onclick="switchTab('dias')">📅 Días</div>
+      <div class="tab" onclick="switchTab('plan')">🗺️ Plan</div>
       <div class="tab" onclick="switchTab('tiempos')">⏱️ Tiempos</div>
       <div class="tab" onclick="switchTab('resumen')">📊 Resumen</div>
     </div>
@@ -678,6 +679,94 @@
             <div class="day-main">🏠 Llegada EZE · 6:10 AM</div>
             <div class="day-sub" style="color:#bbf7d0;">✅ Fin del viaje — 22 días · 9 hoteles · 8 vuelos</div>
           </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL PLAN -->
+    <div class="panel" id="panel-plan">
+      <div style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+
+        <div style="font-size:0.68rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Propuesta día a día · ajustable</div>
+
+        <!-- LOS ANGELES llegada -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #60a5fa;">
+          <div style="font-size:0.7rem; font-weight:700; color:#93c5fd; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">✈️ LOS ÁNGELES — llegada · 2–4 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Sáb 2/8</strong> — Aterrizás 7:50 AM. Checkin hotel no antes de 3 PM → usá la mañana: Santa Monica Pier a 10 min en Uber, desayuno en Breezy's o Cha Cha Chicken. Tarde: Venice Beach, caminata al canal. Noche tranquila, primer jet-lag.<br>
+            <strong>Dom 3/8</strong> — Hollywood Boulevard + Walk of Fame + Griffith Observatory (panorámica de la ciudad). Tarde: The Grove o Farmers Market para comer tranqui. Noche: algún bar en Los Feliz o Silver Lake (neighborhood vibe, sin turistas).<br>
+            <strong>Lun 4/8</strong> — Checkout. Uber a LAX → AS1607 10:03 AM → San Francisco.
+          </div>
+        </div>
+
+        <!-- SAN FRANCISCO -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #34d399;">
+          <div style="font-size:0.7rem; font-weight:700; color:#6ee7b7; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🌉 SAN FRANCISCO · 4–7 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Mar 4/8</strong> — Llegás 11:27. BART al centro ($10). Checkin Hotel Julian (en el centro). Tarde: North Beach + City Lights Bookstore + Coit Tower. Noche: cena en Chinatown (R&G Lounge o Gold Mountain).<br>
+            <strong>Mié 5/8 🎸</strong> — Mañana libre: Fisherman's Wharf + Alcatraz (si está reservado) o Golden Gate a pie. Tarde: descanso. <strong>19h: AC/DC en Levi's Stadium</strong> → Caltrain desde 4th & King (~50 min, $9). Vuelta: Caltrain hasta que haya, Uber el resto.<br>
+            <strong>Jue 6/8</strong> — Golden Gate Park + Museum of Fine Arts (SFMOMA) o de Young. Haight-Ashbury para comer. Tarde: Dolores Park si hace sol. Noche: Castro o Mission (taquerías en Valencia St).<br>
+            <strong>Vie 7/8</strong> — Retiro Hertz en SFO 9:00 AM → Ruta 1 sur→norte: Muir Woods (llegar antes de 10h, se llena) → Stinson Beach → Point Reyes → Bodega Bay → Santa Rosa. Check-in North Bay Inn.
+          </div>
+        </div>
+
+        <!-- SANTA ROSA / STS -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #a78bfa;">
+          <div style="font-size:0.7rem; font-weight:700; color:#c4b5fd; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🍷 SANTA ROSA / SONOMA · 7–8 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Sáb 8/8</strong> — Mañana: Healdsburg o Sonoma Plaza (central square con bodegas a 5 min a pie). Una cata si quieren. Almuerzo. → Devolver auto en STS 12:00 PM → Check-in vuelo → AS1322 12:52 PM → Seattle 14:55.
+          </div>
+        </div>
+
+        <!-- SEATTLE -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #38bdf8;">
+          <div style="font-size:0.7rem; font-weight:700; color:#7dd3fc; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🌲 SEATTLE · 8–12 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Dom 8/8</strong> — Llegás 14:55. Link Light Rail al centro ($3). Checkin. Tarde: Pike Place Market (cierra 18h), primer paseo por el waterfront. Noche: Pioneer Square.<br>
+            <strong>Lun 9/8</strong> — Space Needle + Chihuly Garden (combo ticket). Tarde: Capitol Hill para comer (La Carta de Oaxaca o Stateside). Noche libre.<br>
+            <strong>Mar 10/8</strong> — Excursión: <strong>Mount Rainier</strong> (~2h en auto alquilado o tour desde la ciudad). Sunrise Point o Paradise para vistas con nieve. Volvés a la tarde.<br>
+            <strong>Mié 11/8</strong> — Fremont neighborhood: el troll debajo del puente, Theo Chocolate, mercadillo. Tarde: Ballard (barrio escandinavo, mercado de pescadores, microcervecerías). Noche: última cena en Seattle, zona South Lake Union.<br>
+            <strong>Jue 12/8</strong> — ⚠️ Checkout 5:00 AM → Uber al aeropuerto → AS2141 7:06 AM → BZN 9:46 AM.
+          </div>
+        </div>
+
+        <!-- YELLOWSTONE -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #fb923c;">
+          <div style="font-size:0.7rem; font-weight:700; color:#fdba74; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🌋 YELLOWSTONE · 12–15 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Jue 12/8</strong> — Retiro Kia Rio BZN 10:00 AM. Ruta: BZN → West Yellowstone (~1.5h). Checkin Ho Hum 4 PM. Tarde: West Thumb Geyser Basin (a 30 min del hotel) — géiseres sobre el lago, atardecer increíble.<br>
+            <strong>Vie 13/8</strong> — Salida 7:30 AM. Circuito norte: <strong>Old Faithful</strong> (llegar antes de 9h para verlo sin multitudes) → Grand Prismatic Spring (trailhead Fairy Falls para la vista aérea) → Fountain Paint Pots. Tarde: drive hasta Mammoth Hot Springs + terrazas de travertino. Checkout → Checkin Super 8 Gardiner (entrada norte del parque).<br>
+            <strong>Sáb 14/8</strong> — Día completo: <strong>Grand Canyon of Yellowstone</strong> (Artist Point al amanecer) → Hayden Valley (bisontes garantizados) → <strong>Lamar Valley</strong> (zona de lobos, llegar tarde o temprano). Noche en Gardiner.<br>
+            <strong>Dom 15/8</strong> — Checkout 10 AM. Drive Gardiner → Jackson Hole (~3.5h por Grand Teton NP). Chekin Cache House 4 PM.
+          </div>
+        </div>
+
+        <!-- JACKSON / GRAND TETON -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #4ade80;">
+          <div style="font-size:0.7rem; font-weight:700; color:#86efac; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">⛰️ JACKSON HOLE / GRAND TETON · 15–18 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Dom 15/8</strong> — Llegada a Jackson. Tarde libre: Jackson town square (arcos de cuernos de alce), cena en Million Dollar Cowboy Bar o Persephone Bakery.<br>
+            <strong>Lun 16/8</strong> — <strong>Grand Teton NP</strong>: Lago Jenny + Church of Transfiguration + Snake River Overlook (foto de Ansel Adams). Opcional: kayak en Jenny Lake. Vuelta al atardecer con los Tetons de fondo.<br>
+            <strong>Mar 17/8</strong> — Actividad: horseback riding (varias opciones desde $80pp) o rafting en Snake River. Tarde: National Museum of Wildlife Art. Noche: Mangy Moose en Teton Village para ver quién toca.<br>
+            <strong>Mié 18/8</strong> — Checkout 11 AM → devolver Kia Rio en JAC → AA6471 12:54 PM → LAX 14:21.
+          </div>
+        </div>
+
+        <!-- LA vuelta -->
+        <div style="background:var(--card); border-radius:8px; padding:12px; border-left:4px solid #f472b6;">
+          <div style="font-size:0.7rem; font-weight:700; color:#f9a8d4; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🏖️ LOS ÁNGELES — cierre · 18–22 ago</div>
+          <div style="font-size:0.78rem; line-height:1.9; color:var(--text);">
+            <strong>Mié 18/8</strong> — Llegás 14:21. Uber LAX → Ocean Park Hotel (Santa Mónica). Playa de Santa Mónica, puesta de sol. Cena en Main Street SM.<br>
+            <strong>Jue 19/8</strong> — Getty Center (gratis, pero reservar online). La Brea Tar Pits + LACMA. Tarde: Melrose Ave o Abbot Kinney (Venice) para compras finales.<br>
+            <strong>Vie 20/8</strong> — Malibu: Zuma Beach o El Matador Beach (más salvaje, acantilados). Almuerzo en Malibu Seafood. Tarde: paseo por Bel-Air o Beverly Hills si se quiere el "clásico turístico". Noche: último gran restaurante (recomendado: Gjusta en Venice o Republique).<br>
+            <strong>Sáb 21/8</strong> — Checkout. Move al Studio 6 Gardena (cerca de LAX). Día de cierre: Manhattan Beach → El Segundo → cenita tranqui cerca del hotel. Todo preparado para el vuelo.<br>
+            <strong>Dom 22/8</strong> — ⚠️ <strong>Vuelo 11:35 AM</strong> → salir del hotel 7:30 AM máximo. LA2479 LAX→LIM. Conexión LIM→EZE LA1437 23:45.
+          </div>
+        </div>
+
+        <div style="font-size:0.72rem; color:var(--text-muted); padding:8px 4px; line-height:1.6;">
+          💡 Todo esto es una propuesta — nada está reservado salvo lo ya confirmado. Ajustá según lo que quieran hacer cada día.
         </div>
 
       </div>
