@@ -476,8 +476,15 @@
         <div class="day-row">
           <div class="day-date">Mié<br>5/8</div>
           <div class="day-content">
-            <div class="day-main">🌉 San Francisco + <span style="color:#f59e0b;">🎸 AC/DC · 19h</span></div>
-            <div class="day-sub">Levi's Stadium · Santa Clara (~45 min de SF)</div>
+            <div class="day-main">🌉 SF · tarde + <span style="color:#f59e0b;">🎸 AC/DC · 19h</span></div>
+            <div class="day-sub" style="color:#fbbf24; font-weight:600;">Levi's Stadium · Santa Clara · ~50 km al sur de SF</div>
+            <div style="background:rgba(245,158,11,0.08); border-left:2px solid #f59e0b; border-radius:4px; padding:7px 9px; margin-top:5px; font-size:0.68rem; line-height:1.7;">
+              <div style="font-weight:700; color:#fbbf24; margin-bottom:4px;">⚠️ Sin auto alquilado ese día (retiro el viernes). Opciones:</div>
+              <div>🚆 <strong>Caltrain</strong> (recomendado) — SF 4th &amp; King → Santa Clara Station (~55 min, ~$9). Después Uber corto al estadio (~10 min). Para volver: último tren ~medianoche.</div>
+              <div style="margin-top:4px;">🚕 <strong>Uber/Lyft ida</strong> — ~50 min, ~$35–55. <span style="color:#fca5a5;">Vuelta post-show: surge pricing $60–120, espera 30–60 min.</span></div>
+              <div style="margin-top:4px;">🚗 <strong>No manejes</strong> — estacionamiento $40+ y salida del estadio es un caos.</div>
+            </div>
+            <div class="day-sub" style="margin-top:4px;">💡 Plan ideal: Caltrain ida + Uber de vuelta si el último tren se complica</div>
             <div class="day-pill hotel">🏨 Hotel Julian</div>
           </div>
         </div>
@@ -839,6 +846,7 @@
       <div class="map-legend-item"><div class="ml-dot" style="background:var(--flight);border-color:var(--flight)"></div> Aeropuerto</div>
       <div class="map-legend-item"><div class="ml-dot" style="background:var(--stay);border-color:var(--stay)"></div> Hotel</div>
       <div class="map-legend-item"><div class="ml-dot" style="background:#a78bfa;border-color:#a78bfa"></div> Parque</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:#f59e0b;border-color:#f59e0b"></div> Evento</div>
     </div>
   </div>
 </div>
@@ -865,6 +873,7 @@ const locs = {
   sf_hotel:     [37.7851, -122.4094],
   santa_rosa:   [38.4404, -122.7141],
   sts:          [38.5088, -122.8129],  // Sonoma County Airport — devolución auto 1
+  levis:        [37.4032, -121.9698],  // Levi's Stadium, Santa Clara — AC/DC 5/8
   sea:          [47.4502, -122.3088],
   seattle:      [47.6062, -122.3321],
   bzn:          [45.7775, -111.1605],
@@ -1017,6 +1026,14 @@ addStraightLine([locs.jackson, locs.jac], driveColor, true);
 addStraightLine([locs.lax, locs.ocean_park], driveColor, true);
 addStraightLine([locs.ocean_park, locs.studio6], driveColor, true);
 addStraightLine([locs.studio6, locs.lax], driveColor, true);
+
+// Levi's Stadium — evento especial AC/DC
+L.marker(locs.levis, { icon: makeIcon('#f59e0b', '🎸') })
+  .addTo(map)
+  .bindPopup(`<div class="popup-title">🎸 Levi's Stadium</div><div class="popup-sub">Santa Clara, CA · AC/DC · 5 ago · 19h</div><div class="popup-time">~50 min desde Hotel Julian (SF)</div><div class="popup-alert">⚠️ Sin auto alquilado ese día → Caltrain o Uber</div>`);
+
+// Transporte Hotel Julian → Levi's Stadium (evento, sin auto)
+addStraightLine([locs.sf_hotel, locs.levis], '#f59e0b', true);
 
 // Add LA label
 L.marker(locs.lax, { icon: L.divIcon({
