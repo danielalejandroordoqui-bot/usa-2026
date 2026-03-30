@@ -123,6 +123,8 @@
     .popup-sub { font-size: 0.72rem; color: #94a3b8; }
     .popup-time { margin-top: 6px; font-size: 0.75rem; color: #60a5fa; font-weight: 600; }
     .popup-alert { margin-top: 5px; font-size: 0.7rem; color: #fca5a5; }
+    .popup-row { font-size: 0.71rem; line-height: 1.5; padding: 2px 0; color: #cbd5e1; }
+    .popup-row b { color: #e2e8f0; }
 
     /* DÍAS */
     .day-row { display:flex; gap:10px; padding:8px 4px; border-bottom:1px solid rgba(51,65,85,0.35); cursor:pointer; transition:background 0.12s; border-radius:4px; }
@@ -922,40 +924,197 @@ function makeSmallIcon(color) {
   });
 }
 
-// Airports
-const airports = [
-  { pos: locs.lax, label: 'LAX', sub: 'Los Ángeles International' },
-  { pos: locs.sfo, label: 'SFO', sub: 'San Francisco International — retiro auto alquilado' },
-  { pos: locs.sts, label: 'STS', sub: 'Sonoma County Airport — devolución auto alquilado' },
-  { pos: locs.sea, label: 'SEA', sub: 'Seattle-Tacoma International' },
-  { pos: locs.bzn, label: 'BZN', sub: 'Bozeman Yellowstone International — retiro auto alquilado' },
-  { pos: locs.jac, label: 'JAC', sub: 'Jackson Hole Airport — devolución auto alquilado' },
-];
+function pi(rows) {
+  return rows.map(r => `<div class="popup-row">${r}</div>`).join('');
+}
 
-airports.forEach(a => {
-  L.marker(a.pos, { icon: makeIcon('#4f8ef7', '✈️') })
-    .addTo(map)
-    .bindPopup(`<div class="popup-title">✈️ ${a.label}</div><div class="popup-sub">${a.sub}</div>`);
-});
+// ── AEROPUERTOS ──────────────────────────────────────────────────
+L.marker(locs.lax, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ LAX — Los Ángeles International</div>
+  ${pi([
+    '📅 <b>Llegada 2/8</b> · 7:50 AM (LA2478 desde Lima)',
+    '🚕 Uber LAX-it → Hollywood: <b>35–60 min · $30–50</b>',
+    '⚠️ Punto de recogida: <b>LAX-it</b> (no en la puerta, caminar ~10 min)',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Salida 22/8</b> · vuelo 11:35 AM (LA2479)',
+    '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b>',
+    '💡 Salir del hotel a las <b>7:45 AM</b>'
+  ])}
+`);
 
-// Hotels
-const hotels = [
-  { pos: locs.hollywood, label: 'Americas Best Value Inn', sub: 'Hollywood, LA' },
-  { pos: locs.sf_hotel, label: 'Hotel Julian', sub: 'San Francisco' },
-  { pos: locs.santa_rosa, label: 'North Bay Inn', sub: 'Santa Rosa' },
-  { pos: locs.seattle, label: 'Harry Potter Sweet Suites', sub: 'Seattle' },
-  { pos: locs.west_ystone, label: 'Ho Hum Motel', sub: 'West Yellowstone' },
-  { pos: locs.gardiner, label: 'Super 8', sub: 'Gardiner, MT' },
-  { pos: locs.jackson, label: 'Cache House', sub: 'Jackson Hole' },
-  { pos: locs.ocean_park, label: 'Ocean Park Hotel', sub: 'Santa Monica, LA' },
-  { pos: locs.studio6, label: 'Studio 6', sub: 'Gardena (última noche)' },
-];
+L.marker(locs.sfo, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ SFO — San Francisco International</div>
+  ${pi([
+    '📅 <b>Llegada 4/8</b> · AS1607 · 11:27 AM',
+    '🚇 BART: SFO → Powell St (SF centro): <b>~30 min · $10</b>',
+    '🚕 Uber SFO → Hotel Julian: <b>25–35 min · $35–45</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Retiro auto Hertz 7/8</b> · 9:00 AM',
+    '🚗 Dodge Ram 1500 · On Airport Car Rental Centre',
+    '💡 Ir al hotel primero, volver a SFO en Uber para retirar el auto'
+  ])}
+`);
 
-hotels.forEach(h => {
-  L.marker(h.pos, { icon: makeIcon('#22c55e', '🏨') })
-    .addTo(map)
-    .bindPopup(`<div class="popup-title">🏨 ${h.label}</div><div class="popup-sub">${h.sub}</div>`);
-});
+L.marker(locs.sts, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ STS — Sonoma County Airport</div>
+  ${pi([
+    '📅 <b>Devolución auto Hertz 8/8</b> · 12:00 PM',
+    '🚗 North Bay Inn → STS: <b>~15 min en auto alquilado</b>',
+    '✈️ Vuelo AS1322 STS→SEA: <b>12:52 PM</b>',
+    '⚠️ Llegar al aeropuerto antes de las <b>10:50 AM</b> (2h antes)',
+    '💡 Devolver el auto primero, hacer check-in después'
+  ])}
+`);
+
+L.marker(locs.sea, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ SEA — Seattle-Tacoma International</div>
+  ${pi([
+    '📅 <b>Llegada 8/8</b> · AS1322 · 2:55 PM',
+    '🚇 Link Light Rail: SEA → Capitol Hill: <b>~45 min · $3</b> ✅ recomendado',
+    '🚕 Uber SEA → Harry Potter Suites: <b>30–45 min · $35–55</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Salida 12/8</b> · vuelo AS2141 · 7:06 AM',
+    '⚠️ Salir del hotel a las <b>4:30–5:00 AM</b>',
+    '🚕 Harry Potter Suites → SEA: <b>35–45 min · $35–55</b>',
+    '🚇 Light Rail: primer tren ~5 AM desde Capitol Hill'
+  ])}
+`);
+
+L.marker(locs.bzn, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ BZN — Bozeman Yellowstone Intl</div>
+  ${pi([
+    '📅 <b>Llegada 12/8</b> · AS2141 · 9:46 AM',
+    '🚗 <b>Retiro Kia Rio 10:00 AM</b> · Economy Bookings',
+    '🚗 BZN → West Yellowstone: <b>~1h45 por US-191 Sur</b>',
+    '⛽ Cargar nafta en BZN antes de salir — pocas estaciones en ruta',
+    '💡 Llegada estimada Ho Hum Motel: ~12:00 PM (check-in 4 PM)'
+  ])}
+`);
+
+L.marker(locs.jac, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ JAC — Jackson Hole Airport</div>
+  ${pi([
+    '📅 <b>Devolución Kia Rio 18/8</b> · 10:00 AM',
+    '🚗 Cache House → JAC: <b>~15 min en auto alquilado</b>',
+    '✈️ Vuelo AA6471 JAC→LAX: <b>12:54 PM</b>',
+    '⚠️ Llegar al aeropuerto antes de las <b>10:54 AM</b> (2h antes)',
+    '💡 Check-out Cache House 11 AM → directo a JAC → devolver auto → check-in'
+  ])}
+`);
+
+// ── HOTELES ──────────────────────────────────────────────────────
+L.marker(locs.hollywood, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Americas Best Value Inn Hollywood</div>
+  ${pi([
+    '📅 Check-in: <b>2/8</b> · Check-out: <b>4/8</b> (3 noches)',
+    '🚕 Desde LAX (LAX-it): <b>35–60 min · $30–50</b>',
+    '⚠️ Pedir Uber en el punto LAX-it, no en la puerta',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 4/8 · vuelo LAX→SFO 10:03 AM',
+    '🚕 Hotel → LAX: <b>35–50 min · $30–45</b>',
+    '💡 Salir del hotel a las <b>7:30 AM</b>'
+  ])}
+`);
+
+L.marker(locs.sf_hotel, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Hotel Julian — San Francisco</div>
+  ${pi([
+    '📅 Check-in: <b>4/8</b> · Check-out: <b>7/8</b> (3 noches)',
+    '🚇 Desde SFO: BART → Powell St <b>~30 min · $10</b>',
+    '━━━━━━━━━━━━━━',
+    '🎸 <b>5/8 AC/DC</b> · Levi\'s Stadium, Santa Clara',
+    '🚆 Caltrain 4th &amp; King → Santa Clara: <b>~55 min · $9</b> ✅',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 7/8 · retirar Hertz en SFO 9:00 AM',
+    '🚕 Hotel → SFO: <b>25–35 min · $35–45</b>'
+  ])}
+`);
+
+L.marker(locs.santa_rosa, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 North Bay Inn — Santa Rosa</div>
+  ${pi([
+    '📅 Check-in: <b>7/8</b> · Check-out: <b>8/8</b> (1 noche)',
+    '🚗 Llegada en auto alquilado (Hertz Dodge Ram) por Ruta 1',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 8/8 · vuelo STS→SEA 12:52 PM',
+    '🚗 North Bay Inn → STS: <b>~15 min en auto alquilado</b>',
+    '⚠️ Devolver auto en STS a las <b>12:00 PM</b>',
+    '💡 Check-out, cargar el auto → STS → devolver → check-in vuelo'
+  ])}
+`);
+
+L.marker(locs.seattle, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Harry Potter Sweet Suites — Seattle</div>
+  ${pi([
+    '📅 Check-in: <b>8/8</b> · Check-out: <b>12/8</b> (4 noches)',
+    '🚇 Desde SEA: Link Light Rail → Capitol Hill: <b>~45 min · $3</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 12/8 · vuelo SEA→BZN 7:06 AM',
+    '⚠️ Salir del hotel a las <b>4:30–5:00 AM</b>',
+    '🚕 Hotel → SEA: <b>35–45 min · $35–55</b>',
+    '🚇 Light Rail desde Capitol Hill ~5:00 AM (primer servicio)'
+  ])}
+`);
+
+L.marker(locs.west_ystone, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Ho Hum Motel — West Yellowstone</div>
+  ${pi([
+    '📅 Check-in: <b>12/8</b> · 4:00 PM · Check-out: <b>13/8</b> · 11:00 AM',
+    '🚗 Desde BZN: <b>~1h45 por US-191 Sur</b> (auto alquilado)',
+    '⛽ Cargar nafta antes de entrar al parque',
+    '🦬 Entrada oeste de Yellowstone — posición perfecta',
+    '⚠️ Check-out 11 AM — salir temprano para aprovechar el día en el parque'
+  ])}
+`);
+
+L.marker(locs.gardiner, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Super 8 — Gardiner / Yellowstone</div>
+  ${pi([
+    '📅 Check-in: <b>13/8</b> · 4:00 PM · Check-out: <b>15/8</b> · 10:00 AM',
+    '🚗 Desde West Yellowstone: cruzar el parque, <b>~2h30–3h reales</b>',
+    '🦬 Entrada norte de Yellowstone — Mammoth + Lamar Valley cerca',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 15/8 · drive a Jackson Hole',
+    '🚗 Gardiner → Jackson: <b>3h30–4h</b> (paisaje, no apurarse)'
+  ])}
+`);
+
+L.marker(locs.jackson, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Cache House — Jackson Hole</div>
+  ${pi([
+    '📅 Check-in: <b>15/8</b> · 4:00 PM · Check-out: <b>18/8</b> · 11:00 AM',
+    '🚗 Desde Gardiner: <b>~3h30–4h por US-191</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 18/8 · vuelo JAC→LAX 12:54 PM',
+    '🚗 Cache House → JAC: <b>~15 min en auto</b>',
+    '⚠️ Check-out 11 AM → devolver Kia Rio en JAC 10 AM',
+    '💡 Devolver auto ANTES del check-out formal'
+  ])}
+`);
+
+L.marker(locs.ocean_park, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Ocean Park Hotel — Santa Monica</div>
+  ${pi([
+    '📅 Check-in: <b>18/8</b> · Check-out: <b>21/8</b> (3 noches)',
+    '🚕 Desde LAX: <b>25–40 min · $30–50</b>',
+    '⚠️ Tráfico LA impredecible — ir con margen',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 21/8 → Studio 6 Gardena',
+    '🚕 Ocean Park → Studio 6: <b>35–50 min · $25–40</b>'
+  ])}
+`);
+
+L.marker(locs.studio6, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Studio 6 Suites — Gardena</div>
+  ${pi([
+    '📅 Check-in: <b>21/8</b> · Check-out: <b>22/8</b> (última noche)',
+    '🚕 Desde Ocean Park: <b>35–50 min · $25–40</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 22/8 · vuelo LAX→LIM 11:35 AM',
+    '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b> ✅ más fácil del viaje',
+    '💡 Salir a las <b>7:45 AM</b>'
+  ])}
+`);
 
 // Park points
 [
