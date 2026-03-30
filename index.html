@@ -138,98 +138,158 @@
     .day-pill.hotel { background:rgba(34,197,94,0.12); color:#86efac; }
     .day-pill.car { background:rgba(249,115,22,0.12); color:#fdba74; }
 
-    /* PLAN OVERLAY */
-    #plan-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: var(--bg);
-      overflow-y: auto;
-      flex-direction: column;
-    }
-    #plan-overlay.visible { display: flex; }
-    .plan-overlay-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .plan-overlay-header h2 { font-size: 1.1rem; font-weight: 700; color: #60a5fa; }
-    .plan-overlay-header p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-    .plan-close-btn {
-      background: var(--card);
+    /* SIDEBAR COLLAPSE */
+    .sidebar { transition: width 0.25s ease, min-width 0.25s ease, border 0.25s ease; }
+    .sidebar.collapsed { width: 0 !important; min-width: 0 !important; overflow: hidden; border: none; }
+
+    /* SIDEBAR TOGGLE BUTTON (en el borde del mapa) */
+    .sidebar-toggle-btn {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      z-index: 1001;
+      background: rgba(15,23,42,0.88);
       border: 1px solid var(--border);
-      color: var(--text);
+      color: var(--muted);
       border-radius: 8px;
-      padding: 8px 18px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      width: 28px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      transition: background 0.15s;
+      font-size: 0.75rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+      writing-mode: vertical-rl;
+      letter-spacing: 2px;
     }
-    .plan-close-btn:hover { background: var(--card2); }
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 20px;
-      padding: 28px 32px;
+    .sidebar-toggle-btn:hover { color: var(--text); background: rgba(30,41,59,0.95); }
+
+    /* PLAN CONTENT (dentro de map-area, reemplaza el mapa) */
+    #plan-content {
+      display: none;
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      background: var(--bg);
+      z-index: 10;
     }
-    .plan-city {
-      background: var(--card);
-      border-radius: 12px;
+    #plan-content.active { display: block; }
+    #plan-content::-webkit-scrollbar { width: 6px; }
+    #plan-content::-webkit-scrollbar-track { background: var(--bg); }
+    #plan-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* PLAN — secciones de ciudad */
+    .ps {
+      display: flex;
+      min-height: 300px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ps-photo {
+      width: 38%;
+      min-width: 200px;
+      flex-shrink: 0;
+      position: relative;
+      background-size: cover;
+      background-position: center;
       overflow: hidden;
     }
-    .plan-city-header {
-      padding: 14px 18px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
+    .ps-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px 20px;
     }
-    .plan-days { padding: 0 18px 16px; }
-    .plan-day {
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(51,65,85,0.5);
-      font-size: 0.8rem;
-      line-height: 1.6;
-    }
-    .plan-day:last-child { border-bottom: none; }
-    .plan-day-label {
-      font-size: 0.68rem;
+    .ps-city-name {
+      font-size: 1.15rem;
       font-weight: 800;
-      color: #60a5fa;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    .ps-city-sub {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.75);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .ps-days {
+      flex: 1;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .ps-day {
+      display: flex;
+      gap: 0;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      transition: background 0.1s;
+    }
+    .ps-day:last-child { border-bottom: none; }
+    .ps-day:hover { background: rgba(30,41,59,0.5); }
+    .ps-day-date {
+      width: 72px;
+      min-width: 72px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-top: 2px;
+      line-height: 1.4;
+    }
+    .ps-day-date em {
+      display: block;
+      font-style: normal;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .ps-day-body { flex: 1; }
+    .ps-day-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
       margin-bottom: 4px;
     }
-    .plan-spots {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 6px;
+    .ps-day-desc {
+      font-size: 0.77rem;
+      color: #94a3b8;
+      line-height: 1.6;
     }
-    .plan-spot {
-      font-size: 0.65rem;
-      padding: 2px 8px;
-      border-radius: 20px;
-      background: rgba(79,142,247,0.12);
-      color: #93c5fd;
+    .ps-day-desc strong { color: #cbd5e1; }
+    .ps-spots {
+      margin-top: 7px;
+      font-size: 0.67rem;
+      color: #475569;
+      letter-spacing: 0.2px;
+      line-height: 1.5;
+    }
+    .ps-spots span { color: #64748b; }
+    .ps-spots b { color: #94a3b8; font-weight: 600; }
+    .ps-warn {
+      display: inline-block;
+      font-size: 0.63rem;
+      background: rgba(239,68,68,0.1);
+      color: #fca5a5;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-top: 4px;
       font-weight: 600;
     }
-    .plan-spot.music { background: rgba(168,85,247,0.15); color: #d8b4fe; }
-    .plan-spot.nature { background: rgba(34,197,94,0.12); color: #86efac; }
-    .plan-spot.food { background: rgba(249,115,22,0.12); color: #fdba74; }
-    .plan-spot.alert { background: rgba(239,68,68,0.12); color: #fca5a5; }
-    .plan-spot.event { background: rgba(234,179,8,0.15); color: #fde68a; }
-    .plan-note {
-      margin-top: 5px;
-      font-size: 0.7rem;
-      color: var(--muted);
-      line-height: 1.4;
+    .ps-event {
+      display: inline-block;
+      font-size: 0.63rem;
+      background: rgba(234,179,8,0.12);
+      color: #fde68a;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-top: 4px;
+      font-weight: 600;
     }
 
     /* RESPONSIVE */
@@ -935,7 +995,315 @@
 
   <!-- MAP -->
   <div class="map-area">
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostrar/ocultar sidebar">◀</button>
     <div id="map"></div>
+    <!-- PLAN CONTENT -->
+    <div id="plan-content">
+
+      <!-- LA LLEGADA -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hollywood_Sign_(Zuschnitt).jpg/800px-Hollywood_Sign_(Zuschnitt).jpg'); background-color:#1a1228;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">✈️ Los Ángeles</div>
+            <div class="ps-city-sub">2–4 ago · Americas Best Value Inn Hollywood · Sin auto, todo Uber</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>2/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada LAX · 7:50 AM</div>
+              <div class="ps-day-desc">Jet-lag day. Check-in hotel ~3 PM. Mañana: <strong>Santa Monica Pier</strong> + <strong>Venice Beach</strong> + canales. Noche tranquila.</div>
+              <div class="ps-spots"><b>→</b> <span>Venice Beach · Santa Monica Pier · Breezy's (desayuno)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>3/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Hollywood day</div>
+              <div class="ps-day-desc"><strong>Walk of Fame</strong> (buscar estrella de Ozzy Osbourne) · Teatro Chino · Griffith Observatory. Noche: <strong>Rainbow Bar &amp; Grill</strong> — el bar favorito de Lemmy Kilmister (Motörhead).</div>
+              <div class="ps-spots"><b>→</b> <span>Walk of Fame · Griffith Observatory · Teatro Chino · Sunset Strip</span></div>
+              <div class="ps-spots"><b>🎸</b> <span>Rainbow Bar &amp; Grill · estrella de Ozzy · Mulholland Drive</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>4/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a San Francisco</div>
+              <div class="ps-day-desc">Checkout → Uber LAX → <strong>AS1607 10:03 AM → SFO 11:27 AM</strong></div>
+              <div class="ps-warn">⚠ Salir del hotel 7:30 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAN FRANCISCO -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GoldenGateBridge-001.jpg/800px-GoldenGateBridge-001.jpg'); background-color:#0c2033; background-position: center top;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌉 San Francisco</div>
+            <div class="ps-city-sub">4–7 ago · Hotel Julian · Auto alquilado desde el 7/8</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>4/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada + Fisherman's Wharf</div>
+              <div class="ps-day-desc">BART desde SFO ($10, 30 min). Tarde: <strong>Fisherman's Wharf</strong> + leones marinos. <strong>North Beach</strong> → City Lights Bookstore → Coit Tower.</div>
+              <div class="ps-spots"><b>→</b> <span>Fisherman's Wharf · City Lights Books · Coit Tower · Chinatown (cena)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>5/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Mañana libre · AC/DC 🎸</div>
+              <div class="ps-day-desc">Mañana: <strong>Alcatraz</strong> (ferry, reservar) o <strong>Battery Spencer</strong> — la mejor vista del Golden Gate desde arriba. Tarde: descanso. 19h: <strong>AC/DC en Levi's Stadium</strong>, Santa Clara → Caltrain 4th &amp; King (~$9).</div>
+              <div class="ps-event">🎸 AC/DC · Levi's Stadium · 19h</div>
+              <div class="ps-spots"><b>→</b> <span>Battery Spencer · Alcatraz · Caltrain 4th &amp; King</span></div>
+              <div class="ps-warn">⚠ Vuelta: Caltrain (último ~medianoche) + Uber si se pasa</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>6/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Golden Gate + Haight-Ashbury</div>
+              <div class="ps-day-desc">Caminata por el <strong>Golden Gate Bridge</strong>. Tarde: <strong>Haight-Ashbury</strong> (barrio hippie icónico) + SFMOMA o de Young Museum.</div>
+              <div class="ps-spots"><b>→</b> <span>Golden Gate Bridge · Haight-Ashbury · SFMOMA · Valencia St (cena)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>7/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Ruta 1 · Sonoma Coast</div>
+              <div class="ps-day-desc">Retiro Hertz en SFO <strong>9:00 AM</strong>. Drive: <strong>Muir Woods</strong> (antes de 10h) → Stinson Beach → Point Reyes → <strong>Sonoma Coast State Park</strong> → Bodega Bay → Santa Rosa.</div>
+              <div class="ps-spots"><b>→</b> <span>Muir Woods · Stinson Beach · Point Reyes · Sonoma Coast · Bodega Bay</span></div>
+              <div class="ps-warn">⚠ Llegar a Muir Woods antes de 10h — se llena rápido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANTA ROSA -->
+      <div class="ps" style="min-height:200px;">
+        <div class="ps-photo" style="background: linear-gradient(135deg,#4a1540 0%,#1a0a2e 100%); background-color:#1a0a2e;">
+          <div class="ps-photo-overlay" style="background:linear-gradient(to right,rgba(0,0,0,0.3),transparent);">
+            <div class="ps-city-name" style="font-size:3rem;line-height:1;">🍷</div>
+            <div class="ps-city-name">Santa Rosa</div>
+            <div class="ps-city-sub">7–8 ago · North Bay Inn · Hertz Dodge Ram 1500</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>8/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Museo Schulz + Vuelo a Seattle</div>
+              <div class="ps-day-desc">Mañana: <strong>Museo de Charles M. Schulz</strong> (Snoopy 🐶). Sonoma Plaza si sobra tiempo. → Devolver auto STS <strong>12:00 PM</strong> → AS1322 <strong>12:52 PM → Seattle 14:55</strong>.</div>
+              <div class="ps-spots"><b>→</b> <span>Museo Charles M. Schulz · Sonoma Plaza · Healdsburg</span></div>
+              <div class="ps-warn">⚠ STS = Sonoma County Airport (NO es SFO). Devolver auto 12 PM.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATTLE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Space_Needle002.jpg/500px-Space_Needle002.jpg'); background-color:#0f1f0f;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌲 Seattle</div>
+            <div class="ps-city-sub">8–12 ago · Harry Potter Sweet Suites · Sin auto, todo Light Rail + Uber</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>8/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada + Pike Place</div>
+              <div class="ps-day-desc">Link Light Rail SEA → centro ($3). <strong>Pike Place Market</strong> — primera Starbucks del mundo ("Spoonman"). Waterfront.</div>
+              <div class="ps-spots"><b>→</b> <span>Pike Place · Primera Starbucks · Waterfront · Pioneer Square (noche)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>9/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">MoPOP + Space Needle</div>
+              <div class="ps-day-desc">Seattle Center: <strong>Museum of Pop Culture (MoPOP)</strong> — rock, grunge, Jimi Hendrix, historia del metal. <strong>Space Needle</strong> (combo ticket) + Chihuly Garden.</div>
+              <div class="ps-spots"><b>🎸</b> <span>MoPOP · Space Needle · Chihuly Garden · Capitol Hill (cena)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>10/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Historia del grunge</div>
+              <div class="ps-day-desc">Acuario de Seattle (mañana). Tarde: <strong>Central Saloon</strong> — donde tocaron Nirvana, Pearl Jam, Alice in Chains. <strong>The Crocodile</strong> — venue icónico del grunge de los 90s, sigue activo.</div>
+              <div class="ps-spots"><b>🤘</b> <span>Central Saloon · The Crocodile · Acuario de Seattle</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>11/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Reliquias del grunge + Fremont</div>
+              <div class="ps-day-desc"><strong>Gas Works Park</strong> — primera sesión de fotos de Alice in Chains. <strong>Viretta Park</strong> — santuario fan de Nirvana, cerca de la casa de Kurt Cobain. <strong>Moore Theatre</strong> — donde AIC grabó el MTV Unplugged. Fremont: el troll + mercadillo.</div>
+              <div class="ps-spots"><b>📸</b> <span>Gas Works Park (AIC) · Viretta Park (Nirvana) · Moore Theatre (AIC Unplugged) · Fremont Troll · Ballard</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>12/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a Bozeman</div>
+              <div class="ps-day-desc">AS2141 <strong>7:06 AM → BZN 9:46 AM</strong></div>
+              <div class="ps-warn">⚠ Checkout 5:00 AM · Uber al aeropuerto 5:30 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YELLOWSTONE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Old_faithful_eruption.jpg/500px-Old_faithful_eruption.jpg'); background-color:#1a0800;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌋 Yellowstone</div>
+            <div class="ps-city-sub">12–15 ago · Ho Hum (12-13) + Super 8 Gardiner (13-15) · Kia Rio</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>12/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">BZN → West Yellowstone</div>
+              <div class="ps-day-desc">Retiro Kia Rio BZN <strong>10:00 AM</strong>. Drive ~1.5h. Check-in Ho Hum 4 PM. Tarde: <strong>Grizzly &amp; Wolf Discovery Center</strong> (osos y lobos reales). Si hay tiempo: Wild West Yellowstone Rodeo.</div>
+              <div class="ps-spots"><b>→</b> <span>Grizzly &amp; Wolf Discovery Center 🐻 · Wild West Rodeo 🤠</span></div>
+              <div class="ps-warn">⚠ Cargar nafta antes de entrar al parque</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>13/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Lower Loop · Old Faithful</div>
+              <div class="ps-day-desc">Salida 7:30 AM. <strong>Old Faithful</strong> (antes de 9h). <strong>Grand Prismatic Spring</strong> — vista aérea desde Fairy Falls Trail (~3 km). Fountain Paint Pots. Tarde: <strong>Mammoth Hot Springs</strong> (terrazas de travertino). Move a Gardiner.</div>
+              <div class="ps-spots"><b>→</b> <span>Old Faithful ⛲ · Grand Prismatic 🌈 · Fairy Falls Trail · Mammoth Hot Springs</span></div>
+              <div class="ps-warn">⚠ Old Faithful: llegar antes de 9h para evitar multitudes</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>14/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Canyon + Lamar Valley</div>
+              <div class="ps-day-desc">Amanecer: <strong>Grand Canyon of Yellowstone</strong> — Artist Point (cascadas + cañón dorado). <strong>Hayden Valley</strong> (bisontes garantizados). <strong>Lamar Valley</strong> — zona de lobos, al amanecer o atardecer.</div>
+              <div class="ps-spots"><b>→</b> <span>Grand Canyon 🏔 · Artist Point · Hayden Valley 🦬 · Lamar Valley 🐺</span></div>
+              <div class="ps-spots"><span>Binoculares recomendados para Lamar Valley</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>15/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Drive a Jackson Hole</div>
+              <div class="ps-day-desc">Checkout 10 AM → drive Gardiner → Jackson Hole ~3.5h pasando por <strong>Grand Teton NP</strong>. Check-in Cache House 4 PM.</div>
+              <div class="ps-warn">⚠ Checkout 10 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAND TETON + JACKSON -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Grand_Teton_NPWSTF.jpg/800px-Grand_Teton_NPWSTF.jpg'); background-color:#051522;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">⛰️ Grand Teton</div>
+            <div class="ps-city-sub">15–18 ago · Cache House Jackson Hole · Kia Rio</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>15/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada Jackson Hole</div>
+              <div class="ps-day-desc">Jackson town square (arcos de cuernos de alce). Cena: <strong>Million Dollar Cowboy Bar</strong> o Persephone Bakery.</div>
+              <div class="ps-spots"><b>→</b> <span>Jackson Town Square · Million Dollar Cowboy Bar 🤠</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>16/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Teton · Día 1 — Lagos y vistas</div>
+              <div class="ps-day-desc"><strong>Jackson Lake Dam</strong> → <strong>Teton Point Turnout</strong> → <strong>Oxbow Bend</strong> (reflejo de los Tetons en el agua, foto icónica) → <strong>Jenny Lake</strong> (kayak opcional) → Church of Transfiguration → Snake River Overlook (foto de Ansel Adams).</div>
+              <div class="ps-spots"><b>→</b> <span>Jackson Lake Dam · Teton Point Turnout · Oxbow Bend 📸 · Jenny Lake · Snake River Overlook</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>17/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Teton · Día 2 — Rincones icónicos</div>
+              <div class="ps-day-desc"><strong>Schwabacher Landing</strong> al amanecer (reflejo del río — llegar antes del sol). <strong>Mormon Row</strong> — graneros históricos con los Tetons de fondo, la foto más reproducida del parque. Tarde: horseback riding ($80pp) o rafting Snake River. Noche: <strong>Mangy Moose</strong> en Teton Village.</div>
+              <div class="ps-spots"><b>→</b> <span>Schwabacher Landing 🌅 · Mormon Row 📸 · Horseback / Rafting · Mangy Moose (música en vivo)</span></div>
+              <div class="ps-warn">⚠ Schwabacher: llegar antes del amanecer</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>18/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a Los Ángeles</div>
+              <div class="ps-day-desc">Checkout 11 AM → devolver Kia Rio JAC → <strong>AA6471 12:54 PM → LAX 14:21</strong></div>
+              <div class="ps-warn">⚠ Checkout 11 AM · Devolver auto antes de 12 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LA CIERRE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Santa_Monica_Pier_from_above.jpg/800px-Santa_Monica_Pier_from_above.jpg'); background-color:#1a0f28;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🏖️ Los Ángeles</div>
+            <div class="ps-city-sub">18–22 ago · Ocean Park Hotel (18-21) + Studio 6 Gardena (21-22)</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>18/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada LAX 14:21</div>
+              <div class="ps-day-desc">Uber LAX → Ocean Park Hotel (Santa Mónica). Playa, puesta de sol. Cena en Main Street SM.</div>
+              <div class="ps-spots"><b>→</b> <span>Santa Mónica Beach 🌅 · Main Street SM</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>19/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Arte + Cultura</div>
+              <div class="ps-day-desc"><strong>Getty Center</strong> (gratis, reservar online). La Brea Tar Pits + LACMA. Tarde: Abbot Kinney (Venice) — compras finales.</div>
+              <div class="ps-spots"><b>→</b> <span>Getty Center 🎨 · LACMA · Abbot Kinney · Melrose Ave</span></div>
+              <div class="ps-warn">⚠ Reservar Getty Center online antes</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>20/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Malibu</div>
+              <div class="ps-day-desc"><strong>El Matador Beach</strong> (acantilados, el más salvaje) o Zuma Beach. Almuerzo en Malibu Seafood. Tarde: Beverly Hills si quieren el clásico turístico. Noche: Gjusta (Venice) o Republique.</div>
+              <div class="ps-spots"><b>→</b> <span>El Matador Beach 🏄 · Malibu Seafood · Beverly Hills</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>21/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Checkout + Manhattan Beach</div>
+              <div class="ps-day-desc">Checkout Ocean Park → move a <strong>Studio 6 Gardena</strong> (cerca de LAX). Manhattan Beach → El Segundo. Cena tranqui. Todo listo para el vuelo.</div>
+              <div class="ps-spots"><b>→</b> <span>Manhattan Beach · El Segundo</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>22/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelta a Buenos Aires 🏠</div>
+              <div class="ps-day-desc"><strong>LA2479 11:35 AM</strong> LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → BUE 23/8 06:10.</div>
+              <div class="ps-warn">⚠ Salir del hotel 7:30 AM · Llegada BUE 23/8 a las 06:10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /plan-content -->
     <div class="map-info">
       <h3>Mapa del viaje</h3>
       <div class="map-legend-item"><div class="ml-line" style="background:var(--flight)"></div> Vuelo</div>
@@ -1338,20 +1706,28 @@ function focusSegment(idx) {
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   event.target.classList.add('active');
+  const planContent = document.getElementById('plan-content');
+  const mapDiv = document.getElementById('map');
+  const mapInfo = document.querySelector('.map-info');
   if (name === 'plan') {
-    document.getElementById('plan-overlay').classList.add('visible');
-    return;
+    planContent.classList.add('active');
+    mapDiv.style.visibility = 'hidden';
+    if (mapInfo) mapInfo.style.display = 'none';
+  } else {
+    planContent.classList.remove('active');
+    mapDiv.style.visibility = '';
+    if (mapInfo) mapInfo.style.display = '';
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`#panel-${name}`).classList.add('active');
   }
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelector(`#panel-${name}`).classList.add('active');
 }
 
-function closePlan() {
-  document.getElementById('plan-overlay').classList.remove('visible');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.tab').classList.add('active');
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-ruta').classList.add('active');
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.querySelector('.sidebar-toggle-btn');
+  sidebar.classList.toggle('collapsed');
+  btn.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+  setTimeout(() => map.invalidateSize(), 260);
 }
 
 // Reset map on load
@@ -1360,8 +1736,8 @@ setTimeout(() => {
 }, 100);
 </script>
 
-<!-- PLAN OVERLAY FULL SCREEN -->
-<div id="plan-overlay">
+<!-- OLD PLAN OVERLAY REMOVED -->
+<div id="plan-overlay" style="display:none!important">
   <div class="plan-overlay-header">
     <div>
       <h2>🗺️ Plan día a día · USA 2026</h2>
