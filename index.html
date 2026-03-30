@@ -124,6 +124,18 @@
     .popup-time { margin-top: 6px; font-size: 0.75rem; color: #60a5fa; font-weight: 600; }
     .popup-alert { margin-top: 5px; font-size: 0.7rem; color: #fca5a5; }
 
+    /* DÍAS */
+    .day-row { display:flex; gap:10px; padding:8px 4px; border-bottom:1px solid rgba(51,65,85,0.35); cursor:pointer; transition:background 0.12s; border-radius:4px; }
+    .day-row:hover { background:var(--card2); }
+    .day-date { font-size:0.65rem; font-weight:800; color:#60a5fa; text-align:center; min-width:28px; line-height:1.3; padding-top:2px; }
+    .day-content { flex:1; display:flex; flex-direction:column; gap:3px; }
+    .day-main { font-size:0.8rem; font-weight:600; }
+    .day-sub { font-size:0.68rem; color:var(--muted); line-height:1.4; }
+    .day-tbd { color:#f59e0b !important; }
+    .day-pill { display:inline-block; font-size:0.6rem; padding:2px 7px; border-radius:20px; font-weight:700; margin-top:2px; margin-right:4px; }
+    .day-pill.hotel { background:rgba(34,197,94,0.12); color:#86efac; }
+    .day-pill.car { background:rgba(249,115,22,0.12); color:#fdba74; }
+
     /* RESPONSIVE */
     @media (max-width: 700px) {
       .layout { flex-direction: column; }
@@ -150,6 +162,7 @@
 
     <div class="tabs">
       <div class="tab active" onclick="switchTab('ruta')">🛣️ Ruta</div>
+      <div class="tab" onclick="switchTab('dias')">📅 Días</div>
       <div class="tab" onclick="switchTab('tiempos')">⏱️ Tiempos</div>
       <div class="tab" onclick="switchTab('resumen')">📊 Resumen</div>
     </div>
@@ -230,7 +243,7 @@
       <div class="segment" onclick="focusSegment(6)">
         <div class="seg-header">
           <span class="seg-icon">✈️</span>
-          <span class="seg-title">Santa Rosa → SFO → Seattle</span>
+          <span class="seg-title">STS → Seattle SEA</span>
           <span class="seg-tag tag-flight">Vuelo</span>
         </div>
         <div class="time-row">
@@ -412,6 +425,252 @@
           <div class="time-box"><div class="time-label">Salida recomendada</div><div class="time-val green">7:45 AM</div></div>
         </div>
         <div class="alert green"><span class="alert-icon">🎯</span> El cierre más bien resuelto del viaje. Transición perfecta: funcional → vuelo.</div>
+      </div>
+    </div>
+
+    <!-- PANEL DÍAS -->
+    <div class="panel" id="panel-dias">
+      <div style="padding:10px 14px; display:flex; flex-direction:column; gap:0;">
+
+        <!-- BLOQUE LA LLEGADA -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px;">📍 Los Ángeles — llegada</div>
+
+        <div class="day-row" onclick="focusSegment(0)">
+          <div class="day-date">Sáb<br>1/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ Buenos Aires → Lima</div>
+            <div class="day-sub">LA2368 · 20:05→23:00 · A320 · asientos 13D/13E</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(0)">
+          <div class="day-date">Dom<br>2/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ Lima → LAX · llegada 7:50 AM</div>
+            <div class="day-sub">LA2478 · 00:50→07:50 · B767 · asientos 16J/16L</div>
+            <div class="day-pill hotel">🏨 Americas Best Value Inn Hollywood</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Lun<br>3/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Hollywood, Santa Monica, etc.</div>
+            <div class="day-pill hotel">🏨 Americas Best Value Inn Hollywood</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE SF -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 San Francisco</div>
+
+        <div class="day-row" onclick="focusSegment(2)">
+          <div class="day-date">Mar<br>4/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ LAX → SFO · 10:03→11:27</div>
+            <div class="day-sub">AS1607 · Alaska Airlines</div>
+            <div class="day-pill hotel">🏨 Hotel Julian · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mié<br>5/8</div>
+          <div class="day-content">
+            <div class="day-main">🌉 San Francisco + <span style="color:#f59e0b;">🎸 AC/DC · 19h</span></div>
+            <div class="day-sub">Levi's Stadium · Santa Clara (~45 min de SF)</div>
+            <div class="day-pill hotel">🏨 Hotel Julian</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Jue<br>6/8</div>
+          <div class="day-content">
+            <div class="day-main">🌉 San Francisco — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Golden Gate, Fisherman's Wharf, etc.</div>
+            <div class="day-pill hotel">🏨 Hotel Julian</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE RUTA 1 -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Ruta 1 → Santa Rosa</div>
+
+        <div class="day-row" onclick="focusSegment(4)">
+          <div class="day-date">Vie<br>7/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 SFO → Ruta 1 costera → Santa Rosa</div>
+            <div class="day-sub">Retiro Hertz Dodge Ram en SFO · 9:00 AM</div>
+            <div class="day-sub">Sonoma Coast State Park en el camino</div>
+            <div class="day-pill car">🚗 Hertz Dodge Ram 1500</div>
+            <div class="day-pill hotel">🏨 North Bay Inn · check-in</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE SEATTLE -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Seattle</div>
+
+        <div class="day-row" onclick="focusSegment(6)">
+          <div class="day-date">Sáb<br>8/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 Devuelve auto en STS · 12:00 PM</div>
+            <div class="day-sub">✈️ STS → SEA · AS1322 · 12:52→14:55</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Dom<br>9/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Pike Place, Space Needle, etc.</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Lun<br>10/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mar<br>11/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE YELLOWSTONE -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Yellowstone</div>
+
+        <div class="day-row" onclick="focusSegment(8)">
+          <div class="day-date">Mié<br>12/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ SEA → BZN · 7:06→9:46</div>
+            <div class="day-sub">AS2141 · Alaska Airlines</div>
+            <div class="day-sub">🚗 Retiro Kia Rio en BZN · 10:00 AM · drive a West Yellowstone</div>
+            <div class="day-pill car">🚗 Kia Rio (Economy Bookings)</div>
+            <div class="day-pill hotel">🏨 Ho Hum Motel · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(11)">
+          <div class="day-date">Jue<br>13/8</div>
+          <div class="day-content">
+            <div class="day-main">🦬 Yellowstone — día 1</div>
+            <div class="day-sub">West entrance → Old Faithful → Grand Canyon of Yellowstone</div>
+            <div class="day-sub day-tbd">⚠️ Salir temprano, todo tarda el doble. Check-out 11 AM.</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Super 8 Gardiner · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(11)">
+          <div class="day-date">Vie<br>14/8</div>
+          <div class="day-content">
+            <div class="day-main">🦬 Yellowstone — día 2</div>
+            <div class="day-sub">Mammoth Hot Springs · Lamar Valley (wildlife) · norte del parque</div>
+            <div class="day-sub day-tbd">⚠️ Nafta llena antes de entrar.</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Super 8 Gardiner</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE TETONS -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Jackson Hole / Grand Teton</div>
+
+        <div class="day-row" onclick="focusSegment(13)">
+          <div class="day-date">Sáb<br>15/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Gardiner → Jackson Hole</div>
+            <div class="day-sub">Check-out Super 8 · 10 AM · drive ~4h</div>
+            <div class="day-sub">Pasás por Grand Teton NP en el camino</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(15)">
+          <div class="day-date">Dom<br>16/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Grand Teton NP — día 1</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Snake River Overlook, Jenny Lake, etc.</div>
+            <div class="day-sub" style="color:#fde68a;">🌅 Amanecer clave — salir antes de las 6 AM</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(15)">
+          <div class="day-date">Lun<br>17/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Grand Teton NP — día 2</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House · check-out 11 AM</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE LA FINAL -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Los Ángeles — cierre</div>
+
+        <div class="day-row" onclick="focusSegment(16)">
+          <div class="day-date">Mar<br>18/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 Devuelve auto en JAC · 10:00 AM</div>
+            <div class="day-sub">✈️ JAC → LAX · AA6471 · 12:54→14:21</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mié<br>19/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Santa Monica, Venice, etc.</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Jue<br>20/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(18)">
+          <div class="day-date">Vie<br>21/8</div>
+          <div class="day-content">
+            <div class="day-main">🚕 Ocean Park → Studio 6 Gardena (Uber)</div>
+            <div class="day-sub">Traslado logístico — cerca de LAX para el vuelo del sábado</div>
+            <div class="day-pill hotel">🏨 Studio 6 Gardena · última noche</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(20)">
+          <div class="day-date">Sáb<br>22/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ LAX → Lima → Buenos Aires</div>
+            <div class="day-sub">LA2479 LAX→LIM · 11:35→22:10 · B767 · 16J/16L</div>
+            <div class="day-sub">LA1437 LIM→EZE · 23:45→06:10+1</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Dom<br>23/8</div>
+          <div class="day-content">
+            <div class="day-main">🏠 Llegada EZE · 6:10 AM</div>
+            <div class="day-sub" style="color:#bbf7d0;">✅ Fin del viaje — 22 días · 9 hoteles · 8 vuelos</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -730,7 +989,7 @@ function addStraightLine(points, color, dashed = false) {
 // Flights
 addCurvedLine(locs.lax, locs.lax, flightColor); // arrival (just marker)
 addCurvedLine(locs.lax, locs.sfo, flightColor);  // LA → SF vuelo (ya comprado)
-addCurvedLine(locs.sfo, locs.sea, flightColor);  // SF → Seattle
+addCurvedLine(locs.sts, locs.sea, flightColor);  // STS → Seattle (AS1322)
 addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
 addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
 
