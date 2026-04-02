@@ -265,6 +265,13 @@
     .ps-day-desc ul { margin: 4px 0 0 0; padding-left: 14px; list-style: none; }
     .ps-day-desc ul li { position: relative; padding-left: 10px; margin-bottom: 4px; line-height: 1.5; }
     .ps-day-desc ul li::before { content: "·"; position: absolute; left: 0; color: #475569; font-weight: 700; }
+    .ps-cta-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+    .ps-cta { font-size: 0.62rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-decoration: none; transition: opacity 0.15s; display: inline-flex; align-items: center; gap: 4px; letter-spacing: 0.2px; }
+    .ps-cta:hover { opacity: 0.75; }
+    .ps-cta.hotel  { background: rgba(34,197,94,0.1);  color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+    .ps-cta.flight { background: rgba(79,142,247,0.12); color: #93c5fd; border: 1px solid rgba(79,142,247,0.25); }
+    .ps-cta.car    { background: rgba(249,115,22,0.1); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
+    .ps-cta.ticket { background: rgba(234,179,8,0.1);  color: #fde68a; border: 1px solid rgba(234,179,8,0.25); }
     .ps-spots {
       margin-top: 7px;
       font-size: 0.67rem;
@@ -1018,6 +1025,10 @@
               <div class="ps-day-title">Llegada LAX · 7:50 AM</div>
               <div class="ps-day-desc">Jet-lag day. Check-in hotel ~3 PM. Mañana: <strong>Santa Monica Pier</strong> + <strong>Venice Beach</strong> + canales. Noche tranquila.</div>
               <div class="ps-spots"><b>→</b> <span>Venice Beach · Santa Monica Pier · Breezy's (desayuno)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://expe.app.link/oWJfFSmOHYb" target="_blank">✈️ Vuelo BUE→LAX</a>
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?label=america-s-best-value-inn-hollywood-lqgFJ8GG5UUhkVNnrepWuQS388877648321%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-3144487599%3Alp1000037%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9Ybz4KBg0DTFCp_luKAHRTJg&sid=8ae93e818528fb9fc28ca8e1d5f13a98&aid=311839&auth_key=C4StN92hm0MrG1ll&source=mytrips" target="_blank">🏨 Americas Best Value</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1035,6 +1046,9 @@
               <div class="ps-day-title">Vuelo a San Francisco</div>
               <div class="ps-day-desc">Checkout → Uber LAX → <strong>AS1607 10:03 AM → SFO 11:27 AM</strong></div>
               <div class="ps-warn">⚠ Salir del hotel 7:30 AM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://us.trip.com/online/orderdetail/index?oid=1688895870440272&source=bookings&channel=bookings&subChannel=tripcard&flightsignature=H4sIAAAAAAAA_4uuVirOTM_zS8xNVbJSSsvJTM8o0U1KS1PSAYuHJeaUgiQMzSwsLCxNLcwNTAyNoNKJJaVFIGlHR1dHx0BH76jcioIoowwDn3Cv3Kj8y3A3b89MNy-TVA-TwlRzZ6PQwLTEQLNy78TUdNOSLJPkqmIDx9TiSoNi3ZKizAKQgUq1sQD4GLnLkgAAAA%3D%3D-split-AAEAAQAPZmxpZ2h0c2lnbmF0dXJlx4PW-vJV_14jY2QZ_sEEmymqXAbf_V_CeLtC03xu50w%3D-tripsign&curr=USD&locale=es-US" target="_blank">✈️ LAX → SFO</a>
+              </div>
             </div>
           </div>
         </div>
@@ -1055,6 +1069,9 @@
               <div class="ps-day-title">Llegada + Fisherman's Wharf</div>
               <div class="ps-day-desc">BART desde SFO ($10, 30 min). Tarde: <strong>Fisherman's Wharf</strong> + leones marinos. <strong>North Beach</strong> → City Lights Bookstore → Coit Tower.</div>
               <div class="ps-spots"><b>→</b> <span>Fisherman's Wharf · City Lights Books · Coit Tower · Chinatown (cena)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=304142&label=gen173nr-10CAso7AFCFXZlcnRpZ28tc2FuLWZyYW5jaXNjb0gKWARoDIgBAZgBM7gBB8gBDNgBA-gBAfgBAYgCAagCAbgC_b2RzQbAAgHSAiQzMDVmMjk4Ny0wYTUyLTQ5NDEtOTZiNy1jNDg3Mzc3MTg0ZGTYAgHgAgE&sid=9110d931b8c63b8566142d0d4438d45d&auth_key=BdKkmHkVWPE9BOtp&hostname=www.booking.com&source=book" target="_blank">🏨 Hotel Julian SF</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1065,6 +1082,9 @@
               <div class="ps-event">🎸 AC/DC · Levi's Stadium · 19h</div>
               <div class="ps-spots"><b>→</b> <span>Battery Spencer · Alcatraz · Caltrain 4th &amp; King</span></div>
               <div class="ps-warn">⚠ Vuelta: Caltrain (último ~medianoche) + Uber si se pasa</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta ticket" href="https://www.ticketmaster.com/user/orders" target="_blank">🎫 Tickets AC/DC</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1104,6 +1124,11 @@
               <div class="ps-day-desc">Mañana: <strong>Museo de Charles M. Schulz</strong> (Snoopy 🐶). Sonoma Plaza si sobra tiempo. → Devolver auto STS <strong>12:00 PM</strong> → AS1322 <strong>12:52 PM → Seattle 14:55</strong>.</div>
               <div class="ps-spots"><b>→</b> <span>Museo Charles M. Schulz · Sonoma Plaza · Healdsburg</span></div>
               <div class="ps-warn">⚠ STS = Sonoma County Airport (NO es SFO). Devolver auto 12 PM.</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es-ar.html?label=gen173nr-10CAEoggI46AdIM1gEaAyIAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4As2kjswGwAIB0gIkNjM1N2RkOGMtNmJhNi00ZjcyLTllNGYtNDc0OTYwZWZjZWM42AIB4AIB&sid=e97268dd70750bcc564d4cab4cec125e&aid=304142&auth_key=g4o3DUDyubnnjcfn&source=mytrips" target="_blank">🏨 North Bay Inn</a>
+                <a class="ps-cta car" href="https://www.rentalcars.com/confirmation/p3YqQpvBTut9irqQByDmxlM_kIVW9psAesu7-nmfGqg9w0YMoK_660Odl22V2hJqfrfjob_u3E_YxRPdbT-8HBh3d1E5HsILROv-o-kcJ6rJFe06RcJRt93QDGPF1U5yYerUFQt_MV_SRCYhRsViuA" target="_blank">🚗 Hertz Dodge Ram</a>
+                <a class="ps-cta flight" href="https://us.trip.com/online/orderdetail/index?oid=1688895871511184&source=bookings&channel=bookings&subChannel=tripcard&flightsignature=H4sIAAAAAAAA_4uuVirOTM_zS8xNVbJSSsvJTM8o0U1KS1PSAYuHJeaUgiQMzSwsLCxNLcwNTQ0NDS1MoNKJJaVFIGlHR1dHx0BH76jcioIoowwDn3Cv3Kj0wjAvb794_2yvsiJLX38LxyST9Hy3imQL16LE8Kok5xJjj3J3z1TnIMs03ZKizAKQgUq1sQCrE6p2kgAAAA%3D%3D-split-AAEAAQAPZmxpZ2h0c2lnbmF0dXJlk7RkKGUd1GZwvD_YU8l4CrdCEooD6DLlYuDY_LAXHzQ%3D-tripsign&curr=USD&locale=es-US" target="_blank">✈️ STS → SEA</a>
+              </div>
             </div>
           </div>
         </div>
@@ -1124,6 +1149,9 @@
               <div class="ps-day-title">Llegada + Pike Place</div>
               <div class="ps-day-desc">Link Light Rail SEA → centro ($3). <strong>Pike Place Market</strong> — primera Starbucks del mundo ("Spoonman"). Waterfront.</div>
               <div class="ps-spots"><b>→</b> <span>Pike Place · Primera Starbucks · Waterfront · Pioneer Square (noche)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=1288287&label=metagha-link-LUAR-hotel-11532492_dev-desktop_los-4_bw-160_dow-Saturday_defdate-0_room-0_gstadt-2_rateid-0_aud-9182455835_gacid-21411130277_mcid-10_ppa-0_clrid-0_ad-1_gstkid-0_checkin-20260808_ppt-_lp-2032_r-16987554273933735595&sid=9110d931b8c63b8566142d0d4438d45d&hostname=www.booking.com&source=conf_brief" target="_blank">🏨 Harry Potter Sweet Suites</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1156,6 +1184,9 @@
               <div class="ps-day-title">Vuelo a Bozeman</div>
               <div class="ps-day-desc">AS2141 <strong>7:06 AM → BZN 9:46 AM</strong></div>
               <div class="ps-warn">⚠ Checkout 5:00 AM · Uber al aeropuerto 5:30 AM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.trip.com/online/orderdetail/index?orderid=1688894476545616&channel=complete&subChannel=DetailsButton&locale=en-XX&curr=USD&tripsignature=AAEAAQAHb3JkZXJpZHPQ6_JFFP0K8TcG7cowKL0QeQ15o1kpG7Aptca7GmwV-tripsign&oid=1688894476545616&orderId=1688894476545616&redirectFromOnline=1" target="_blank">✈️ SEA → BZN</a>
+              </div>
             </div>
           </div>
         </div>
@@ -1182,6 +1213,10 @@
               </ul></div>
               <div class="ps-spots"><b>→</b> <span>Grizzly &amp; Wolf Discovery Center 🐻 · Wild West Rodeo 🤠</span></div>
               <div class="ps-warn">⚠ Cargar nafta antes de entrar al parque</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://www.hotels.com/trips/egti-9D9-5Z5-97QL" target="_blank">🏨 Ho Hum Motel</a>
+                <a class="ps-cta car" href="https://www.economybookings.com/es/profile/bookings" target="_blank">🚗 Kia Rio (BZN→JAC)</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1199,6 +1234,9 @@
               <div class="ps-spots"><b>→</b> <span>Old Faithful ⛲ · Grand Prismatic 🌈 · Fairy Falls Trail · Mammoth Hot Springs · Calcite Springs 🐏 · Gardiner→Mammoth corridor</span></div>
               <div class="ps-warn">⚠ Old Faithful: llegar antes de 9h para evitar multitudes</div>
               <div class="ps-warn" style="background:rgba(34,197,94,0.08);border-color:#22c55e;color:#86efac;">🐏 Bighorn sheep: repetir el tramo Gardiner↔Mammoth al amanecer del día siguiente — es la mejor chance del viaje</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://hotels.app.link/2yOhFZ09lXb" target="_blank">🏨 Super 8 Gardiner</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1244,6 +1282,9 @@
               <div class="ps-day-title">Llegada Jackson Hole</div>
               <div class="ps-day-desc">Jackson town square (arcos de cuernos de alce). Cena: <strong>Million Dollar Cowboy Bar</strong> o Persephone Bakery.</div>
               <div class="ps-spots"><b>→</b> <span>Jackson Town Square · Million Dollar Cowboy Bar 🤠</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://hotels.app.link/2yOhFZ09lXb" target="_blank">🏨 Cache House Jackson</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1280,6 +1321,9 @@
               <div class="ps-day-title">Vuelo a Los Ángeles</div>
               <div class="ps-day-desc">Checkout 11 AM → devolver Kia Rio JAC → <strong>AA6471 12:54 PM → LAX 14:21</strong></div>
               <div class="ps-warn">⚠ Checkout 11 AM · Devolver auto antes de 12 PM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.trip.com/online/orderdetail/index?orderid=1688894476442000&channel=complete&subChannel=DetailsButton&locale=en-XX&curr=USD&tripsignature=AAEAAQAHb3JkZXJpZHFsQH4SO92pReAOUuQRKiLryvq0CYh0o4M-agRJuO7C-tripsign&oid=1688894476442000&orderId=1688894476442000&redirectFromOnline=1" target="_blank">✈️ JAC → LAX</a>
+              </div>
             </div>
           </div>
         </div>
@@ -1300,6 +1344,9 @@
               <div class="ps-day-title">Llegada LAX 14:21</div>
               <div class="ps-day-desc">Uber LAX → Ocean Park Hotel (Santa Mónica). Playa, puesta de sol. Cena en Main Street SM.</div>
               <div class="ps-spots"><b>→</b> <span>Santa Mónica Beach 🌅 · Main Street SM</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=356980&label=gog235jc-10CAso7AFCImFtZXJpY2Etcy1iZXN0LXZhbHVlLWlubi1ob2xseXdvb2RIClgDaAyIAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Aqap_8sGwAIB0gIkODlmZDI0ZTAtMGE1Zi00OWM2LTk1ZGItYTcxZGIzMWRiYWIx2AIB4AIB&sid=d1468b82309c74ff116128db1bd95766&hostname=www.booking.com&source=conf_brief&bn=5995979984" target="_blank">🏨 Ocean Park Hotel</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1325,6 +1372,9 @@
               <div class="ps-day-title">Checkout + Manhattan Beach</div>
               <div class="ps-day-desc">Checkout Ocean Park → move a <strong>Studio 6 Gardena</strong> (cerca de LAX). Manhattan Beach → El Segundo. Cena tranqui. Todo listo para el vuelo.</div>
               <div class="ps-spots"><b>→</b> <span>Manhattan Beach · El Segundo</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=2440491&label=cht532js-10CAso7AFCC2R5bmFzdHktaW5uSApYA2gMiAEBmAEzuAEHyAEM2AED6AEB-AEBiAIBqAIBuALPsabOBsACAdICJDBlMGQyNjBjLWVlNGUtNGMwMy05MDdlLWFkZGM0MjNiNDUzMNgCAeACAQ&sid=9110d931b8c63b8566142d0d4438d45d&hostname=www.booking.com&source=conf_brief&bn=6131525416" target="_blank">🏨 Studio 6 Gardena</a>
+              </div>
             </div>
           </div>
           <div class="ps-day">
@@ -1333,6 +1383,9 @@
               <div class="ps-day-title">Vuelta a Buenos Aires 🏠</div>
               <div class="ps-day-desc"><strong>LA2479 11:35 AM</strong> LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → BUE 23/8 06:10.</div>
               <div class="ps-warn">⚠ Salir del hotel 7:30 AM · Llegada BUE 23/8 a las 06:10</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.expedia.com.ar/trips/egti-8HN-9BM-AXRY/details/Mjg1NWI1ZDAtZWFhNi01OTVlLTliNTItNjE4YmEyYjcxMmRmOzU3Y2NkZTU3LTI5NWUtNGVjZS04NGJkLWE1Yjc1NmU1ZmNlZl8wOzE" target="_blank">✈️ Vuelo LAX→BUE</a>
+              </div>
             </div>
           </div>
         </div>
