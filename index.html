@@ -861,6 +861,7 @@
           <div class="day-content">
             <div class="day-main">🌴 Los Ángeles — día libre</div>
             <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#fcd34d;">🧳 Comprar valija barata (23 kg) — Walmart / Ross / TJ Maxx</div>
             <div class="day-pill hotel">🏨 Ocean Park Hotel</div>
           </div>
         </div>
@@ -880,6 +881,7 @@
             <div class="day-main">✈️ LAX → Lima → Buenos Aires</div>
             <div class="day-sub">LA2479 LAX→LIM · 11:35→22:10 · B767 · 16J/16L</div>
             <div class="day-sub">LA1437 LIM→EZE · 23:45→06:10+1</div>
+            <div class="day-sub" style="color:#fcd34d;">🧳 23 kg despachados · Salir hotel 8:00 AM · 3h mínimo en LAX</div>
           </div>
         </div>
 
@@ -1509,7 +1511,8 @@
             <div class="ps-day-body">
               <div class="ps-day-title">Vuelta a Buenos Aires 🏠</div>
               <div class="ps-day-desc"><strong>LA2479 11:35 AM</strong> LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → BUE 23/8 06:10.</div>
-              <div class="ps-warn">⚠ Salir del hotel 7:30 AM · Llegada BUE 23/8 a las 06:10</div>
+              <div class="ps-day-desc" style="color:#fcd34d;">🧳 <strong>23 kg incluidos para despachar</strong> — necesitás 3h mínimo en LAX antes del vuelo</div>
+              <div class="ps-warn">⚠ Salir del hotel 8:00 AM · 3h de margen para despacho · Llegada BUE 23/8 06:10</div>
               <div class="ps-cta-row">
                 <a class="ps-cta flight" href="https://www.latamairlines.com/ar/es/mis-viajes/third-detail?orderId=LA4699602JDBS&segment=1&item=0&lastname=ORDOQUI" target="_blank">✈️ Vuelo LAX→BUE</a>
               </div>
@@ -1615,8 +1618,9 @@ L.marker(locs.lax, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup
     '⚠️ Punto de recogida: <b>LAX-it</b> (no en la puerta, caminar ~10 min)',
     '━━━━━━━━━━━━━━',
     '📅 <b>Salida 22/8</b> · vuelo 11:35 AM (LA2479)',
+    '🧳 <b>23 kg incluidos</b> para despachar — llegar 3h antes = 8:35 AM en LAX',
     '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b>',
-    '💡 Salir del hotel a las <b>7:45 AM</b>'
+    '💡 Salir del hotel a las <b>8:00 AM</b> (3h+ para despacho)'
   ])}
 `);
 
@@ -1789,8 +1793,9 @@ L.marker(locs.studio6, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPop
     '🚕 Desde Ocean Park: <b>35–50 min · $25–40</b>',
     '━━━━━━━━━━━━━━',
     '📅 Salida 22/8 · vuelo LAX→LIM 11:35 AM',
+    '🧳 <b>Despachar valija de 23 kg</b> — llegar 3h antes obligatorio',
     '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b> ✅ más fácil del viaje',
-    '💡 Salir a las <b>7:45 AM</b>'
+    '💡 Salir a las <b>8:00 AM</b> — llegar ~8:10–8:25 AM (3h+ de margen)'
   ])}
 `);
 
@@ -2270,12 +2275,13 @@ setTimeout(() => {
 
         <div class="plan-day">
           <div class="plan-day-label">JUE 19/8 — Arte + Cultura LA</div>
-          Getty Center (gratis, reservar online). La Brea Tar Pits + LACMA. Tarde: Melrose Ave o Abbot Kinney (Venice) — compras finales.
+          Getty Center (gratis, reservar online). La Brea Tar Pits + LACMA. Tarde: Melrose Ave o Abbot Kinney (Venice) — compras finales. <strong>🧳 Buscar valija económica de 23 kg</strong> (Walmart/Ross/TJ Maxx) para meter todo lo que juntaron en el viaje.
           <div class="plan-spots">
             <span class="plan-spot">Getty Center 🎨</span>
             <span class="plan-spot">LACMA</span>
             <span class="plan-spot">Abbot Kinney</span>
             <span class="plan-spot alert">Reservar Getty online</span>
+            <span class="plan-spot alert">🧳 Comprar valija barata (Walmart/Ross)</span>
           </div>
         </div>
 
@@ -2292,18 +2298,20 @@ setTimeout(() => {
 
         <div class="plan-day">
           <div class="plan-day-label">SAB 21/8 — Checkout + Manhattan Beach</div>
-          Checkout Ocean Park → move a Studio 6 Gardena (cerca de LAX). Manhattan Beach → El Segundo. Cena tranqui, todo listo para el vuelo.
+          Checkout Ocean Park → move a Studio 6 Gardena (cerca de LAX). Manhattan Beach → El Segundo. Cena tranqui, todo listo para el vuelo. <strong>Empacar valija de 23 kg con todo lo comprado</strong> — no exceder el peso.
           <div class="plan-spots">
             <span class="plan-spot nature">Manhattan Beach</span>
             <span class="plan-spot alert">Check-in Studio 6 Gardena</span>
+            <span class="plan-spot alert">🧳 Empacar y pesar valija (máx 23 kg)</span>
           </div>
         </div>
 
         <div class="plan-day">
           <div class="plan-day-label">DOM 22/8 — Vuelo de vuelta ⚠️</div>
-          <strong>Vuelo 11:35 AM → salir hotel 7:30 AM máximo.</strong> LA2479 LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → Buenos Aires 23/8 06:10.
+          <strong>Vuelo 11:35 AM → salir hotel 8:00 AM.</strong> Despachar valija de 23 kg — llegar 3h antes al LAX obligatorio. LA2479 LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → Buenos Aires 23/8 06:10.
           <div class="plan-spots">
-            <span class="plan-spot alert">Salir hotel 7:30 AM 🚨</span>
+            <span class="plan-spot alert">Salir hotel 8:00 AM 🚨</span>
+            <span class="plan-spot alert">🧳 Despachar 23 kg en LAX</span>
             <span class="plan-spot alert">LA2479 11:35 AM</span>
           </div>
         </div>
