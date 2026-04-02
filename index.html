@@ -707,6 +707,7 @@
           <div class="day-content">
             <div class="day-main">🌉 San Francisco — día libre</div>
             <div class="day-sub day-tbd">📌 Por planificar: Golden Gate, Fisherman's Wharf, etc.</div>
+            <div class="day-sub" style="color:#6ee7b7;">🚇 BART + Waymo/Uber · sin auto en SF</div>
             <div class="day-pill hotel">🏨 Hotel Julian</div>
           </div>
         </div>
@@ -742,6 +743,7 @@
           <div class="day-content">
             <div class="day-main">🏙️ Seattle — día libre</div>
             <div class="day-sub day-tbd">📌 Por planificar: Pike Place, Space Needle, etc.</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
             <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
           </div>
         </div>
@@ -751,6 +753,7 @@
           <div class="day-content">
             <div class="day-main">🏙️ Seattle — día libre</div>
             <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
             <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
           </div>
         </div>
@@ -760,6 +763,7 @@
           <div class="day-content">
             <div class="day-main">🏙️ Seattle — día libre</div>
             <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
             <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
           </div>
         </div>
@@ -913,6 +917,8 @@
         <div style="background:var(--card); border-radius:8px; padding:14px; border-left:4px solid var(--alert-green);">
           <div style="font-size:0.72rem; font-weight:700; color:#bbf7d0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🟢 ZONAS TRANQUILAS</div>
           <div style="font-size:0.78rem; line-height:1.8;">
+            ✅ <strong>SF ciudad</strong> — sin auto · BART + Waymo + Uber (Waymo es lo mejor)<br>
+            ✅ <strong>Seattle ciudad</strong> — sin auto · Link Light Rail $3 + Uber<br>
             ✅ <strong>SF → Santa Rosa</strong> (fuera de hora pico)<br>
             ✅ <strong>Jackson → JAC aeropuerto</strong> (30 min directo)<br>
             ✅ <strong>Studio 6 → LAX</strong> (10–25 min, bien resuelto)<br>
@@ -1613,6 +1619,11 @@ function pi(rows) {
   return rows.map(r => `<div class="popup-row">${r}</div>`).join('');
 }
 
+// Colores globales (deben estar antes de los marcadores)
+const flightColor = '#4f8ef7';
+const intlColor   = '#7dd3fc';
+const driveColor  = '#f97316';
+
 // ── AEROPUERTOS ──────────────────────────────────────────────────
 L.marker(locs.lax, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
   <div class="popup-title">✈️ LAX — Los Ángeles International</div>
@@ -1852,10 +1863,6 @@ L.marker(locs.studio6, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPop
 });
 
 // ROUTES
-// Flights (solid blue curves)
-const flightColor = '#4f8ef7';
-const intlColor   = '#7dd3fc';  // vuelos internacionales — celeste
-const driveColor  = '#f97316';
 
 function addCurvedLine(p1, p2, color, dashed = false) {
   const latlngs = [];
@@ -1900,13 +1907,13 @@ addCurvedLine(locs.sts, locs.sea, flightColor);  // STS → Seattle (AS1322)
 addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
 addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
 
-// Vuelos internacionales (celeste punteado)
-// IDA: AEP → Lima (curva este, sobre Bolivia) → LAX (curva norte, sobre Pacífico)
-addIntlLine(locs.aep, locs.lim,  0.1,  0.9);  // AEP→LIM: arco hacia el interior
-addIntlLine(locs.lim, locs.lax,  0.6, -0.15); // LIM→LAX: gran arco norte sobre Pacífico
-// VUELTA: LAX → Lima → EZE
-addIntlLine(locs.lax, locs.lim,  0.6, -0.15); // LAX→LIM: mismo arco
-addIntlLine(locs.lim, locs.eze,  0.1,  0.9);  // LIM→EZE: arco hacia el interior
+// Vuelos internacionales (celeste punteado) — todos curvan hacia el norte (gran círculo real)
+// IDA (1–2/8): AEP → LIM → LAX
+addIntlLine(locs.aep, locs.lim,  0.25,  0.0);  // AEP→LIM: arco norte suave sobre Andes
+addIntlLine(locs.lim, locs.lax,  0.45,  0.15); // LIM→LAX: arco norte, leve este (sobre México)
+// VUELTA (22/8): LAX → LIM → EZE
+addIntlLine(locs.lax, locs.lim,  0.45, -0.15); // LAX→LIM: arco norte, leve oeste (Pacífico)
+addIntlLine(locs.lim, locs.eze,  0.25,  0.0);  // LIM→EZE: arco norte suave sobre Andes
 
 // Drives (dashed orange) — solo tramos con auto alquilado + Uber en ciudades
 addStraightLine([locs.lax, locs.hollywood], driveColor, true);  // Uber LAX→Hollywood
@@ -2079,6 +2086,11 @@ setTimeout(() => {
       <div class="plan-city-header" style="background:linear-gradient(135deg,#1a3a2f,#0f2218);border-left:4px solid #34d399;color:#6ee7b7;">
         🌉 SAN FRANCISCO · 4–7 ago · Hotel Julian
       </div>
+      <div style="background:rgba(52,211,153,0.08);border-left:3px solid #34d399;padding:8px 14px;font-size:0.72rem;line-height:1.7;color:#a7f3d0;">
+        🚇 <strong>Sin auto en la ciudad</strong> — BART + Waymo + Uber son suficientes · Parking $40+/día, no vale la pena<br>
+        🤖 <strong>Waymo</strong> funciona excelente en SF: taxis autónomos, más baratos que Uber y disponibles 24h<br>
+        🚗 <strong>Auto sí</strong> el 7/8: Hertz SFO 9 AM → Ruta 1 norte → STS (nunca se estaciona en la ciudad)
+      </div>
       <div class="plan-days">
 
         <div class="plan-day">
@@ -2155,6 +2167,12 @@ setTimeout(() => {
     <div class="plan-city">
       <div class="plan-city-header" style="background:linear-gradient(135deg,#0c2a3a,#071a24);border-left:4px solid #38bdf8;color:#7dd3fc;">
         🌲 SEATTLE · 8–12 ago · Harry Potter Sweet Suites
+      </div>
+      <div style="background:rgba(56,189,248,0.08);border-left:3px solid #38bdf8;padding:8px 14px;font-size:0.72rem;line-height:1.7;color:#bae6fd;">
+        🚇 <strong>Sin auto en la ciudad</strong> — Link Light Rail + Uber cubren todo · Similar a SF, no vale rentar<br>
+        🚆 <strong>Link Light Rail</strong>: SEA aeropuerto → downtown $3 · 45 min · Primera estación: Westlake<br>
+        📍 Todos los spots grunge están agrupados: Capitol Hill (Viretta, Moore) y Seattle Center (MoPOP, Space Needle) a Uber corto<br>
+        ⚠️ <strong>12/8 vuelo 7:06 AM</strong>: Link arranca ~5 AM pero ir en Uber (~$35) para no correr con maletas
       </div>
       <div class="plan-days">
 
