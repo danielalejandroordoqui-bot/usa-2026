@@ -312,6 +312,51 @@
 </head>
 <body>
 
+<div id="pw-gate" style="position:fixed;inset:0;z-index:9999;background:#0f172a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;font-family:'Segoe UI',system-ui,sans-serif;">
+  <div style="text-align:center;margin-bottom:8px;">
+    <div style="font-size:2.4rem;margin-bottom:6px;">🇺🇸</div>
+    <div style="font-size:1.05rem;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;">Road Trip USA 2026</div>
+    <div style="font-size:0.72rem;color:#475569;margin-top:4px;">Acceso privado</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;width:260px;">
+    <input id="pw-input" type="password" placeholder="Contraseña" autocomplete="off"
+      style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:11px 14px;font-size:0.88rem;outline:none;width:100%;box-sizing:border-box;transition:border 0.2s;"
+      onkeydown="if(event.key==='Enter')checkPw()"
+      onfocus="this.style.borderColor='#60a5fa'"
+      onblur="this.style.borderColor='#334155'"
+    />
+    <button onclick="checkPw()"
+      style="background:#1d4ed8;color:#fff;border:none;border-radius:8px;padding:11px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:background 0.2s;"
+      onmouseover="this.style.background='#2563eb'"
+      onmouseout="this.style.background='#1d4ed8'"
+    >Entrar</button>
+    <div id="pw-error" style="color:#fca5a5;font-size:0.72rem;text-align:center;display:none;">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    if (sessionStorage.getItem('usa2026_auth') === '1') {
+      document.getElementById('pw-gate').style.display = 'none';
+    } else {
+      document.body.style.overflow = 'hidden';
+    }
+  })();
+  function checkPw() {
+    var val = document.getElementById('pw-input').value;
+    if (val === 'YellowstoneUSA2026') {
+      sessionStorage.setItem('usa2026_auth', '1');
+      document.getElementById('pw-gate').style.display = 'none';
+      document.body.style.overflow = '';
+    } else {
+      document.getElementById('pw-error').style.display = 'block';
+      document.getElementById('pw-input').style.borderColor = '#ef4444';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+</script>
+
 <div class="layout">
   <!-- SIDEBAR -->
   <div class="sidebar">
@@ -1090,12 +1135,12 @@
             <div class="ps-day-body">
               <div class="ps-day-title">Mañana libre · AC/DC 🎸</div>
               <div class="ps-day-desc"><ul>
-                <li>Mañana: <strong>Alcatraz</strong> (ferry, reservar con anticipación) o <strong>Battery Spencer</strong> — mejor vista del Golden Gate desde arriba</li>
+                <li>Mañana: <strong>Battery Spencer</strong> — mejor vista del Golden Gate desde arriba (ver Alcatraz a lo lejos desde aquí)</li>
                 <li>Tarde: descanso antes del show</li>
                 <li><strong>19h: AC/DC en Levi's Stadium</strong>, Santa Clara → Caltrain 4th &amp; King (~$9)</li>
               </ul></div>
               <div class="ps-event">🎸 AC/DC · Levi's Stadium · 19h</div>
-              <div class="ps-spots"><b>→</b> <span>Battery Spencer · Alcatraz · Caltrain 4th &amp; King</span></div>
+              <div class="ps-spots"><b>→</b> <span>Battery Spencer · Caltrain 4th &amp; King</span></div>
               <div class="ps-warn">⚠ Vuelta: Caltrain (último ~medianoche) + Uber si se pasa</div>
               <div class="ps-cta-row">
                 <a class="ps-cta ticket" href="https://www.ticketmaster.com/user/orders" target="_blank">🎫 Tickets AC/DC</a>
