@@ -1524,7 +1524,8 @@
     </div><!-- /plan-content -->
     <div class="map-info">
       <h3>Mapa del viaje</h3>
-      <div class="map-legend-item"><div class="ml-line" style="background:var(--flight)"></div> Vuelo</div>
+      <div class="map-legend-item"><div class="ml-line" style="background:var(--flight)"></div> Vuelo doméstico</div>
+      <div class="map-legend-item"><div class="ml-line" style="background:#7dd3fc;border-top:2px dashed #7dd3fc;height:0;"></div> Vuelo internacional</div>
       <div class="map-legend-item"><div class="ml-line" style="background:var(--drive);height:2px;border-top:2px dashed var(--drive);background:none;"></div> Auto</div>
       <div class="map-legend-item"><div class="ml-dot" style="background:var(--flight);border-color:var(--flight)"></div> Aeropuerto</div>
       <div class="map-legend-item"><div class="ml-dot" style="background:var(--stay);border-color:var(--stay)"></div> Hotel</div>
@@ -1568,7 +1569,10 @@ const locs = {
   jac:          [43.6073, -110.7377],
   jackson:      [43.4799, -110.7624],
   ocean_park:   [34.0007, -118.4912],
-  studio6:      [33.8875, -118.2729]
+  studio6:      [33.8875, -118.2729],
+  aep:          [-34.5592, -58.4156],  // Aeroparque Jorge Newbery — salida 1/8
+  lim:          [-12.0219, -77.1143],  // Lima Jorge Chávez — escalas ida y vuelta
+  eze:          [-34.8222, -58.5358]   // Ezeiza — llegada 23/8
 };
 
 // Custom icons
@@ -1681,6 +1685,43 @@ L.marker(locs.jac, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup
     '✈️ Vuelo AA6471 JAC→LAX: <b>12:54 PM</b>',
     '⚠️ Llegar al aeropuerto antes de las <b>10:54 AM</b> (2h antes)',
     '💡 Check-out Cache House 11 AM → directo a JAC → devolver auto → check-in'
+  ])}
+`);
+
+// ── AEROPUERTOS INTERNACIONALES ──────────────────────────────────
+L.marker(locs.aep, { icon: makeIcon(intlColor, '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ AEP — Aeroparque Jorge Newbery</div>
+  ${pi([
+    '📅 <b>Salida 1/8</b> · LA2368 · 20:05 hs',
+    '🛫 AEP → LIM · <b>~4h55 de vuelo</b>',
+    '🛬 Llega Lima: <b>23:00 hs</b> (hora Lima)',
+    '━━━━━━━━━━━━━━',
+    '⏳ Escala Lima: <b>1h50</b> (23:00 → 00:50)',
+    '🛫 LIM → LAX · LA2478 · sale <b>2/8 00:50 hs</b> · ~9h',
+    '🛬 Llega LAX: <b>2/8 07:50 AM</b>'
+  ])}
+`);
+
+L.marker(locs.lim, { icon: makeIcon(intlColor, '🔄') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ LIM — Lima Jorge Chávez</div>
+  ${pi([
+    '━━ IDA (1–2/8) ━━━━━━━━━━━━━',
+    '🛬 Llega de AEP: <b>23:00 hs · 1/8</b> · LA2368',
+    '⏳ Escala: <b>1h50</b>',
+    '🛫 Sale a LAX: <b>00:50 hs · 2/8</b> · LA2478',
+    '━━ VUELTA (22/8) ━━━━━━━━━━━',
+    '🛬 Llega de LAX: <b>22:10 hs · 22/8</b> · LA2479',
+    '⏳ Escala: <b>1h35</b>',
+    '🛫 Sale a EZE: <b>23:45 hs · 22/8</b> · LA1437'
+  ])}
+`);
+
+L.marker(locs.eze, { icon: makeIcon(intlColor, '🏠') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ EZE — Ezeiza Internacional</div>
+  ${pi([
+    '📅 <b>Llegada 23/8</b> · LA1437 · 06:10 AM',
+    '🛬 LIM → EZE · <b>~4h25 de vuelo</b>',
+    '✅ Fin del viaje — 22 días por USA'
   ])}
 `);
 
@@ -1813,7 +1854,8 @@ L.marker(locs.studio6, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPop
 // ROUTES
 // Flights (solid blue curves)
 const flightColor = '#4f8ef7';
-const driveColor = '#f97316';
+const intlColor   = '#7dd3fc';  // vuelos internacionales — celeste
+const driveColor  = '#f97316';
 
 function addCurvedLine(p1, p2, color, dashed = false) {
   const latlngs = [];
@@ -1837,12 +1879,34 @@ function addStraightLine(points, color, dashed = false) {
   L.polyline(points, opts).addTo(map);
 }
 
+// Vuelos internacionales — curva larga con arco pronunciado
+function addIntlLine(p1, p2, dLat, dLng) {
+  const latlngs = [];
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const lat = p1[0] + (p2[0] - p1[0]) * t;
+    const lng = p1[1] + (p2[1] - p1[1]) * t;
+    const curve = Math.sin(Math.PI * t) * 8;
+    latlngs.push([lat + curve * dLat, lng + curve * dLng]);
+  }
+  L.polyline(latlngs, { color: intlColor, weight: 2, opacity: 0.8, dashArray: '10 6' }).addTo(map);
+}
+
 // Flights
 addCurvedLine(locs.lax, locs.lax, flightColor); // arrival (just marker)
 addCurvedLine(locs.lax, locs.sfo, flightColor);  // LA → SF vuelo (ya comprado)
 addCurvedLine(locs.sts, locs.sea, flightColor);  // STS → Seattle (AS1322)
 addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
 addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
+
+// Vuelos internacionales (celeste punteado)
+// IDA: AEP → Lima (curva este, sobre Bolivia) → LAX (curva norte, sobre Pacífico)
+addIntlLine(locs.aep, locs.lim,  0.1,  0.9);  // AEP→LIM: arco hacia el interior
+addIntlLine(locs.lim, locs.lax,  0.6, -0.15); // LIM→LAX: gran arco norte sobre Pacífico
+// VUELTA: LAX → Lima → EZE
+addIntlLine(locs.lax, locs.lim,  0.6, -0.15); // LAX→LIM: mismo arco
+addIntlLine(locs.lim, locs.eze,  0.1,  0.9);  // LIM→EZE: arco hacia el interior
 
 // Drives (dashed orange) — solo tramos con auto alquilado + Uber en ciudades
 addStraightLine([locs.lax, locs.hollywood], driveColor, true);  // Uber LAX→Hollywood
