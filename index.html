@@ -232,6 +232,7 @@ function checkPw(){
   <a class="nav-link" href="#jackson">🏔️ Jackson Hole</a>
   <a class="nav-link" href="#la2">🌴 LA Cierre</a>
   <a class="nav-link" href="#logistica">⏱️ Tiempos</a>
+  <a class="nav-link" href="#auto-la">🅿️ Auto LA</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -867,6 +868,17 @@ function checkPw(){
     <div class="rule-card"><span class="rule-icon">🐑</span><div class="rule-heading">Bighorn sheep: buscar en roca, no en pasto</div><div class="rule-text">Corridor Gardiner↔Mammoth. Binoculares en mano. Buscar formas claras en paredes verticales de roca.</div></div>
   </div>
 
+  <div class="section-divider" id="auto-la">Auto en Los Ángeles</div>
+  <div class="alert-inline alert-amber" style="margin-bottom:16px;"><span class="icon">⚠️</span><span>LA no es Buenos Aires ni La Plata — <strong>no se estaciona donde hay lugar</strong>. Hay inspectores todo el día y las multas son $70–100 USD. Leer siempre los carteles de street parking.</span></div>
+  <div class="rules-grid">
+    <div class="rule-card"><span class="rule-icon">📏</span><div class="rule-heading">Turo 800 millas: más que suficiente</div><div class="rule-text">Un día turista en LA son 50–80 millas. Para 4 días de paseos (Hollywood, Santa Monica, Malibu, Venice) estimá 350–450 millas totales. 800 millas es el doble de lo que van a necesitar.</div></div>
+    <div class="rule-card"><span class="rule-icon">📱</span><div class="rule-heading">SpotHero: reservar garage de antemano</div><div class="rule-text">La app más útil para LA. Buscás garage por zona, reservás y pagás desde el cel. Ideal para Hollywood Blvd, Santa Monica y downtown. Siempre más barato que llegar sin reserva.</div></div>
+    <div class="rule-card"><span class="rule-icon">🅿️</span><div class="rule-heading">ParkMobile: pagar parquímetros sin monedas</div><div class="rule-text">La mayoría de los parquímetros de LA usan esta app. Ingresás el número del parquímetro, pagás y podés extender el tiempo a distancia. Bajársela antes de salir.</div></div>
+    <div class="rule-card"><span class="rule-icon">🗺️</span><div class="rule-heading">Dónde estacionar — por zona</div><div class="rule-text"><strong>Hollywood Blvd:</strong> garages en Hollywood &amp; Highland.<br><strong>Santa Monica Pier:</strong> structures en 2nd y 4th St (90 min gratis en algunas).<br><strong>Griffith Park / Observatory:</strong> playas gratuitas dentro del parque.<br><strong>Venice Beach:</strong> playas pagas sobre la costa.<br><strong>Getty Center:</strong> estacionamiento oficial $20 (reservar entrada online).</div></div>
+    <div class="rule-card"><span class="rule-icon">🚫</span><div class="rule-heading">Street parking: leer el cartel siempre</div><div class="rule-text">Los carteles indican: horario permitido, días de limpieza de calle (te llevan el auto), y si es zona de permiso residencial (permit only). Si dice "No Parking 8–10 AM Mon/Thu" y estacionás un lunes → multa + grúa.</div></div>
+    <div class="rule-card"><span class="rule-icon">💡</span><div class="rule-heading">Garage &gt; calle en zonas turísticas</div><div class="rule-text">En áreas de mucho turismo, perder 5 min buscando un garage pago es mejor que arriesgarse a una multa o que te lleven el auto. El costo de recuperar el auto en LA es $250–300 USD.</div></div>
+  </div>
+
 </main>
 
 <footer class="footer">
@@ -876,7 +888,7 @@ function checkPw(){
 </footer>
 
 <script>
-const sections = document.querySelectorAll('section[id], #logistica');
+const sections = document.querySelectorAll('section[id], #logistica, #auto-la');
 const navLinks = document.querySelectorAll('.nav-link');
 window.addEventListener('scroll', () => {
   let current = '';
