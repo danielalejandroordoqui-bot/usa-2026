@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🇺🇸 Road Trip USA 2026 — Mapa Interactivo</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --flight: #4f8ef7;
+      --drive: #f97316;
+      --stay: #22c55e;
+      --alert-red: #ef4444;
+      --alert-yellow: #eab308;
+      --alert-green: #22c55e;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card2: #263248;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+
+    /* LAYOUT */
+    .layout { display: flex; height: 100vh; }
+    .sidebar { width: 400px; min-width: 360px; height: 100vh; overflow-y: auto; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .map-area { flex: 1; position: relative; }
+    #map { width: 100%; height: 100%; }
+
+    /* SCROLLBAR */
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: var(--bg); }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* HEADER */
+    .header { padding: 20px 20px 16px; background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); border-bottom: 1px solid var(--border); }
+    .header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
+    .header h1 span { color: #60a5fa; }
+    .header p { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .legend { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--muted); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* TABS */
+    .tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .tab { flex: 1; padding: 11px 8px; text-align: center; font-size: 0.72rem; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; letter-spacing: 0.3px; text-transform: uppercase; }
+    .tab:hover { color: var(--text); background: var(--card2); }
+    .tab.active { color: #60a5fa; border-bottom: 2px solid #60a5fa; }
+
+    /* CONTENT PANELS */
+    .panel { display: none; flex-direction: column; gap: 0; }
+    .panel.active { display: flex; }
+
+    /* SEGMENT CARDS */
+    .segment { padding: 14px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+    .segment:hover { background: var(--card2); }
+    .segment.highlighted { background: var(--card2); border-left: 3px solid #60a5fa; }
+    .seg-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .seg-icon { font-size: 1.1rem; }
+    .seg-title { font-weight: 600; font-size: 0.85rem; }
+    .seg-subtitle { font-size: 0.7rem; color: var(--muted); margin-left: auto; }
+    .seg-tag { font-size: 0.62rem; padding: 2px 7px; border-radius: 20px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+    .tag-flight { background: rgba(79,142,247,0.15); color: var(--flight); }
+    .tag-drive { background: rgba(249,115,22,0.15); color: var(--drive); }
+    .tag-stay { background: rgba(34,197,94,0.15); color: var(--stay); }
+
+    .time-row { display: flex; gap: 10px; margin: 6px 0; }
+    .time-box { flex: 1; background: var(--card); border-radius: 6px; padding: 7px 10px; }
+    .time-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .time-val { font-size: 0.9rem; font-weight: 700; color: #60a5fa; }
+    .time-val.orange { color: var(--drive); }
+    .time-val.green { color: var(--stay); }
+
+    /* ALERTS */
+    .alert { display: flex; gap: 8px; align-items: flex-start; padding: 7px 10px; border-radius: 6px; margin-top: 5px; font-size: 0.72rem; line-height: 1.4; }
+    .alert.red { background: rgba(239,68,68,0.1); border-left: 3px solid var(--alert-red); color: #fca5a5; }
+    .alert.yellow { background: rgba(234,179,8,0.1); border-left: 3px solid var(--alert-yellow); color: #fde68a; }
+    .alert.green { background: rgba(34,197,94,0.1); border-left: 3px solid var(--alert-green); color: #bbf7d0; }
+    .alert-icon { font-size: 0.85rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* RESUMEN TAB */
+    .summary-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { background: var(--card); border-radius: 8px; padding: 14px; text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; }
+    .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+    .rules-section { padding: 0 16px 16px; }
+    .rules-title { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .rule-card { background: var(--card); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+    .rule-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .rule-text { font-size: 0.78rem; line-height: 1.5; }
+    .rule-text strong { color: #60a5fa; display: block; margin-bottom: 2px; }
+    .zone-table { padding: 0 16px 16px; }
+    .zone-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border-radius: 8px; margin-bottom: 6px; }
+    .zone-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .zone-name { font-size: 0.78rem; font-weight: 600; flex: 1; }
+    .zone-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; font-weight: 700; }
+    .badge-danger { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .badge-ok { background: rgba(34,197,94,0.2); color: #bbf7d0; }
+
+    /* ITINERARY */
+    .itinerary { padding: 12px 16px; }
+    .day-block { margin-bottom: 16px; }
+    .day-header { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .day-event { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(51,65,85,0.4); }
+    .day-time { font-size: 0.7rem; color: #60a5fa; font-weight: 700; width: 50px; flex-shrink: 0; padding-top: 1px; }
+    .day-desc { font-size: 0.78rem; line-height: 1.4; }
+    .day-desc .sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+    /* MAP OVERLAY INFO */
+    .map-info { position: absolute; top: 16px; right: 16px; z-index: 1000; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; max-width: 220px; backdrop-filter: blur(8px); }
+    .map-info h3 { font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: #60a5fa; }
+    .map-legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.7rem; }
+    .ml-line { width: 24px; height: 3px; border-radius: 2px; }
+    .ml-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; }
+
+    /* POPUP CUSTOM */
+    .leaflet-popup-content-wrapper { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 8px; }
+    .leaflet-popup-tip { background: #1e293b; }
+    .popup-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+    .popup-sub { font-size: 0.72rem; color: #94a3b8; }
+    .popup-time { margin-top: 6px; font-size: 0.75rem; color: #60a5fa; font-weight: 600; }
+    .popup-alert { margin-top: 5px; font-size: 0.7rem; color: #fca5a5; }
+    .popup-row { font-size: 0.71rem; line-height: 1.5; padding: 2px 0; color: #cbd5e1; }
+    .popup-row b { color: #e2e8f0; }
+
+    /* DÍAS */
+    .day-row { display:flex; gap:10px; padding:8px 4px; border-bottom:1px solid rgba(51,65,85,0.35); cursor:pointer; transition:background 0.12s; border-radius:4px; }
+    .day-row:hover { background:var(--card2); }
+    .day-date { font-size:0.65rem; font-weight:800; color:#60a5fa; text-align:center; min-width:28px; line-height:1.3; padding-top:2px; }
+    .day-content { flex:1; display:flex; flex-direction:column; gap:3px; }
+    .day-main { font-size:0.8rem; font-weight:600; }
+    .day-sub { font-size:0.68rem; color:var(--muted); line-height:1.4; }
+    .day-tbd { color:#f59e0b !important; }
+    .day-pill { display:inline-block; font-size:0.6rem; padding:2px 7px; border-radius:20px; font-weight:700; margin-top:2px; margin-right:4px; }
+    .day-pill.hotel { background:rgba(34,197,94,0.12); color:#86efac; }
+    .day-pill.car { background:rgba(249,115,22,0.12); color:#fdba74; }
+
+    /* SIDEBAR COLLAPSE */
+    .sidebar { transition: width 0.25s ease, min-width 0.25s ease, border 0.25s ease; }
+    .sidebar.collapsed { width: 0 !important; min-width: 0 !important; overflow: hidden; border: none; }
+
+    /* SIDEBAR TOGGLE BUTTON (en el borde del mapa) */
+    .sidebar-toggle-btn {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      z-index: 1001;
+      background: rgba(15,23,42,0.88);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      width: 28px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+      writing-mode: vertical-rl;
+      letter-spacing: 2px;
+    }
+    .sidebar-toggle-btn:hover { color: var(--text); background: rgba(30,41,59,0.95); }
+
+    /* PLAN CONTENT (dentro de map-area, reemplaza el mapa) */
+    #plan-content {
+      display: none;
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      background: var(--bg);
+      z-index: 10;
+    }
+    #plan-content.active { display: block; }
+    #plan-content::-webkit-scrollbar { width: 6px; }
+    #plan-content::-webkit-scrollbar-track { background: var(--bg); }
+    #plan-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* PLAN — secciones de ciudad */
+    .ps {
+      display: flex;
+      min-height: 300px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ps-photo {
+      width: 38%;
+      min-width: 200px;
+      flex-shrink: 0;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    .ps-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 24px 20px;
+    }
+    .ps-city-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    .ps-city-sub {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.75);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .ps-days {
+      flex: 1;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .ps-day {
+      display: flex;
+      gap: 0;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      transition: background 0.1s;
+    }
+    .ps-day:last-child { border-bottom: none; }
+    .ps-day:hover { background: rgba(30,41,59,0.5); }
+    .ps-day-date {
+      width: 72px;
+      min-width: 72px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-top: 2px;
+      line-height: 1.4;
+    }
+    .ps-day-date em {
+      display: block;
+      font-style: normal;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .ps-day-body { flex: 1; }
+    .ps-day-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .ps-day-desc {
+      font-size: 0.77rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .ps-day-desc strong { color: #cbd5e1; }
+    .ps-day-desc ul { margin: 4px 0 0 0; padding-left: 14px; list-style: none; }
+    .ps-day-desc ul li { position: relative; padding-left: 10px; margin-bottom: 4px; line-height: 1.5; }
+    .ps-day-desc ul li::before { content: "·"; position: absolute; left: 0; color: #475569; font-weight: 700; }
+    .ps-cta-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+    .ps-cta { font-size: 0.62rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-decoration: none; transition: opacity 0.15s; display: inline-flex; align-items: center; gap: 4px; letter-spacing: 0.2px; }
+    .ps-cta:hover { opacity: 0.75; }
+    .ps-cta.hotel  { background: rgba(34,197,94,0.1);  color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+    .ps-cta.flight { background: rgba(79,142,247,0.12); color: #93c5fd; border: 1px solid rgba(79,142,247,0.25); }
+    .ps-cta.car    { background: rgba(249,115,22,0.1); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
+    .ps-cta.ticket { background: rgba(234,179,8,0.1);  color: #fde68a; border: 1px solid rgba(234,179,8,0.25); }
+    .ps-cta.pass   { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+    .ps-spots {
+      margin-top: 7px;
+      font-size: 0.67rem;
+      color: #475569;
+      letter-spacing: 0.2px;
+      line-height: 1.5;
+    }
+    .ps-spots span { color: #64748b; }
+    .ps-spots b { color: #94a3b8; font-weight: 600; }
+    .ps-warn {
+      display: inline-block;
+      font-size: 0.63rem;
+      background: rgba(239,68,68,0.1);
+      color: #fca5a5;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .ps-event {
+      display: inline-block;
+      font-size: 0.63rem;
+      background: rgba(234,179,8,0.12);
+      color: #fde68a;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; height: 50vh; min-width: unset; border-right: none; border-bottom: 1px solid var(--border); overflow-y: auto; }
+      .map-area { height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="pw-gate" style="position:fixed;inset:0;z-index:9999;background:#0f172a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;font-family:'Segoe UI',system-ui,sans-serif;">
+  <div style="text-align:center;margin-bottom:8px;">
+    <div style="font-size:2.4rem;margin-bottom:6px;">🇺🇸</div>
+    <div style="font-size:1.05rem;font-weight:800;color:#e2e8f0;letter-spacing:0.5px;">Road Trip USA 2026</div>
+    <div style="font-size:0.72rem;color:#475569;margin-top:4px;">Acceso privado</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;width:260px;">
+    <input id="pw-input" type="password" placeholder="Contraseña" autocomplete="off"
+      style="background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:11px 14px;font-size:0.88rem;outline:none;width:100%;box-sizing:border-box;transition:border 0.2s;"
+      onkeydown="if(event.key==='Enter')checkPw()"
+      onfocus="this.style.borderColor='#60a5fa'"
+      onblur="this.style.borderColor='#334155'"
+    />
+    <button onclick="checkPw()"
+      style="background:#1d4ed8;color:#fff;border:none;border-radius:8px;padding:11px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:background 0.2s;"
+      onmouseover="this.style.background='#2563eb'"
+      onmouseout="this.style.background='#1d4ed8'"
+    >Entrar</button>
+    <div id="pw-error" style="color:#fca5a5;font-size:0.72rem;text-align:center;display:none;">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    if (sessionStorage.getItem('usa2026_auth') === '1') {
+      document.getElementById('pw-gate').style.display = 'none';
+    } else {
+      document.body.style.overflow = 'hidden';
+    }
+  })();
+  function checkPw() {
+    var val = document.getElementById('pw-input').value;
+    if (val === 'YellowstoneUSA2026') {
+      sessionStorage.setItem('usa2026_auth', '1');
+      document.getElementById('pw-gate').style.display = 'none';
+      document.body.style.overflow = '';
+    } else {
+      document.getElementById('pw-error').style.display = 'block';
+      document.getElementById('pw-input').style.borderColor = '#ef4444';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+</script>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="header">
+      <h1>🇺🇸 Road Trip <span>USA 2026</span></h1>
+      <p>Costa · Norte · Yellowstone · Tetons</p>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--flight)"></div> Vuelo</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--drive)"></div> Auto</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--stay)"></div> Hotel</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--alert-red)"></div> Alerta</div>
+      </div>
+    </div>
+
+    <div class="tabs" style="font-size:0.65rem;">
+      <div class="tab active" onclick="switchTab('ruta')">🛣️ Ruta</div>
+      <div class="tab" onclick="switchTab('dias')">📅 Días</div>
+      <div class="tab" onclick="switchTab('plan')">🗺️ Plan</div>
+      <div class="tab" onclick="switchTab('tiempos')">⏱️ Tiempos</div>
+      <div class="tab" onclick="switchTab('resumen')">📊 Resumen</div>
+    </div>
+
+    <!-- PANEL RUTA -->
+    <div class="panel active" id="panel-ruta">
+
+      <div class="segment" onclick="focusSegment(0)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Llegada a Los Ángeles</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Migraciones + equipaje</div><div class="time-val">60–120 min</div></div>
+          <div class="time-box"><div class="time-label">Uber a hotel</div><div class="time-val orange">35–60 min</div></div>
+        </div>
+        <div class="alert red"><span class="alert-icon">⚠️</span> LAX es caótico. Punto de recogida específico: LAX-it (no en la puerta)</div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total real puerta a puerta: <strong>1h30 – 2h30</strong></div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(1)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Americas Best Value Inn Hollywood</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Base de llegada — Hollywood, LA</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(2)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">LAX → San Francisco SFO</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Vuelo</div><div class="time-val">~1h15</div></div>
+          <div class="time-box"><div class="time-label">Total puerta a puerta</div><div class="time-val orange">3–4h</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — LAX → SFO</div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Al llegar a SFO: retirar auto alquilado — lo usás hasta STS (Sonoma County Airport)</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(3)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Hotel Julian — San Francisco</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Centro de SF, cerca de Union Square</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(4)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">SF → Santa Rosa · Ruta 1 + Sonoma</span>
+          <span class="seg-tag tag-drive">Auto alquilado</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">1h 20min</div></div>
+          <div class="time-box"><div class="time-label">Realista (+ paradas)</div><div class="time-val orange">2h – 3h</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">🛣️</span> Ruta por Highway 1 costera + Sonoma Park en el camino — planificar con tiempo extra</div>
+        <div class="alert red"><span class="alert-icon">🚨</span> NO salir entre 7–10 AM ni 16–19 PM. Golden Gate congestionado en esos horarios.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Salir antes de las 9 AM o después de las 7 PM</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(5)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">North Bay Inn — Santa Rosa</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona vino Sonoma, tranquila</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(6)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">STS → Seattle SEA</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Drive → SFO</div><div class="time-val">1h – 1h30</div></div>
+          <div class="time-box"><div class="time-label">Check-in + seg.</div><div class="time-val orange">2h</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Devolver auto alquilado en STS (Sonoma County Airport) antes de ir a SFO</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — SFO → SEA</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(7)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Harry Potter Sweet Suites — Seattle</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona céntrica Seattle</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(8)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Seattle SEA → Bozeman BZN</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Salida SEA</div><div class="time-val">7:06 AM</div></div>
+          <div class="time-box"><div class="time-label">Llegada BZN</div><div class="time-val orange">9:46 AM</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> AS2141 · Alaska Airlines · 12/8 · ya comprado</div>
+        <div class="alert yellow"><span class="alert-icon">⚠️</span> Salir del hotel a las <strong>4:30–5:00 AM</strong> para llegar a SEA en tiempo</div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> BZN 9:46 AM → retiro Kia Rio 10:00 AM → West Yellowstone: <strong>~1h45</strong></div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta SEA → West Yellowstone: <strong>6–8 horas</strong></div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(9)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">Bozeman BZN → West Yellowstone</span>
+          <span class="seg-tag tag-drive">Auto alquilado</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Distancia</div><div class="time-val">~130 km</div></div>
+          <div class="time-box"><div class="time-label">Tiempo</div><div class="time-val orange">1h45</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Ruta directa y sencilla por US-191 South</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(10)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Ho Hum Motel — West Yellowstone</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Entrada oeste al parque — posición perfecta</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(11)">
+        <div class="seg-header">
+          <span class="seg-icon">🐃</span>
+          <span class="seg-title">Yellowstone — Circuito interno</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div style="background:var(--card); border-radius:6px; padding:10px; margin:6px 0; font-size:0.72rem;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; text-align:center; margin-bottom:8px;">
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">TRAMO</div>
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">GOOGLE</div>
+            <div style="font-size:0.62rem; color:var(--muted); font-weight:700;">REAL</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; text-align:center;">
+            <div>West → Old Faithful</div><div style="color:var(--muted)">1h</div><div style="color:var(--alert-red);font-weight:700;">1h30–2h</div>
+            <div>Old Faithful → Canyon</div><div style="color:var(--muted)">1h30</div><div style="color:var(--alert-red);font-weight:700;">2–2h30</div>
+            <div>Canyon → Mammoth</div><div style="color:var(--muted)">1h15</div><div style="color:var(--alert-red);font-weight:700;">1h45–2h15</div>
+          </div>
+        </div>
+        <div class="alert red"><span class="alert-icon">🦬</span> Bisontes en la ruta → frenan TODO. Podés perder 30–60 min fácil.</div>
+        <div class="alert red"><span class="alert-icon">🚗</span> Temporada alta (verano): parkings llenos desde las 9–10 AM.</div>
+        <div class="alert red"><span class="alert-icon">⛽</span> Pocas estaciones de nafta. NUNCA bajar de medio tanque.</div>
+        <div class="alert yellow"><span class="alert-icon">⏰</span> Regla de oro: todo tarda el DOBLE de lo que parece.</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(12)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Super 8 — Gardiner</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Salida norte del parque — posición estratégica para Tetons</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(13)">
+        <div class="seg-header">
+          <span class="seg-icon">🚗</span>
+          <span class="seg-title">Gardiner → Jackson Hole</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Google Maps</div><div class="time-val">2h 45min</div></div>
+          <div class="time-box"><div class="time-label">Real</div><div class="time-val orange">3h30 – 4h</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">🏔️</span> Ruta hermosa → te VAS a frenar. No planificarlo ajustado.</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Pasás por Grand Teton NP antes de llegar a Jackson</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(14)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Cache House — Jackson Hole</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Centro de Jackson — acceso fácil a Tetons</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(15)">
+        <div class="seg-header">
+          <span class="seg-icon">🏔️</span>
+          <span class="seg-title">Grand Teton NP — Circuito</span>
+          <span class="seg-tag tag-drive">Auto</span>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">⏱️</span> Todo parece cerca... pero cualquier trayecto = 30–60 min mínimo.</div>
+        <div class="alert red"><span class="alert-icon">🌅</span> Amanecer = clave (mejor luz + animales activos).</div>
+        <div class="alert red"><span class="alert-icon">☀️</span> Mediodía = peor momento (luz plana + mucha gente).</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(16)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Jackson JAC → Los Ángeles LAX</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Hotel → JAC</div><div class="time-val">30–45 min</div></div>
+          <div class="time-box"><div class="time-label">Vuelo</div><div class="time-val orange">~2h30</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">🚗</span> Devolver auto alquilado en JAC (recorrido completo BZN→JAC ✅)</div>
+        <div class="alert green"><span class="alert-icon">✅</span> Vuelo interno ya comprado — JAC → LAX</div>
+        <div class="alert yellow"><span class="alert-icon">💡</span> Total puerta a puerta JAC→hotel LA: 5–6 horas</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(17)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Ocean Park Hotel — Santa Monica</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Zona turística tranquila. Transición: naturaleza → ciudad</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(18)">
+        <div class="seg-header">
+          <span class="seg-icon">🚕</span>
+          <span class="seg-title">Ocean Park → Studio 6 (Gardena)</span>
+          <span class="seg-tag tag-stay">Uber</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Sin tráfico</div><div class="time-val">25–35 min</div></div>
+          <div class="time-box"><div class="time-label">Realista</div><div class="time-val orange">35–50 min</div></div>
+        </div>
+        <div class="alert yellow"><span class="alert-icon">⚠️</span> Tráfico LA impredecible incluso fuera de hora pico. Ir con margen.</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(19)">
+        <div class="seg-header">
+          <span class="seg-icon">🏨</span>
+          <span class="seg-title">Studio 6 — Gardena (última noche)</span>
+          <span class="seg-tag tag-stay">Estadía</span>
+        </div>
+        <div class="alert green"><span class="alert-icon">✅</span> Cerca de LAX — posición perfecta para el vuelo final</div>
+      </div>
+
+      <div class="segment" onclick="focusSegment(20)">
+        <div class="seg-header">
+          <span class="seg-icon">✈️</span>
+          <span class="seg-title">Studio 6 → LAX (vuelo final)</span>
+          <span class="seg-tag tag-flight">Vuelo</span>
+        </div>
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">Traslado</div><div class="time-val">10–25 min</div></div>
+          <div class="time-box"><div class="time-label">Salida recomendada</div><div class="time-val green">7:45 AM</div></div>
+        </div>
+        <div class="alert green"><span class="alert-icon">🎯</span> El cierre más bien resuelto del viaje. Transición perfecta: funcional → vuelo.</div>
+      </div>
+    </div>
+
+    <!-- PANEL DÍAS -->
+    <div class="panel" id="panel-dias">
+      <div style="padding:10px 14px; display:flex; flex-direction:column; gap:0;">
+
+        <!-- BLOQUE LA LLEGADA -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px;">📍 Los Ángeles — llegada</div>
+
+        <div class="day-row" onclick="focusSegment(0)">
+          <div class="day-date">Sáb<br>1/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ Buenos Aires → Lima</div>
+            <div class="day-sub">LA2368 · 20:05→23:00 · A320 · asientos 13D/13E</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(0)">
+          <div class="day-date">Dom<br>2/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ Lima → LAX · llegada 7:50 AM</div>
+            <div class="day-sub">LA2478 · 00:50→07:50 · B767 · asientos 16J/16L</div>
+            <div class="day-pill hotel">🏨 Americas Best Value Inn Hollywood</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Lun<br>3/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Hollywood, Santa Monica, etc.</div>
+            <div class="day-pill hotel">🏨 Americas Best Value Inn Hollywood</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE SF -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 San Francisco</div>
+
+        <div class="day-row" onclick="focusSegment(2)">
+          <div class="day-date">Mar<br>4/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ LAX → SFO · 10:03→11:27</div>
+            <div class="day-sub">AS1607 · Alaska Airlines</div>
+            <div class="day-pill hotel">🏨 Hotel Julian · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mié<br>5/8</div>
+          <div class="day-content">
+            <div class="day-main">🌉 SF · tarde + <span style="color:#f59e0b;">🎸 AC/DC · 19h</span></div>
+            <div class="day-sub" style="color:#fbbf24; font-weight:600;">Levi's Stadium · Santa Clara · ~50 km al sur de SF</div>
+            <div style="background:rgba(245,158,11,0.08); border-left:2px solid #f59e0b; border-radius:4px; padding:7px 9px; margin-top:5px; font-size:0.68rem; line-height:1.7;">
+              <div style="font-weight:700; color:#fbbf24; margin-bottom:4px;">⚠️ Sin auto alquilado ese día (retiro el viernes). Opciones:</div>
+              <div>🚆 <strong>Caltrain</strong> (recomendado) — SF 4th &amp; King → Santa Clara Station (~55 min, ~$9). Después Uber corto al estadio (~10 min). Para volver: último tren ~medianoche.</div>
+              <div style="margin-top:4px;">🚕 <strong>Uber/Lyft ida</strong> — ~50 min, ~$35–55. <span style="color:#fca5a5;">Vuelta post-show: surge pricing $60–120, espera 30–60 min.</span></div>
+              <div style="margin-top:4px;">🚗 <strong>No manejes</strong> — estacionamiento $40+ y salida del estadio es un caos.</div>
+            </div>
+            <div class="day-sub" style="margin-top:4px;">💡 Plan ideal: Caltrain ida + Uber de vuelta si el último tren se complica</div>
+            <div class="day-pill hotel">🏨 Hotel Julian</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Jue<br>6/8</div>
+          <div class="day-content">
+            <div class="day-main">🌉 San Francisco — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Golden Gate, Fisherman's Wharf, etc.</div>
+            <div class="day-sub" style="color:#6ee7b7;">🚇 BART + Waymo/Uber · sin auto en SF</div>
+            <div class="day-pill hotel">🏨 Hotel Julian</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE RUTA 1 -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Ruta 1 → Santa Rosa</div>
+
+        <div class="day-row" onclick="focusSegment(4)">
+          <div class="day-date">Vie<br>7/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 SFO → Ruta 1 costera → Santa Rosa</div>
+            <div class="day-sub">Retiro Hertz Dodge Ram en SFO · 9:00 AM</div>
+            <div class="day-sub">Sonoma Coast State Park en el camino</div>
+            <div class="day-pill car">🚗 Hertz Dodge Ram 1500</div>
+            <div class="day-pill hotel">🏨 North Bay Inn · check-in</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE SEATTLE -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Seattle</div>
+
+        <div class="day-row" onclick="focusSegment(6)">
+          <div class="day-date">Sáb<br>8/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 Devuelve auto en STS · 12:00 PM</div>
+            <div class="day-sub">✈️ STS → SEA · AS1322 · 12:52→14:55</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Dom<br>9/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Pike Place, Space Needle, etc.</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Lun<br>10/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mar<br>11/8</div>
+          <div class="day-content">
+            <div class="day-main">🏙️ Seattle — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#7dd3fc;">🚆 Link Light Rail + Uber · sin auto en Seattle</div>
+            <div class="day-pill hotel">🏨 Harry Potter Sweet Suites</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE YELLOWSTONE -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Yellowstone</div>
+
+        <div class="day-row" onclick="focusSegment(8)">
+          <div class="day-date">Mié<br>12/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ SEA → BZN · 7:06→9:46</div>
+            <div class="day-sub">AS2141 · Alaska Airlines</div>
+            <div class="day-sub">🚗 Retiro Kia Rio en BZN · 10:00 AM · drive a West Yellowstone</div>
+            <div class="day-pill car">🚗 Kia Rio (Economy Bookings)</div>
+            <div class="day-pill hotel">🏨 Ho Hum Motel · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(11)">
+          <div class="day-date">Jue<br>13/8</div>
+          <div class="day-content">
+            <div class="day-main">🦬 Yellowstone — día 1</div>
+            <div class="day-sub">West entrance → Old Faithful → Grand Canyon of Yellowstone</div>
+            <div class="day-sub day-tbd">⚠️ Salir temprano, todo tarda el doble. Check-out 11 AM.</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Super 8 Gardiner · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(11)">
+          <div class="day-date">Vie<br>14/8</div>
+          <div class="day-content">
+            <div class="day-main">🦬 Yellowstone — día 2</div>
+            <div class="day-sub">Mammoth Hot Springs · Lamar Valley (wildlife) · norte del parque</div>
+            <div class="day-sub day-tbd">⚠️ Nafta llena antes de entrar.</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Super 8 Gardiner</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE TETONS -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Jackson Hole / Grand Teton</div>
+
+        <div class="day-row" onclick="focusSegment(13)">
+          <div class="day-date">Sáb<br>15/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Gardiner → Jackson Hole</div>
+            <div class="day-sub">Check-out Super 8 · 10 AM · drive ~4h</div>
+            <div class="day-sub">Pasás por Grand Teton NP en el camino</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House · check-in 4 PM</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(15)">
+          <div class="day-date">Dom<br>16/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Grand Teton NP — día 1</div>
+            <div class="day-sub">Oxbow Bend 🌅 · Antelope Flats 🦬 · Moose-Wilson Road 🫎</div>
+            <div class="day-sub" style="color:#fde68a;">🌅 Amanecer clave — salir antes de las 6 AM</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(15)">
+          <div class="day-date">Lun<br>17/8</div>
+          <div class="day-content">
+            <div class="day-main">🏔️ Grand Teton NP — día 2</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-pill car">🚗 Kia Rio</div>
+            <div class="day-pill hotel">🏨 Cache House · check-out 11 AM</div>
+          </div>
+        </div>
+
+        <!-- BLOQUE LA FINAL -->
+        <div style="padding:8px 0 4px; font-size:0.65rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border); margin-bottom:2px; margin-top:6px;">📍 Los Ángeles — cierre</div>
+
+        <div class="day-row" onclick="focusSegment(16)">
+          <div class="day-date">Mar<br>18/8</div>
+          <div class="day-content">
+            <div class="day-main">🚗 Devuelve auto en JAC · 10:00 AM</div>
+            <div class="day-sub">✈️ JAC → LAX · AA6471 · 12:54→14:21</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel · check-in</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Mié<br>19/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar: Santa Monica, Venice, etc.</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Jue<br>20/8</div>
+          <div class="day-content">
+            <div class="day-main">🌴 Los Ángeles — día libre</div>
+            <div class="day-sub day-tbd">📌 Por planificar</div>
+            <div class="day-sub" style="color:#fcd34d;">🧳 Comprar valija barata (23 kg) — Walmart / Ross / TJ Maxx</div>
+            <div class="day-pill hotel">🏨 Ocean Park Hotel</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(18)">
+          <div class="day-date">Vie<br>21/8</div>
+          <div class="day-content">
+            <div class="day-main">🚕 Ocean Park → Studio 6 Gardena (Uber)</div>
+            <div class="day-sub">Traslado logístico — cerca de LAX para el vuelo del sábado</div>
+            <div class="day-pill hotel">🏨 Studio 6 Gardena · última noche</div>
+          </div>
+        </div>
+
+        <div class="day-row" onclick="focusSegment(20)">
+          <div class="day-date">Sáb<br>22/8</div>
+          <div class="day-content">
+            <div class="day-main">✈️ LAX → Lima → Buenos Aires</div>
+            <div class="day-sub">LA2479 LAX→LIM · 11:35→22:10 · B767 · 16J/16L</div>
+            <div class="day-sub">LA1437 LIM→EZE · 23:45→06:10+1</div>
+            <div class="day-sub" style="color:#fcd34d;">🧳 23 kg despachados · Salir hotel 8:00 AM · 3h mínimo en LAX</div>
+          </div>
+        </div>
+
+        <div class="day-row">
+          <div class="day-date">Dom<br>23/8</div>
+          <div class="day-content">
+            <div class="day-main">🏠 Llegada EZE · 6:10 AM</div>
+            <div class="day-sub" style="color:#bbf7d0;">✅ Fin del viaje — 22 días · 9 hoteles · 8 vuelos</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL TIEMPOS -->
+    <div class="panel" id="panel-tiempos">
+      <div style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+
+        <div style="background:var(--card); border-radius:8px; padding:14px; border-left:4px solid var(--alert-red);">
+          <div style="font-size:0.72rem; font-weight:700; color:#fca5a5; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🔴 ZONAS CRÍTICAS</div>
+          <div style="font-size:0.78rem; line-height:1.8;">
+            ⚠️ <strong>LAX</strong> — entrada y salida siempre caótica (+1h mental)<br>
+            ⚠️ <strong>Yellowstone interno</strong> — todo tarda el doble<br>
+            ⚠️ <strong>SEA → BZN</strong> — logística compleja (6–8h totales)<br>
+            ⚠️ <strong>SF → Santa Rosa</strong> — evitar horas pico obligatorio
+          </div>
+        </div>
+
+        <div style="background:var(--card); border-radius:8px; padding:14px; border-left:4px solid var(--alert-green);">
+          <div style="font-size:0.72rem; font-weight:700; color:#bbf7d0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🟢 ZONAS TRANQUILAS</div>
+          <div style="font-size:0.78rem; line-height:1.8;">
+            ✅ <strong>SF ciudad</strong> — sin auto · BART + Waymo + Uber (Waymo es lo mejor)<br>
+            ✅ <strong>Seattle ciudad</strong> — sin auto · Link Light Rail $3 + Uber<br>
+            ✅ <strong>SF → Santa Rosa</strong> (fuera de hora pico)<br>
+            ✅ <strong>Jackson → JAC aeropuerto</strong> (30 min directo)<br>
+            ✅ <strong>Studio 6 → LAX</strong> (10–25 min, bien resuelto)<br>
+            ✅ <strong>BZN → West Yellowstone</strong> (1h45, sin complicaciones)
+          </div>
+        </div>
+
+        <div style="background:var(--card); border-radius:8px; padding:14px;">
+          <div style="font-size:0.72rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">⏱️ TABLA DE TIEMPOS REALES</div>
+          <table style="width:100%; font-size:0.72rem; border-collapse:collapse;">
+            <tr style="color:var(--muted); font-size:0.62rem; text-transform:uppercase;">
+              <td style="padding:4px 0; border-bottom:1px solid var(--border);">Tramo</td>
+              <td style="padding:4px; border-bottom:1px solid var(--border); text-align:right;">Google</td>
+              <td style="padding:4px 0; border-bottom:1px solid var(--border); text-align:right; color:#f97316;">Real</td>
+            </tr>
+            <tr><td style="padding:6px 0;">LAX llegada (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h30</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">LA → SF ✈️ (vuelo)</td><td style="text-align:right; color:var(--muted);">1h15</td><td style="text-align:right; color:var(--flight); font-weight:700;">3–4h total</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SF → Santa Rosa 🚗</td><td style="text-align:right; color:var(--muted);">1h20</td><td style="text-align:right; color:var(--drive); font-weight:700;">2–3h (Ruta 1)</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">SEA → BZN (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">6–8h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">BZN → West Ystone</td><td style="text-align:right; color:var(--muted);">1h30</td><td style="text-align:right; color:var(--drive); font-weight:700;">1h45</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">West → Old Faithful</td><td style="text-align:right; color:var(--muted);">1h</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h30–2h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Old Faithful → Canyon</td><td style="text-align:right; color:var(--muted);">1h30</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">2–2h30</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Canyon → Mammoth</td><td style="text-align:right; color:var(--muted);">1h15</td><td style="text-align:right; color:var(--alert-red); font-weight:700;">1h45–2h15</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Gardiner → Jackson</td><td style="text-align:right; color:var(--muted);">2h45</td><td style="text-align:right; color:var(--drive); font-weight:700;">3h30–4h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">JAC → LAX (total)</td><td style="text-align:right; color:var(--muted);">—</td><td style="text-align:right; color:var(--drive); font-weight:700;">5–6h</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Ocean Park → Gardena</td><td style="text-align:right; color:var(--muted);">25min</td><td style="text-align:right; color:var(--drive); font-weight:700;">35–50min</td></tr>
+            <tr><td style="padding:6px 0; border-top:1px solid rgba(51,65,85,0.3);">Studio 6 → LAX</td><td style="text-align:right; color:var(--muted);">10min</td><td style="text-align:right; color:var(--stay); font-weight:700;">10–25min</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL RESUMEN -->
+    <div class="panel" id="panel-resumen">
+      <div class="summary-grid">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--flight);">5</div>
+          <div class="stat-label">Vuelos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--drive);">9</div>
+          <div class="stat-label">Tramos en auto</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--stay);">9</div>
+          <div class="stat-label">Hoteles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:#a78bfa;">4</div>
+          <div class="stat-label">Destinos clave</div>
+        </div>
+      </div>
+
+      <div class="zone-table">
+        <div class="rules-title">Estado por zona</div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">LAX (entrada/salida)</div>
+          <span class="zone-badge badge-danger">⚠️ Crítico</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">Yellowstone interno</div>
+          <span class="zone-badge badge-danger">⚠️ Crítico</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-red)"></div>
+          <div class="zone-name">Seattle → Bozeman</div>
+          <span class="zone-badge badge-danger">⚠️ Complejo</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-yellow)"></div>
+          <div class="zone-name">SF → Santa Rosa</div>
+          <span class="zone-badge" style="background:rgba(234,179,8,0.2);color:#fde68a;">⏰ Horario</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-green)"></div>
+          <div class="zone-name">Jackson Hole área</div>
+          <span class="zone-badge badge-ok">✅ Tranquilo</span>
+        </div>
+        <div class="zone-row">
+          <div class="zone-dot" style="background:var(--alert-green)"></div>
+          <div class="zone-name">Cierre LA (Gardena → LAX)</div>
+          <span class="zone-badge badge-ok">✅ Bien resuelto</span>
+        </div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-title">Reglas de oro</div>
+        <div class="rule-card">
+          <div class="rule-icon">🐃</div>
+          <div class="rule-text">
+            <strong>Yellowstone: todo tarda el doble</strong>
+            No pongas horarios ajustados. Siempre planificá con buffer. Los bisontes mandan.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">✈️</div>
+          <div class="rule-text">
+            <strong>Aeropuertos: sumá +1h mental siempre</strong>
+            Especialmente LAX. Nunca llegar "justo". El costo es demasiado alto.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">🚗</div>
+          <div class="rule-text">
+            <strong>Ciudades: evitá horas pico siempre</strong>
+            7–10 AM y 16–19 PM son zonas de guerra en SF y LA.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">⛽</div>
+          <div class="rule-text">
+            <strong>Yellowstone: nunca menos de medio tanque</strong>
+            Las estaciones son pocas y están lejos. Esta regla te puede salvar el día.
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-icon">🚗</div>
+          <div class="rule-text">
+            <strong>BZN → West Yellowstone: ~1h45 desde el aeropuerto</strong>
+            Aterrizás 9:46 AM, retirás el auto 10:00 AM, llegás al parque ~12:00 PM. Check-in 4 PM.
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 0 16px 24px;">
+        <div style="background: linear-gradient(135deg, #1e3a5f, #1e293b); border-radius: 10px; padding: 16px; border: 1px solid #334155;">
+          <div style="font-size:0.72rem; font-weight:700; color:#60a5fa; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🏁 Evaluación del viaje</div>
+          <div style="font-size:0.78rem; line-height:1.7; color:#cbd5e1;">
+            Tu viaje está armado con estructura de Costa → Norte → Interior → Regreso. Sin zig-zag innecesario. Yellowstone optimizado: entrada oeste, salida norte. Cierre en LA bien ejecutado.<br><br>
+            <span style="color:#22c55e; font-weight:700;">→ No hay errores de planificación. Solo gestionar los tiempos.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-area">
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostrar/ocultar sidebar">◀</button>
+    <div id="map"></div>
+    <!-- PLAN CONTENT -->
+    <div id="plan-content">
+
+      <!-- LA LLEGADA -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hollywood_Sign_(Zuschnitt).jpg/800px-Hollywood_Sign_(Zuschnitt).jpg'); background-color:#1a1228;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">✈️ Los Ángeles</div>
+            <div class="ps-city-sub">2–4 ago · Americas Best Value Inn Hollywood · Sin auto, todo Uber</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>2/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada LAX · 7:50 AM</div>
+              <div class="ps-day-desc"><ul>
+                <li>Jet-lag day · check-in hotel ~3 PM</li>
+                <li>Tarde: <strong>Santa Monica Pier</strong> + <strong>Venice Beach</strong> + canales</li>
+                <li>Noche tranquila</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Venice Beach · Santa Monica Pier · Breezy's (desayuno)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.latamairlines.com/ar/es/mis-viajes/third-detail?orderId=LA4699602JDBS&segment=1&item=0&lastname=ORDOQUI" target="_blank">✈️ Vuelo BUE→LAX</a>
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?label=america-s-best-value-inn-hollywood-lqgFJ8GG5UUhkVNnrepWuQS388877648321%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-3144487599%3Alp1000037%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9Ybz4KBg0DTFCp_luKAHRTJg&sid=8ae93e818528fb9fc28ca8e1d5f13a98&aid=311839&auth_key=C4StN92hm0MrG1ll&source=mytrips" target="_blank">🏨 Americas Best Value</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>3/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Hollywood day</div>
+              <div class="ps-day-desc"><ul>
+                <li><strong>Walk of Fame</strong> (buscar estrella de Ozzy Osbourne) · Teatro Chino · Griffith Observatory</li>
+                <li>Noche: <strong>Rainbow Bar &amp; Grill</strong> — el bar favorito de Lemmy Kilmister (Motörhead)</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Walk of Fame · Griffith Observatory · Teatro Chino · Sunset Strip</span></div>
+              <div class="ps-spots"><b>🎸</b> <span>Rainbow Bar &amp; Grill · estrella de Ozzy · Mulholland Drive</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>4/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a San Francisco</div>
+              <div class="ps-day-desc">Checkout → Uber LAX → <strong>AS1607 10:03 AM → SFO 11:27 AM</strong></div>
+              <div class="ps-warn">⚠ Salir del hotel 7:30 AM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://us.trip.com/online/orderdetail/index?oid=1688895870440272&source=bookings&channel=bookings&subChannel=tripcard&flightsignature=H4sIAAAAAAAA_4uuVirOTM_zS8xNVbJSSsvJTM8o0U1KS1PSAYuHJeaUgiQMzSwsLCxNLcwNTAyNoNKJJaVFIGlHR1dHx0BH76jcioIoowwDn3Cv3Kj8y3A3b89MNy-TVA-TwlRzZ6PQwLTEQLNy78TUdNOSLJPkqmIDx9TiSoNi3ZKizAKQgUq1sQD4GLnLkgAAAA%3D%3D-split-AAEAAQAPZmxpZ2h0c2lnbmF0dXJlx4PW-vJV_14jY2QZ_sEEmymqXAbf_V_CeLtC03xu50w%3D-tripsign&curr=USD&locale=es-US" target="_blank">✈️ LAX → SFO</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAN FRANCISCO -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GoldenGateBridge-001.jpg/800px-GoldenGateBridge-001.jpg'); background-color:#0c2033; background-position: center top;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌉 San Francisco</div>
+            <div class="ps-city-sub">4–7 ago · Hotel Julian · Auto alquilado desde el 7/8</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>4/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada + Fisherman's Wharf</div>
+              <div class="ps-day-desc"><ul>
+                <li>BART desde SFO al centro ($10, 30 min)</li>
+                <li>Tarde: <strong>Fisherman's Wharf</strong> + leones marinos</li>
+                <li><strong>North Beach</strong> → City Lights Bookstore → Coit Tower</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Fisherman's Wharf · City Lights Books · Coit Tower · Chinatown (cena)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=304142&label=gen173nr-10CAso7AFCFXZlcnRpZ28tc2FuLWZyYW5jaXNjb0gKWARoDIgBAZgBM7gBB8gBDNgBA-gBAfgBAYgCAagCAbgC_b2RzQbAAgHSAiQzMDVmMjk4Ny0wYTUyLTQ5NDEtOTZiNy1jNDg3Mzc3MTg0ZGTYAgHgAgE&sid=9110d931b8c63b8566142d0d4438d45d&auth_key=BdKkmHkVWPE9BOtp&hostname=www.booking.com&source=book" target="_blank">🏨 Hotel Julian SF</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>5/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Mañana libre · AC/DC 🎸</div>
+              <div class="ps-day-desc"><ul>
+                <li>Mañana: <strong>Battery Spencer</strong> — mejor vista del Golden Gate desde arriba (ver Alcatraz a lo lejos desde aquí)</li>
+                <li>Tarde: descanso antes del show</li>
+                <li><strong>19h: AC/DC en Levi's Stadium</strong>, Santa Clara → Caltrain 4th &amp; King (~$9)</li>
+              </ul></div>
+              <div class="ps-event">🎸 AC/DC · Levi's Stadium · 19h</div>
+              <div class="ps-spots"><b>→</b> <span>Battery Spencer · Caltrain 4th &amp; King</span></div>
+              <div class="ps-warn">⚠ Vuelta: Caltrain (último ~medianoche) + Uber si se pasa</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta ticket" href="https://www.ticketmaster.com/user/orders" target="_blank">🎫 Tickets AC/DC</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>6/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Golden Gate + Haight-Ashbury</div>
+              <div class="ps-day-desc"><ul>
+                <li>Caminata por el <strong>Golden Gate Bridge</strong></li>
+                <li>Tarde: <strong>Haight-Ashbury</strong> (barrio hippie icónico) + SFMOMA o de Young Museum</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Golden Gate Bridge · Haight-Ashbury · SFMOMA · Valencia St (cena)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>7/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Ruta 1 · Sonoma Coast · Museo Schulz</div>
+              <div class="ps-day-desc"><ul>
+                <li>Retiro Hertz en SFO <strong>9:00 AM</strong></li>
+                <li><strong>Muir Woods</strong> (antes de 10h, ~1.5h) → Stinson Beach → Point Reyes (parada panorámica, sin demora)</li>
+                <li><strong>Sonoma Coast State Park</strong> → Bodega Bay → Santa Rosa ~14:30-15:00h</li>
+                <li><strong>Museo de Charles M. Schulz</strong> (abre hasta 17:00h en días de semana) · ~1.5h cómodas · $15 sin reserva</li>
+                <li>Check-in North Bay Inn · cena tranquila</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Muir Woods · Stinson Beach · Point Reyes · Sonoma Coast · Bodega Bay · Museo Schulz 🐶</span></div>
+              <div class="ps-warn">⚠ Llegar a Muir Woods antes de 10h · mantener ritmo en Ruta 1 para llegar al museo antes de las 17h</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es-ar.html?label=gen173nr-10CAEoggI46AdIM1gEaAyIAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4As2kjswGwAIB0gIkNjM1N2RkOGMtNmJhNi00ZjcyLTllNGYtNDc0OTYwZWZjZWM42AIB4AIB&sid=e97268dd70750bcc564d4cab4cec125e&aid=304142&auth_key=g4o3DUDyubnnjcfn&source=mytrips" target="_blank">🏨 North Bay Inn</a>
+                <a class="ps-cta car" href="https://www.rentalcars.com/confirmation/p3YqQpvBTut9irqQByDmxlM_kIVW9psAesu7-nmfGqg9w0YMoK_660Odl22V2hJqfrfjob_u3E_YxRPdbT-8HBh3d1E5HsILROv-o-kcJ6rJFe06RcJRt93QDGPF1U5yYerUFQt_MV_SRCYhRsViuA" target="_blank">🚗 Hertz Dodge Ram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANTA ROSA -->
+      <div class="ps" style="min-height:200px;">
+        <div class="ps-photo" style="background: linear-gradient(135deg,#4a1540 0%,#1a0a2e 100%); background-color:#1a0a2e;">
+          <div class="ps-photo-overlay" style="background:linear-gradient(to right,rgba(0,0,0,0.3),transparent);">
+            <div class="ps-city-name" style="font-size:3rem;line-height:1;">🍷</div>
+            <div class="ps-city-name">Santa Rosa</div>
+            <div class="ps-city-sub">7–8 ago · North Bay Inn · Hertz Dodge Ram 1500</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>8/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Mañana libre · Vuelo a Seattle</div>
+              <div class="ps-day-desc"><ul>
+                <li>Mañana tranquila — desayuno, caminata o simplemente descansar antes del tramo más exigente del viaje</li>
+                <li>Opcional si dan los tiempos: <strong>Warm Puppy Café</strong> (al lado del museo Schulz y la pista de patinaje, muy fan-friendly)</li>
+                <li>Devolver Dodge Ram en STS <strong>12:00 PM</strong> → AS1322 <strong>12:52 PM → Seattle 14:55</strong></li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Sonoma Plaza (si queda ganas) · Snoopy's Home Ice (pista al lado del museo)</span></div>
+              <div class="ps-warn">⚠ STS = Sonoma County Airport (NO es SFO) · Devolver auto 12 PM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://us.trip.com/online/orderdetail/index?oid=1688895871511184&source=bookings&channel=bookings&subChannel=tripcard&flightsignature=H4sIAAAAAAAA_4uuVirOTM_zS8xNVbJSSsvJTM8o0U1KS1PSAYuHJeaUgiQMzSwsLCxNLcwNTQ0NDS1MoNKJJaVFIGlHR1dHx0BH76jcioIoowwDn3Cv3Kj0wjAvb794_2yvsiJLX38LxyST9Hy3imQL16LE8Kok5xJjj3J3z1TnIMs03ZKizAKQgUq1sQCrE6p2kgAAAA%3D%3D-split-AAEAAQAPZmxpZ2h0c2lnbmF0dXJlk7RkKGUd1GZwvD_YU8l4CrdCEooD6DLlYuDY_LAXHzQ%3D-tripsign&curr=USD&locale=es-US" target="_blank">✈️ STS → SEA</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATTLE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Space_Needle002.jpg/500px-Space_Needle002.jpg'); background-color:#0f1f0f;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌲 Seattle</div>
+            <div class="ps-city-sub">8–12 ago · Harry Potter Sweet Suites · Sin auto, todo Light Rail + Uber</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>8/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada + Pike Place</div>
+              <div class="ps-day-desc"><ul>
+                <li>Link Light Rail SEA → centro ($3)</li>
+                <li><strong>Pike Place Market</strong> — primera Starbucks del mundo ("Spoonman")</li>
+                <li>Waterfront · Pioneer Square (noche)</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Pike Place · Primera Starbucks · Waterfront · Pioneer Square (noche)</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=1288287&label=metagha-link-LUAR-hotel-11532492_dev-desktop_los-4_bw-160_dow-Saturday_defdate-0_room-0_gstadt-2_rateid-0_aud-9182455835_gacid-21411130277_mcid-10_ppa-0_clrid-0_ad-1_gstkid-0_checkin-20260808_ppt-_lp-2032_r-16987554273933735595&sid=9110d931b8c63b8566142d0d4438d45d&hostname=www.booking.com&source=conf_brief" target="_blank">🏨 Harry Potter Sweet Suites</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>9/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">MoPOP + Space Needle</div>
+              <div class="ps-day-desc"><ul>
+                <li><strong>Museum of Pop Culture (MoPOP)</strong> — rock, grunge, Jimi Hendrix, historia del metal</li>
+                <li><strong>Space Needle</strong> (combo ticket con MoPOP) + Chihuly Garden</li>
+              </ul></div>
+              <div class="ps-spots"><b>🎸</b> <span>MoPOP · Space Needle · Chihuly Garden · Capitol Hill (cena)</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>10/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Historia del grunge</div>
+              <div class="ps-day-desc"><ul>
+                <li>Mañana: Acuario de Seattle</li>
+                <li>Tarde: <strong>Central Saloon</strong> — donde tocaron Nirvana, Pearl Jam, Alice in Chains</li>
+                <li><strong>The Crocodile</strong> — venue icónico del grunge de los 90s, sigue activo</li>
+              </ul></div>
+              <div class="ps-spots"><b>🤘</b> <span>Central Saloon · The Crocodile · Acuario de Seattle</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>11/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Reliquias del grunge + Fremont</div>
+              <div class="ps-day-desc"><ul>
+                <li><strong>Gas Works Park</strong> — primera sesión de fotos de Alice in Chains</li>
+                <li><strong>Viretta Park</strong> — santuario fan de Nirvana, cerca de la casa de Kurt Cobain</li>
+                <li><strong>Moore Theatre</strong> — donde AIC grabó el MTV Unplugged</li>
+                <li>Fremont: el troll + mercadillo</li>
+              </ul></div>
+              <div class="ps-spots"><b>📸</b> <span>Gas Works Park (AIC) · Viretta Park (Nirvana) · Moore Theatre (AIC Unplugged) · Fremont Troll · Ballard</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>12/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a Bozeman</div>
+              <div class="ps-day-desc">AS2141 <strong>7:06 AM → BZN 9:46 AM</strong></div>
+              <div class="ps-warn">⚠ Checkout 5:00 AM · Uber al aeropuerto 5:30 AM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.trip.com/online/orderdetail/index?orderid=1688894476545616&channel=complete&subChannel=DetailsButton&locale=en-XX&curr=USD&tripsignature=AAEAAQAHb3JkZXJpZHPQ6_JFFP0K8TcG7cowKL0QeQ15o1kpG7Aptca7GmwV-tripsign&oid=1688894476545616&orderId=1688894476545616&redirectFromOnline=1" target="_blank">✈️ SEA → BZN</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YELLOWSTONE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Old_faithful_eruption.jpg/500px-Old_faithful_eruption.jpg'); background-color:#1a0800;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🌋 Yellowstone</div>
+            <div class="ps-city-sub">12–15 ago · Ho Hum (12-13) + Super 8 Gardiner (13-15) · Kia Rio</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>12/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">BZN → West Yellowstone</div>
+              <div class="ps-day-desc"><ul>
+                <li>Retiro Kia Rio BZN <strong>10:00 AM</strong> · drive ~1.5h</li>
+                <li>Check-in Ho Hum 4 PM</li>
+                <li>Tarde: <strong>Grizzly &amp; Wolf Discovery Center</strong> (osos y lobos reales)</li>
+                <li>Si hay tiempo: Wild West Yellowstone Rodeo</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Grizzly &amp; Wolf Discovery Center 🐻 · Wild West Rodeo 🤠</span></div>
+              <div class="ps-warn">⚠ Cargar nafta antes de entrar al parque</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://ar.hoteles.com/trips/egti-9D9-5Z5-97QL" target="_blank">🏨 Ho Hum Motel</a>
+                <a class="ps-cta car" href="https://www.economybookings.com/es/profile/bookings" target="_blank">🚗 Kia Rio (BZN→JAC)</a>
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>13/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Lower Loop · Old Faithful</div>
+              <div class="ps-day-desc"><ul>
+                <li>Salida <strong>7:30 AM</strong> · <strong>Old Faithful</strong> antes de 9h</li>
+                <li><strong>Grand Prismatic Spring</strong> — vista aérea desde Fairy Falls Trail (~3 km)</li>
+                <li>Fountain Paint Pots</li>
+                <li>Tarde: <strong>Mammoth Hot Springs</strong> (terrazas de travertino) · move a Gardiner</li>
+                <li><strong>Al llegar: tramo Gardiner→Mammoth muy despacio</strong> — acantilados rocosos = hotspot de bighorn sheep. Parar en cada pullout, escanear paredes con binoculares (buscar formas claras en roca, no en el pasto)</li>
+                <li>Zona <strong>Calcite Springs</strong> y <strong>Tower-Roosevelt</strong>: los ven caminando por cornisas verticales sin bajar del auto</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Old Faithful ⛲ · Grand Prismatic 🌈 · Fairy Falls Trail · Mammoth Hot Springs · Calcite Springs 🐏 · Gardiner→Mammoth corridor</span></div>
+              <div class="ps-warn">⚠ Old Faithful: llegar antes de 9h para evitar multitudes</div>
+              <div class="ps-warn" style="background:rgba(34,197,94,0.08);border-color:#22c55e;color:#86efac;">🐏 Bighorn sheep: repetir el tramo Gardiner↔Mammoth al amanecer del día siguiente — es la mejor chance del viaje</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://ar.hoteles.com/trips/egti-9D9-5Z5-97QL" target="_blank">🏨 Super 8 Gardiner</a>
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>14/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Canyon + Lamar Valley + Fauna</div>
+              <div class="ps-day-desc"><ul>
+                <li>Salida <strong>5:45 AM</strong> desde Gardiner · tramo Gardiner→Mammoth despacio buscando <strong>bighorn sheep</strong> en acantilados</li>
+                <li><strong>Grand Canyon of Yellowstone</strong> — Artist Point (cascadas + cañón dorado)</li>
+                <li><strong>Hayden Valley</strong> — bisontes garantizados</li>
+                <li><strong>Tower-Roosevelt → Calcite Springs</strong>: acantilados verticales = bighorn sheep casi seguro, escanear desde el auto con binoculares</li>
+                <li><strong>Lamar Valley</strong>: estar antes de las <strong>6:30 AM</strong> — el "Serengeti americano". Regla de oro: autos parados con telescopios = frenar siempre (lobo o oso)</li>
+                <li>Opcional a pie: <strong>Lamar River Trail</strong> (~45 min desde trailhead) — valle abierto, trípode, manadas de bisontes y berrendos, posibles lobos cruzando</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Grand Canyon 🏔 · Artist Point · Hayden Valley 🦬 · Calcite Springs 🐏 · Lamar Valley 🐺 · Lamar River Trail (sendero)</span></div>
+              <div class="ps-spots"><span>Binoculares + trípode esenciales · buscar siluetas en roca para bighorn · no en el pasto</span></div>
+              <div class="ps-warn" style="background:rgba(34,197,94,0.08);border-color:#22c55e;color:#86efac;">🐏 Salida 5:45 AM desde Gardiner → Mammoth → Tower-Roosevelt: chance doble (bighorn al ir + Lamar al llegar)</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>15/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Drive a Jackson Hole</div>
+              <div class="ps-day-desc">Checkout 10 AM → drive Gardiner → Jackson Hole ~3.5h pasando por <strong>Grand Teton NP</strong>. Check-in Cache House 4 PM.</div>
+              <div class="ps-warn">⚠ Checkout 10 AM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAND TETON + JACKSON -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Grand_Teton_NPWSTF.jpg/800px-Grand_Teton_NPWSTF.jpg'); background-color:#051522;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">⛰️ Grand Teton</div>
+            <div class="ps-city-sub">15–18 ago · Cache House Jackson Hole · Kia Rio</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>15/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada Jackson Hole</div>
+              <div class="ps-day-desc">Jackson town square (arcos de cuernos de alce). Cena: <strong>Million Dollar Cowboy Bar</strong> o Persephone Bakery.</div>
+              <div class="ps-spots"><b>→</b> <span>Jackson Town Square · Million Dollar Cowboy Bar 🤠</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://ar.hoteles.com/trips/egti-9D9-5Z5-97QL" target="_blank">🏨 Cache House Jackson</a>
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>16/8</em>LUN</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Teton · Día 1 — Amanecer, fauna y vistas</div>
+              <div class="ps-day-desc"><ul>
+                <li>🌅 <strong>Oxbow Bend</strong> (~5:30 AM, imprescindible) — reflejo icónico del Monte Moran en el Snake River. Mayor chance de alces al amanecer. Este spot solo ya justifica el día</li>
+                <li><strong>Snake River Overlook</strong> — la foto que hizo famoso a Ansel Adams. Parada rápida de 10-15 min</li>
+                <li><strong>Antelope Flats</strong> — llanura abierta: pronghorns y bisontes desde el auto, casi garantizados. Sin esfuerzo, alto impacto</li>
+                <li><strong>Mormon Row</strong> — graneros históricos con los Tetons de fondo, la foto más reproducida del parque</li>
+                <li><strong>Jackson Lake Dam</strong> · <strong>Teton Point Turnout</strong></li>
+                <li>Atardecer: <strong>Moose-Wilson Road</strong> — carretera estrecha Teton Village→Moose: mejor spot del parque para alces en humedales y osos negros entre las bayas. Recorrer muy despacio, parar en cada apertura del bosque</li>
+                <li>⚡ <strong>Jenny Lake ferry</strong> — <em>solo si sobra tiempo entre mediodía y las 15h</em>: ~$15, sin reserva, tarjeta en el muelle. Vale si entrás 45-60 min en Cascade Canyon (Hidden Falls → Inspiration Point → más adentro). Si no hay tiempo: saltear sin culpa</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Oxbow Bend 🌅🫎 · Snake River Overlook 📸 · Antelope Flats 🦬🦌 · Mormon Row 📸 · Jackson Lake Dam · Moose-Wilson Road 🫎🐻</span></div>
+              <div class="ps-spots"><span>Jenny Lake ferry: opcional si sobra tiempo · no es prioridad con 2 días · tele obligatorio todo el día</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>17/8</em>MAR</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Grand Teton · Día 2 — Schwabacher y ritmo libre</div>
+              <div class="ps-day-desc"><ul>
+                <li>🌅 <strong>Schwabacher Landing</strong> al amanecer — llegar antes del sol. Tip: la mayoría se queda a 50m del parking — <strong>caminar 15-20 min al norte bordeando el río</strong> → diques de castores, remansos y ángulos únicos. Más íntimo que Oxbow, casi nadie a esa hora</li>
+                <li><strong>Willow Flats</strong> — zona húmeda al norte, excelente para alces en la mañana</li>
+                <li>Si quedó pendiente del día anterior: Antelope Flats otra vuelta (fauna siempre cambia) o repetir Oxbow Bend (vale la pena repetir si la luz del día 1 no fue perfecta)</li>
+                <li>Tarde: horseback riding ($80pp) o rafting Snake River — reservar en Jackson los días anteriores</li>
+                <li>Noche: <strong>Mangy Moose</strong> en Teton Village (música en vivo)</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Schwabacher Landing 🌅 · caminar norte del río (castores + reflejos) · Willow Flats 🫎 · Horseback / Rafting · Mangy Moose (música en vivo)</span></div>
+              <div class="ps-warn">⚠ Schwabacher: llegar antes del amanecer · caminar al norte del parking para los mejores ángulos</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta pass" href="https://www.recreation.gov/account/orders/0819897495/reservations/6a898112-6569-5fdd-9ba9-1719b6eeded0" target="_blank">🏞️ Annual Pass</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>18/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelo a Los Ángeles</div>
+              <div class="ps-day-desc">Checkout 11 AM → devolver Kia Rio JAC → <strong>AA6471 12:54 PM → LAX 14:21</strong></div>
+              <div class="ps-warn">⚠ Checkout 11 AM · Devolver auto antes de 12 PM</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.trip.com/online/orderdetail/index?orderid=1688894476442000&channel=complete&subChannel=DetailsButton&locale=en-XX&curr=USD&tripsignature=AAEAAQAHb3JkZXJpZHFsQH4SO92pReAOUuQRKiLryvq0CYh0o4M-agRJuO7C-tripsign&oid=1688894476442000&orderId=1688894476442000&redirectFromOnline=1" target="_blank">✈️ JAC → LAX</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LA CIERRE -->
+      <div class="ps">
+        <div class="ps-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Santa_Monica_Pier_from_above.jpg/800px-Santa_Monica_Pier_from_above.jpg'); background-color:#1a0f28;">
+          <div class="ps-photo-overlay">
+            <div class="ps-city-name">🏖️ Los Ángeles</div>
+            <div class="ps-city-sub">18–22 ago · Ocean Park Hotel (18-21) + Studio 6 Gardena (21-22)</div>
+          </div>
+        </div>
+        <div class="ps-days">
+          <div class="ps-day">
+            <div class="ps-day-date"><em>18/8</em>MIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Llegada LAX 14:21</div>
+              <div class="ps-day-desc"><ul>
+                <li>Uber LAX → Ocean Park Hotel (Santa Mónica)</li>
+                <li>Playa + puesta de sol</li>
+                <li>Cena en Main Street SM</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Santa Mónica Beach 🌅 · Main Street SM</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=356980&label=gog235jc-10CAso7AFCImFtZXJpY2Etcy1iZXN0LXZhbHVlLWlubi1ob2xseXdvb2RIClgDaAyIAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Aqap_8sGwAIB0gIkODlmZDI0ZTAtMGE1Zi00OWM2LTk1ZGItYTcxZGIzMWRiYWIx2AIB4AIB&sid=d1468b82309c74ff116128db1bd95766&hostname=www.booking.com&source=conf_brief&bn=5995979984" target="_blank">🏨 Ocean Park Hotel</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>19/8</em>JUE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Arte + Cultura</div>
+              <div class="ps-day-desc"><ul>
+                <li><strong>Getty Center</strong> (gratis, reservar online)</li>
+                <li>La Brea Tar Pits + LACMA</li>
+                <li>Tarde: Abbot Kinney (Venice) — compras finales</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Getty Center 🎨 · LACMA · Abbot Kinney · Melrose Ave</span></div>
+              <div class="ps-warn">⚠ Reservar Getty Center online antes</div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>20/8</em>VIE</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Malibu</div>
+              <div class="ps-day-desc"><ul>
+                <li><strong>El Matador Beach</strong> (acantilados, el más salvaje) o Zuma Beach</li>
+                <li>Almuerzo en Malibu Seafood</li>
+                <li>Tarde: Beverly Hills (el clásico turístico) · Noche: Gjusta (Venice) o Republique</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>El Matador Beach 🏄 · Malibu Seafood · Beverly Hills</span></div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>21/8</em>SAB</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Checkout + Manhattan Beach</div>
+              <div class="ps-day-desc"><ul>
+                <li>Checkout Ocean Park → move a <strong>Studio 6 Gardena</strong> (cerca de LAX)</li>
+                <li>Manhattan Beach → El Segundo</li>
+                <li>Cena tranquila · todo listo para el vuelo</li>
+              </ul></div>
+              <div class="ps-spots"><b>→</b> <span>Manhattan Beach · El Segundo</span></div>
+              <div class="ps-cta-row">
+                <a class="ps-cta hotel" href="https://secure.booking.com/confirmation.es.html?aid=2440491&label=cht532js-10CAso7AFCC2R5bmFzdHktaW5uSApYA2gMiAEBmAEzuAEHyAEM2AED6AEB-AEBiAIBqAIBuALPsabOBsACAdICJDBlMGQyNjBjLWVlNGUtNGMwMy05MDdlLWFkZGM0MjNiNDUzMNgCAeACAQ&sid=9110d931b8c63b8566142d0d4438d45d&hostname=www.booking.com&source=conf_brief&bn=6131525416" target="_blank">🏨 Studio 6 Gardena</a>
+              </div>
+            </div>
+          </div>
+          <div class="ps-day">
+            <div class="ps-day-date"><em>22/8</em>DOM</div>
+            <div class="ps-day-body">
+              <div class="ps-day-title">Vuelta a Buenos Aires 🏠</div>
+              <div class="ps-day-desc"><strong>LA2479 11:35 AM</strong> LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → BUE 23/8 06:10.</div>
+              <div class="ps-day-desc" style="color:#fcd34d;">🧳 <strong>23 kg incluidos para despachar</strong> — necesitás 3h mínimo en LAX antes del vuelo</div>
+              <div class="ps-warn">⚠ Salir del hotel 8:00 AM · 3h de margen para despacho · Llegada BUE 23/8 06:10</div>
+              <div class="ps-cta-row">
+                <a class="ps-cta flight" href="https://www.latamairlines.com/ar/es/mis-viajes/third-detail?orderId=LA4699602JDBS&segment=1&item=0&lastname=ORDOQUI" target="_blank">✈️ Vuelo LAX→BUE</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /plan-content -->
+    <div class="map-info">
+      <h3>Mapa del viaje</h3>
+      <div class="map-legend-item"><div class="ml-line" style="background:var(--flight)"></div> Vuelo doméstico</div>
+      <div class="map-legend-item"><div class="ml-line" style="background:#7dd3fc;border-top:2px dashed #7dd3fc;height:0;"></div> Vuelo internacional</div>
+      <div class="map-legend-item"><div class="ml-line" style="background:var(--drive);height:2px;border-top:2px dashed var(--drive);background:none;"></div> Auto</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:var(--flight);border-color:var(--flight)"></div> Aeropuerto</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:var(--stay);border-color:var(--stay)"></div> Hotel</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:#a78bfa;border-color:#a78bfa"></div> Parque</div>
+      <div class="map-legend-item"><div class="ml-dot" style="background:#f59e0b;border-color:#f59e0b"></div> Evento</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Init map
+const map = L.map('map', {
+  center: [42.5, -113],
+  zoom: 5,
+  zoomControl: true
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// Coordinates
+const locs = {
+  lax:          [33.9416, -118.4085],
+  hollywood:    [34.0928, -118.3287],
+  sfo:          [37.6213, -122.3790],
+  sf_hotel:     [37.7851, -122.4094],
+  santa_rosa:   [38.4404, -122.7141],
+  sts:          [38.5088, -122.8129],  // Sonoma County Airport — devolución auto 1
+  levis:        [37.4032, -121.9698],  // Levi's Stadium, Santa Clara — AC/DC 5/8
+  sea:          [47.4502, -122.3088],
+  seattle:      [47.6062, -122.3321],
+  bzn:          [45.7775, -111.1605],
+  west_ystone:  [44.6601, -111.1037],
+  old_faithful: [44.4605, -110.8281],
+  canyon:       [44.7268, -110.4983],
+  mammoth:      [44.9764, -110.7014],
+  gardiner:     [45.0333, -110.7074],
+  jac:          [43.6073, -110.7377],
+  jackson:      [43.4799, -110.7624],
+  ocean_park:   [34.0007, -118.4912],
+  studio6:      [33.8875, -118.2729],
+  aep:          [-34.5592, -58.4156],  // Aeroparque Jorge Newbery — salida 1/8
+  lim:          [-12.0219, -77.1143],  // Lima Jorge Chávez — escalas ida y vuelta
+  eze:          [-34.8222, -58.5358]   // Ezeiza — llegada 23/8
+};
+
+// Custom icons
+function makeIcon(color, emoji) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      background:${color};
+      border:2px solid white;
+      border-radius:50%;
+      width:28px;height:28px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      cursor:pointer;
+    ">${emoji}</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+}
+
+function makeSmallIcon(color) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      background:${color};
+      border:2px solid white;
+      border-radius:50%;
+      width:14px;height:14px;
+      box-shadow:0 1px 4px rgba(0,0,0,0.4);
+    "></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+  });
+}
+
+function pi(rows) {
+  return rows.map(r => `<div class="popup-row">${r}</div>`).join('');
+}
+
+// Colores globales (deben estar antes de los marcadores)
+const flightColor = '#4f8ef7';
+const intlColor   = '#7dd3fc';
+const driveColor  = '#f97316';
+
+// ── AEROPUERTOS ──────────────────────────────────────────────────
+L.marker(locs.lax, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ LAX — Los Ángeles International</div>
+  ${pi([
+    '📅 <b>Llegada 2/8</b> · 7:50 AM (LA2478 desde Lima)',
+    '🚕 Uber LAX-it → Hollywood: <b>35–60 min · $30–50</b>',
+    '⚠️ Punto de recogida: <b>LAX-it</b> (no en la puerta, caminar ~10 min)',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Salida 22/8</b> · vuelo 11:35 AM (LA2479)',
+    '🧳 <b>23 kg incluidos</b> para despachar — llegar 3h antes = 8:35 AM en LAX',
+    '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b>',
+    '💡 Salir del hotel a las <b>8:00 AM</b> (3h+ para despacho)'
+  ])}
+`);
+
+L.marker(locs.sfo, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ SFO — San Francisco International</div>
+  ${pi([
+    '📅 <b>Llegada 4/8</b> · AS1607 · 11:27 AM',
+    '🚇 BART: SFO → Powell St (SF centro): <b>~30 min · $10</b>',
+    '🚕 Uber SFO → Hotel Julian: <b>25–35 min · $35–45</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Retiro auto Hertz 7/8</b> · 9:00 AM',
+    '🚗 Dodge Ram 1500 · On Airport Car Rental Centre',
+    '💡 Ir al hotel primero, volver a SFO en Uber para retirar el auto'
+  ])}
+`);
+
+L.marker(locs.sts, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ STS — Sonoma County Airport</div>
+  ${pi([
+    '📅 <b>Devolución auto Hertz 8/8</b> · 12:00 PM',
+    '🚗 North Bay Inn → STS: <b>~15 min en auto alquilado</b>',
+    '✈️ Vuelo AS1322 STS→SEA: <b>12:52 PM</b>',
+    '⚠️ Llegar al aeropuerto antes de las <b>10:50 AM</b> (2h antes)',
+    '💡 Devolver el auto primero, hacer check-in después'
+  ])}
+`);
+
+L.marker(locs.sea, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ SEA — Seattle-Tacoma International</div>
+  ${pi([
+    '📅 <b>Llegada 8/8</b> · AS1322 · 2:55 PM',
+    '🚇 Link Light Rail: SEA → Capitol Hill: <b>~45 min · $3</b> ✅ recomendado',
+    '🚕 Uber SEA → Harry Potter Suites: <b>30–45 min · $35–55</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 <b>Salida 12/8</b> · vuelo AS2141 · 7:06 AM',
+    '⚠️ Salir del hotel a las <b>4:30–5:00 AM</b>',
+    '🚕 Harry Potter Suites → SEA: <b>35–45 min · $35–55</b>',
+    '🚇 Light Rail: primer tren ~5 AM desde Capitol Hill'
+  ])}
+`);
+
+L.marker(locs.bzn, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ BZN — Bozeman Yellowstone Intl</div>
+  ${pi([
+    '📅 <b>Llegada 12/8</b> · AS2141 · 9:46 AM',
+    '🚗 <b>Retiro Kia Rio 10:00 AM</b> · Economy Bookings',
+    '🚗 BZN → West Yellowstone: <b>~1h45 por US-191 Sur</b>',
+    '⛽ Cargar nafta en BZN antes de salir — pocas estaciones en ruta',
+    '💡 Llegada estimada Ho Hum Motel: ~12:00 PM (check-in 4 PM)'
+  ])}
+`);
+
+L.marker(locs.jac, { icon: makeIcon('#4f8ef7', '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ JAC — Jackson Hole Airport</div>
+  ${pi([
+    '📅 <b>Devolución Kia Rio 18/8</b> · 10:00 AM',
+    '🚗 Cache House → JAC: <b>~15 min en auto alquilado</b>',
+    '✈️ Vuelo AA6471 JAC→LAX: <b>12:54 PM</b>',
+    '⚠️ Llegar al aeropuerto antes de las <b>10:54 AM</b> (2h antes)',
+    '💡 Check-out Cache House 11 AM → directo a JAC → devolver auto → check-in'
+  ])}
+`);
+
+// ── AEROPUERTOS INTERNACIONALES ──────────────────────────────────
+L.marker(locs.aep, { icon: makeIcon(intlColor, '✈️') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ AEP — Aeroparque Jorge Newbery</div>
+  ${pi([
+    '📅 <b>Salida 1/8</b> · LA2368 · 20:05 hs',
+    '🛫 AEP → LIM · <b>~4h55 de vuelo</b>',
+    '🛬 Llega Lima: <b>23:00 hs</b> (hora Lima)',
+    '━━━━━━━━━━━━━━',
+    '⏳ Escala Lima: <b>1h50</b> (23:00 → 00:50)',
+    '🛫 LIM → LAX · LA2478 · sale <b>2/8 00:50 hs</b> · ~9h',
+    '🛬 Llega LAX: <b>2/8 07:50 AM</b>'
+  ])}
+`);
+
+L.marker(locs.lim, { icon: makeIcon(intlColor, '🔄') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ LIM — Lima Jorge Chávez</div>
+  ${pi([
+    '━━ IDA (1–2/8) ━━━━━━━━━━━━━',
+    '🛬 Llega de AEP: <b>23:00 hs · 1/8</b> · LA2368',
+    '⏳ Escala: <b>1h50</b>',
+    '🛫 Sale a LAX: <b>00:50 hs · 2/8</b> · LA2478',
+    '━━ VUELTA (22/8) ━━━━━━━━━━━',
+    '🛬 Llega de LAX: <b>22:10 hs · 22/8</b> · LA2479',
+    '⏳ Escala: <b>1h35</b>',
+    '🛫 Sale a EZE: <b>23:45 hs · 22/8</b> · LA1437'
+  ])}
+`);
+
+L.marker(locs.eze, { icon: makeIcon(intlColor, '🏠') }).addTo(map).bindPopup(`
+  <div class="popup-title">✈️ EZE — Ezeiza Internacional</div>
+  ${pi([
+    '📅 <b>Llegada 23/8</b> · LA1437 · 06:10 AM',
+    '🛬 LIM → EZE · <b>~4h25 de vuelo</b>',
+    '✅ Fin del viaje — 22 días por USA'
+  ])}
+`);
+
+// ── HOTELES ──────────────────────────────────────────────────────
+L.marker(locs.hollywood, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Americas Best Value Inn Hollywood</div>
+  ${pi([
+    '📅 Check-in: <b>2/8</b> · Check-out: <b>4/8</b> (3 noches)',
+    '🚕 Desde LAX (LAX-it): <b>35–60 min · $30–50</b>',
+    '⚠️ Pedir Uber en el punto LAX-it, no en la puerta',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 4/8 · vuelo LAX→SFO 10:03 AM',
+    '🚕 Hotel → LAX: <b>35–50 min · $30–45</b>',
+    '💡 Salir del hotel a las <b>7:30 AM</b>'
+  ])}
+`);
+
+L.marker(locs.sf_hotel, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Hotel Julian — San Francisco</div>
+  ${pi([
+    '📅 Check-in: <b>4/8</b> · Check-out: <b>7/8</b> (3 noches)',
+    '🚇 Desde SFO: BART → Powell St <b>~30 min · $10</b>',
+    '━━━━━━━━━━━━━━',
+    '🎸 <b>5/8 AC/DC</b> · Levi\'s Stadium, Santa Clara',
+    '🚆 Caltrain 4th &amp; King → Santa Clara: <b>~55 min · $9</b> ✅',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 7/8 · retirar Hertz en SFO 9:00 AM',
+    '🚕 Hotel → SFO: <b>25–35 min · $35–45</b>'
+  ])}
+`);
+
+L.marker(locs.santa_rosa, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 North Bay Inn — Santa Rosa</div>
+  ${pi([
+    '📅 Check-in: <b>7/8</b> · Check-out: <b>8/8</b> (1 noche)',
+    '🚗 Llegada en auto alquilado (Hertz Dodge Ram) por Ruta 1',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 8/8 · vuelo STS→SEA 12:52 PM',
+    '🚗 North Bay Inn → STS: <b>~15 min en auto alquilado</b>',
+    '⚠️ Devolver auto en STS a las <b>12:00 PM</b>',
+    '💡 Check-out, cargar el auto → STS → devolver → check-in vuelo'
+  ])}
+`);
+
+L.marker(locs.seattle, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Harry Potter Sweet Suites — Seattle</div>
+  ${pi([
+    '📅 Check-in: <b>8/8</b> · Check-out: <b>12/8</b> (4 noches)',
+    '🚇 Desde SEA: Link Light Rail → Capitol Hill: <b>~45 min · $3</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 12/8 · vuelo SEA→BZN 7:06 AM',
+    '⚠️ Salir del hotel a las <b>4:30–5:00 AM</b>',
+    '🚕 Hotel → SEA: <b>35–45 min · $35–55</b>',
+    '🚇 Light Rail desde Capitol Hill ~5:00 AM (primer servicio)'
+  ])}
+`);
+
+L.marker(locs.west_ystone, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Ho Hum Motel — West Yellowstone</div>
+  ${pi([
+    '📅 Check-in: <b>12/8</b> · 4:00 PM · Check-out: <b>13/8</b> · 11:00 AM',
+    '🚗 Desde BZN: <b>~1h45 por US-191 Sur</b> (auto alquilado)',
+    '⛽ Cargar nafta antes de entrar al parque',
+    '🦬 Entrada oeste de Yellowstone — posición perfecta',
+    '⚠️ Check-out 11 AM — salir temprano para aprovechar el día en el parque'
+  ])}
+`);
+
+L.marker(locs.gardiner, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Super 8 — Gardiner / Yellowstone</div>
+  ${pi([
+    '📅 Check-in: <b>13/8</b> · 4:00 PM · Check-out: <b>15/8</b> · 10:00 AM',
+    '🚗 Desde West Yellowstone: cruzar el parque, <b>~2h30–3h reales</b>',
+    '🦬 Entrada norte de Yellowstone — Mammoth + Lamar Valley cerca',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 15/8 · drive a Jackson Hole',
+    '🚗 Gardiner → Jackson: <b>3h30–4h</b> (paisaje, no apurarse)'
+  ])}
+`);
+
+L.marker(locs.jackson, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Cache House — Jackson Hole</div>
+  ${pi([
+    '📅 Check-in: <b>15/8</b> · 4:00 PM · Check-out: <b>18/8</b> · 11:00 AM',
+    '🚗 Desde Gardiner: <b>~3h30–4h por US-191</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 18/8 · vuelo JAC→LAX 12:54 PM',
+    '🚗 Cache House → JAC: <b>~15 min en auto</b>',
+    '⚠️ Check-out 11 AM → devolver Kia Rio en JAC 10 AM',
+    '💡 Devolver auto ANTES del check-out formal'
+  ])}
+`);
+
+L.marker(locs.ocean_park, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Ocean Park Hotel — Santa Monica</div>
+  ${pi([
+    '📅 Check-in: <b>18/8</b> · Check-out: <b>21/8</b> (3 noches)',
+    '🚕 Desde LAX: <b>25–40 min · $30–50</b>',
+    '⚠️ Tráfico LA impredecible — ir con margen',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 21/8 → Studio 6 Gardena',
+    '🚕 Ocean Park → Studio 6: <b>35–50 min · $25–40</b>'
+  ])}
+`);
+
+L.marker(locs.studio6, { icon: makeIcon('#22c55e', '🏨') }).addTo(map).bindPopup(`
+  <div class="popup-title">🏨 Studio 6 Suites — Gardena</div>
+  ${pi([
+    '📅 Check-in: <b>21/8</b> · Check-out: <b>22/8</b> (última noche)',
+    '🚕 Desde Ocean Park: <b>35–50 min · $25–40</b>',
+    '━━━━━━━━━━━━━━',
+    '📅 Salida 22/8 · vuelo LAX→LIM 11:35 AM',
+    '🧳 <b>Despachar valija de 23 kg</b> — llegar 3h antes obligatorio',
+    '🚕 Studio 6 → LAX: <b>10–25 min · ~$15</b> ✅ más fácil del viaje',
+    '💡 Salir a las <b>8:00 AM</b> — llegar ~8:10–8:25 AM (3h+ de margen)'
+  ])}
+`);
+
+// Park points
+[
+  { pos: locs.old_faithful, label: 'Old Faithful', alert: 'West→aquí: 1h30–2h (Google dice 1h)' },
+  { pos: locs.canyon, label: 'Grand Canyon of Yellowstone', alert: 'OF→Canyon: 2–2h30 (Google dice 1h30)' },
+  { pos: locs.mammoth, label: 'Mammoth Hot Springs', alert: 'Canyon→Mammoth: 1h45–2h15' },
+].forEach(p => {
+  L.marker(p.pos, { icon: makeSmallIcon('#a78bfa') })
+    .addTo(map)
+    .bindPopup(`<div class="popup-title">🌋 ${p.label}</div><div class="popup-alert">⏱️ ${p.alert}</div>`);
+});
+
+// ROUTES
+
+function addCurvedLine(p1, p2, color, dashed = false) {
+  const latlngs = [];
+  const steps = 30;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const lat = p1[0] + (p2[0] - p1[0]) * t;
+    const lng = p1[1] + (p2[1] - p1[1]) * t;
+    // slight curve
+    const curve = Math.sin(Math.PI * t) * 1.2;
+    latlngs.push([lat + curve * 0.3, lng - curve * 0.5]);
+  }
+  const opts = { color, weight: dashed ? 2 : 3, opacity: 0.8 };
+  if (dashed) opts.dashArray = '8 5';
+  L.polyline(latlngs, opts).addTo(map);
+}
+
+function addStraightLine(points, color, dashed = false) {
+  const opts = { color, weight: dashed ? 2 : 2.5, opacity: 0.75 };
+  if (dashed) opts.dashArray = '8 6';
+  L.polyline(points, opts).addTo(map);
+}
+
+// Vuelos internacionales — curva larga con arco pronunciado
+function addIntlLine(p1, p2, dLat, dLng) {
+  const latlngs = [];
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const lat = p1[0] + (p2[0] - p1[0]) * t;
+    const lng = p1[1] + (p2[1] - p1[1]) * t;
+    const curve = Math.sin(Math.PI * t) * 8;
+    latlngs.push([lat + curve * dLat, lng + curve * dLng]);
+  }
+  L.polyline(latlngs, { color: intlColor, weight: 2, opacity: 0.8, dashArray: '10 6' }).addTo(map);
+}
+
+// Flights
+addCurvedLine(locs.lax, locs.lax, flightColor); // arrival (just marker)
+addCurvedLine(locs.lax, locs.sfo, flightColor);  // LA → SF vuelo (ya comprado)
+addCurvedLine(locs.sts, locs.sea, flightColor);  // STS → Seattle (AS1322)
+addCurvedLine(locs.sea, locs.bzn, flightColor);  // Seattle → Bozeman
+addCurvedLine(locs.jac, locs.lax, flightColor);  // Jackson → LA
+
+// Vuelos internacionales (celeste punteado) — todos curvan hacia el norte (gran círculo real)
+// IDA (1–2/8): AEP → LIM → LAX
+addIntlLine(locs.aep, locs.lim,  0.25,  0.0);  // AEP→LIM: arco norte suave sobre Andes
+addIntlLine(locs.lim, locs.lax,  0.45,  0.15); // LIM→LAX: arco norte, leve este (sobre México)
+// VUELTA (22/8): LAX → LIM → EZE
+addIntlLine(locs.lax, locs.lim,  0.45, -0.15); // LAX→LIM: arco norte, leve oeste (Pacífico)
+addIntlLine(locs.lim, locs.eze,  0.25,  0.0);  // LIM→EZE: arco norte suave sobre Andes
+
+// Drives (dashed orange) — solo tramos con auto alquilado + Uber en ciudades
+addStraightLine([locs.lax, locs.hollywood], driveColor, true);  // Uber LAX→Hollywood
+// 🚗 alquilado: SFO → SF → Ruta 1 costera → Sonoma Coast → Santa Rosa → STS
+addStraightLine([
+  locs.sfo,
+  locs.sf_hotel,
+  [37.8309, -122.4789], // Golden Gate Norte
+  [37.8726, -122.5290], // Marin Headlands
+  [37.9019, -122.6442], // Stinson Beach
+  [38.0702, -122.8028], // Point Reyes Station
+  [38.3327, -123.0472], // Bodega Bay — Sonoma Coast State Park
+  [38.4482, -123.1258], // Jenner (Hwy 1 + Russian River)
+  [38.5067, -123.0034], // Guerneville
+  locs.santa_rosa,
+  locs.sts
+], driveColor, true);
+addStraightLine([locs.sea, locs.seattle], driveColor, true);
+addStraightLine([locs.bzn, locs.west_ystone], driveColor, true);
+addStraightLine([locs.west_ystone, locs.old_faithful, locs.canyon, locs.mammoth, locs.gardiner], driveColor, true);
+addStraightLine([locs.gardiner, locs.jackson], driveColor, true);
+addStraightLine([locs.jackson, locs.jac], driveColor, true);
+addStraightLine([locs.lax, locs.ocean_park], driveColor, true);
+addStraightLine([locs.ocean_park, locs.studio6], driveColor, true);
+addStraightLine([locs.studio6, locs.lax], driveColor, true);
+
+// Levi's Stadium — evento especial AC/DC
+L.marker(locs.levis, { icon: makeIcon('#f59e0b', '🎸') })
+  .addTo(map)
+  .bindPopup(`<div class="popup-title">🎸 Levi's Stadium</div><div class="popup-sub">Santa Clara, CA · AC/DC · 5 ago · 19h</div><div class="popup-time">~50 min desde Hotel Julian (SF)</div><div class="popup-alert">⚠️ Sin auto alquilado ese día → Caltrain o Uber</div>`);
+
+// Transporte Hotel Julian → Levi's Stadium (evento, sin auto)
+addStraightLine([locs.sf_hotel, locs.levis], '#f59e0b', true);
+
+// Add LA label
+L.marker(locs.lax, { icon: L.divIcon({
+  className: '',
+  html: '<div style="color:#4f8ef7;font-size:11px;font-weight:700;text-shadow:0 1px 3px #000;white-space:nowrap;margin-left:16px;margin-top:-6px;">Los Ángeles</div>',
+  iconSize: [100, 20],
+  iconAnchor: [0, 10]
+})}).addTo(map);
+
+// Segment focus points
+const segmentViews = [
+  { center: locs.lax, zoom: 11 },          // 0 - LAX llegada
+  { center: locs.hollywood, zoom: 13 },    // 1 - Hollywood
+  { center: [35.5, -119.5], zoom: 7 },     // 2 - LA→SF drive
+  { center: locs.sf_hotel, zoom: 13 },     // 3 - Hotel Julian
+  { center: [37.9, -122.5], zoom: 10 },    // 4 - SF → Santa Rosa
+  { center: locs.santa_rosa, zoom: 13 },   // 5 - North Bay Inn
+  { center: [41, -122], zoom: 7 },         // 6 - SFO → SEA
+  { center: locs.seattle, zoom: 12 },      // 7 - Harry Potter
+  { center: [46.5, -117], zoom: 6 },       // 8 - SEA → BZN flight
+  { center: [44.8, -111.4], zoom: 9 },     // 9 - BZN → West Ystone
+  { center: locs.west_ystone, zoom: 12 },  // 10 - Ho Hum
+  { center: [44.7, -110.7], zoom: 9 },     // 11 - Yellowstone
+  { center: locs.gardiner, zoom: 12 },     // 12 - Super 8
+  { center: [44, -111], zoom: 8 },         // 13 - Gardiner → Jackson
+  { center: locs.jackson, zoom: 12 },      // 14 - Cache House
+  { center: [43.8, -110.7], zoom: 10 },    // 15 - Tetons
+  { center: [39, -112], zoom: 6 },         // 16 - JAC → LAX
+  { center: locs.ocean_park, zoom: 13 },   // 17 - Ocean Park
+  { center: [33.94, -118.4], zoom: 11 },   // 18 - Ocean Park → Studio 6
+  { center: locs.studio6, zoom: 13 },      // 19 - Studio 6
+  { center: locs.lax, zoom: 12 },          // 20 - Studio 6 → LAX
+];
+
+let currentHighlight = null;
+
+function focusSegment(idx) {
+  if (segmentViews[idx]) {
+    map.flyTo(segmentViews[idx].center, segmentViews[idx].zoom, { duration: 1.2 });
+  }
+  // Highlight segment
+  document.querySelectorAll('.segment').forEach((el, i) => {
+    el.classList.toggle('highlighted', i === idx);
+  });
+}
+
+// Tab switching
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  const planContent = document.getElementById('plan-content');
+  const mapDiv = document.getElementById('map');
+  const mapInfo = document.querySelector('.map-info');
+  if (name === 'plan') {
+    planContent.classList.add('active');
+    mapDiv.style.visibility = 'hidden';
+    if (mapInfo) mapInfo.style.display = 'none';
+  } else {
+    planContent.classList.remove('active');
+    mapDiv.style.visibility = '';
+    if (mapInfo) mapInfo.style.display = '';
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`#panel-${name}`).classList.add('active');
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.querySelector('.sidebar-toggle-btn');
+  sidebar.classList.toggle('collapsed');
+  btn.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+  setTimeout(() => map.invalidateSize(), 260);
+}
+
+// Reset map on load
+setTimeout(() => {
+  map.invalidateSize();
+}, 100);
+</script>
+
+<!-- OLD PLAN OVERLAY REMOVED -->
+<div id="plan-overlay" style="display:none!important">
+  <div class="plan-overlay-header">
+    <div>
+      <h2>🗺️ Plan día a día · USA 2026</h2>
+      <p>Daniel + Melisa · 22 días · Ago 2026 · Basado en Itinerario C (final)</p>
+    </div>
+    <button class="plan-close-btn" onclick="closePlan()">✕ Volver al mapa</button>
+  </div>
+
+  <div class="plan-grid">
+
+    <!-- LOS ÁNGELES LLEGADA -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#1e3a5f,#162032);border-left:4px solid #60a5fa;color:#93c5fd;">
+        ✈️ LOS ÁNGELES — Llegada · 2–4 ago · Americas Best Value Inn Hollywood
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">SAB 2/8 — Llegada LAX 7:50 AM</div>
+          Jet-lag day. Check-in hotel ~3 PM. Mañana: Santa Monica Pier + Venice Beach + canales.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Venice Beach</span>
+            <span class="plan-spot">Santa Monica Pier</span>
+            <span class="plan-spot food">Breezy's desayuno</span>
+          </div>
+          <div class="plan-note">Noche tranquila — primer día de viaje largo.</div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">DOM 3/8 — Hollywood day</div>
+          Hollywood Blvd · Walk of Fame (buscar estrella de Ozzy Osbourne) · Teatro Chino · Griffith Observatory (panorámica). Noche: <strong>Rainbow Bar &amp; Grill</strong> — el bar favorito de Lemmy Kilmister de Motörhead.
+          <div class="plan-spots">
+            <span class="plan-spot music">Rainbow Bar &amp; Grill 🎸</span>
+            <span class="plan-spot music">Estrella de Ozzy 🤘</span>
+            <span class="plan-spot">Walk of Fame</span>
+            <span class="plan-spot nature">Griffith Observatory</span>
+            <span class="plan-spot">Teatro Chino</span>
+            <span class="plan-spot">Sunset Strip</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">LUN 4/8 — Vuelo a SF</div>
+          Checkout → Uber LAX → <strong>AS1607 10:03 AM → SFO 11:27 AM</strong>
+          <div class="plan-spots">
+            <span class="plan-spot alert">Salir hotel 7:30 AM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SAN FRANCISCO -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#1a3a2f,#0f2218);border-left:4px solid #34d399;color:#6ee7b7;">
+        🌉 SAN FRANCISCO · 4–7 ago · Hotel Julian
+      </div>
+      <div style="background:rgba(52,211,153,0.08);border-left:3px solid #34d399;padding:8px 14px;font-size:0.72rem;line-height:1.7;color:#a7f3d0;">
+        🚇 <strong>Sin auto en la ciudad</strong> — BART + Waymo + Uber son suficientes · Parking $40+/día, no vale la pena<br>
+        🤖 <strong>Waymo</strong> funciona excelente en SF: taxis autónomos, más baratos que Uber y disponibles 24h<br>
+        🚗 <strong>Auto sí</strong> el 7/8: Hertz SFO 9 AM → Ruta 1 norte → STS (nunca se estaciona en la ciudad)
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">MAR 4/8 — Llegada + Fisherman's Wharf</div>
+          BART desde SFO ($10, 30 min). Checkin. Tarde: Fisherman's Wharf + leones marinos. North Beach + City Lights Bookstore + Coit Tower.
+          <div class="plan-spots">
+            <span class="plan-spot">Fisherman's Wharf</span>
+            <span class="plan-spot">City Lights Books</span>
+            <span class="plan-spot">Coit Tower</span>
+            <span class="plan-spot food">Chinatown (cena)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">MIE 5/8 🎸 — AC/DC · Levi's Stadium</div>
+          Mañana: Alcatraz (ferry, reservar!) o Battery Spencer (Fort Baker) — la mejor vista del Golden Gate desde arriba. Tarde: descanso. <strong>19h: AC/DC en Levi's Stadium, Santa Clara</strong>.
+          <div class="plan-spots">
+            <span class="plan-spot event">AC/DC 19h 🎸</span>
+            <span class="plan-spot nature">Battery Spencer</span>
+            <span class="plan-spot">Alcatraz (ferry)</span>
+            <span class="plan-spot alert">Caltrain 4th &amp; King → $9</span>
+          </div>
+          <div class="plan-note">Vuelta: Caltrain (último ~medianoche) + Uber si se pasa.</div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">JUE 6/8 — Haight-Ashbury + Golden Gate</div>
+          Caminar Golden Gate Bridge. Tarde: Haight-Ashbury (barrio hippie icónico). SFMOMA o de Young Museum.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Golden Gate Bridge</span>
+            <span class="plan-spot">Haight-Ashbury</span>
+            <span class="plan-spot">SFMOMA</span>
+            <span class="plan-spot food">Valencia St (cena Mission)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">VIE 7/8 — Ruta 1 + Sonoma Coast</div>
+          Retiro Hertz SFO <strong>9:00 AM</strong>. Drive: Muir Woods (antes de 10h) → Stinson Beach → Point Reyes → Sonoma Coast State Park → Bodega Bay → Santa Rosa. Check-in North Bay Inn.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Muir Woods</span>
+            <span class="plan-spot nature">Stinson Beach</span>
+            <span class="plan-spot nature">Point Reyes</span>
+            <span class="plan-spot nature">Sonoma Coast SP</span>
+            <span class="plan-spot alert">Llegar Muir antes 10h</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SANTA ROSA -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#2d1a4a,#1a0f2e);border-left:4px solid #a78bfa;color:#c4b5fd;">
+        🍷 SANTA ROSA / SONOMA · 7–8 ago · North Bay Inn
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">SAB 8/8 — Museo Schulz + Vuelo a Seattle</div>
+          Mañana: <strong>Museo de Charles M. Schulz</strong> (Snoopy!). Sonoma Plaza si queda tiempo. → Devolver auto STS 12:00 PM → <strong>AS1322 12:52 PM → Seattle 14:55</strong>.
+          <div class="plan-spots">
+            <span class="plan-spot">Museo Charles M. Schulz 🐶</span>
+            <span class="plan-spot">Sonoma Plaza</span>
+            <span class="plan-spot alert">Devolver auto STS 12 PM</span>
+          </div>
+          <div class="plan-note">STS = Sonoma County Airport (Charles M. Schulz Airport), no SFO.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEATTLE -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#0c2a3a,#071a24);border-left:4px solid #38bdf8;color:#7dd3fc;">
+        🌲 SEATTLE · 8–12 ago · Harry Potter Sweet Suites
+      </div>
+      <div style="background:rgba(56,189,248,0.08);border-left:3px solid #38bdf8;padding:8px 14px;font-size:0.72rem;line-height:1.7;color:#bae6fd;">
+        🚇 <strong>Sin auto en la ciudad</strong> — Link Light Rail + Uber cubren todo · Similar a SF, no vale rentar<br>
+        🚆 <strong>Link Light Rail</strong>: SEA aeropuerto → downtown $3 · 45 min · Primera estación: Westlake<br>
+        📍 Todos los spots grunge están agrupados: Capitol Hill (Viretta, Moore) y Seattle Center (MoPOP, Space Needle) a Uber corto<br>
+        ⚠️ <strong>12/8 vuelo 7:06 AM</strong>: Link arranca ~5 AM pero ir en Uber (~$35) para no correr con maletas
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">DOM 8/8 — Llegada + Pike Place</div>
+          Link Light Rail SEA → centro ($3). Checkin. Tarde: Pike Place Market (primera Starbucks del mundo — "Spoonman"). Waterfront.
+          <div class="plan-spots">
+            <span class="plan-spot music">Primera Starbucks ☕ (Spoonman)</span>
+            <span class="plan-spot">Pike Place Market</span>
+            <span class="plan-spot">Waterfront</span>
+            <span class="plan-spot food">Pioneer Square (noche)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">LUN 9/8 — MoPOP + Space Needle</div>
+          Seattle Center: <strong>Museum of Pop Culture (MoPOP)</strong> — colección de rock, grunge, Jimi Hendrix, historia del metal. Space Needle (combo ticket). Chihuly Garden.
+          <div class="plan-spots">
+            <span class="plan-spot music">MoPOP 🎸</span>
+            <span class="plan-spot">Space Needle</span>
+            <span class="plan-spot">Chihuly Garden</span>
+            <span class="plan-spot food">Capitol Hill (cena)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">MAR 10/8 — Historia del grunge</div>
+          Acuario de Seattle (mañana). Tarde: circuito grunge — <strong>Central Saloon</strong> (bar donde tocaron Nirvana, Pearl Jam, AIC) → <strong>The Crocodile</strong> (venue icónico del grunge de los 90s).
+          <div class="plan-spots">
+            <span class="plan-spot music">Central Saloon 🤘</span>
+            <span class="plan-spot music">The Crocodile 🎸</span>
+            <span class="plan-spot nature">Acuario de Seattle</span>
+          </div>
+          <div class="plan-note">Central Saloon: donde empezó todo. The Crocodile: venue del grunge, sigue activo.</div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">MIE 11/8 — Reliquias + Fremont</div>
+          <strong>Gas Works Park</strong> — lugar de la primera sesión de fotos de Alice in Chains. <strong>Viretta Park</strong> — santuario fan de Nirvana (cerca de la casa de Kurt Cobain). <strong>Moore Theatre</strong> — donde Alice in Chains grabó el MTV Unplugged. Fremont: el troll, mercadillo.
+          <div class="plan-spots">
+            <span class="plan-spot music">Gas Works Park (AIC fotos) 📸</span>
+            <span class="plan-spot music">Viretta Park (Nirvana) 🕯️</span>
+            <span class="plan-spot music">Moore Theatre (AIC Unplugged) 🎤</span>
+            <span class="plan-spot">Fremont + El Troll</span>
+            <span class="plan-spot">Ballard (cervecerías)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">JUE 12/8 — Vuelo a Bozeman ⚠️</div>
+          Checkout 5:00 AM → Uber al aeropuerto → <strong>AS2141 7:06 AM → BZN 9:46 AM</strong>
+          <div class="plan-spots">
+            <span class="plan-spot alert">Checkout 5 AM 🚨</span>
+            <span class="plan-spot alert">Uber aeropuerto 5:30 AM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- YELLOWSTONE -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#3a1f0a,#221207);border-left:4px solid #fb923c;color:#fdba74;">
+        🌋 YELLOWSTONE · 12–15 ago · Ho Hum (12-13) + Super 8 Gardiner (13-15)
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">JUE 12/8 — BZN → West Yellowstone</div>
+          Retiro Kia Rio BZN 10:00 AM. Nafta llena. Drive ~1.5h a West Yellowstone. Check-in Ho Hum 4 PM. Tarde: <strong>Grizzly &amp; Wolf Discovery Center</strong> (osos y lobos de verdad). Si hay tiempo: Wild West Yellowstone Rodeo.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Grizzly &amp; Wolf Discovery Center 🐻</span>
+            <span class="plan-spot">Wild West Rodeo 🤠</span>
+            <span class="plan-spot alert">Nafta llena antes de entrar</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">VIE 13/8 — Lower Loop: Old Faithful + Grand Prismatic</div>
+          Salida 7:30 AM. <strong>Old Faithful</strong> (llegar antes de 9h). <strong>Grand Prismatic Spring</strong> — vista aérea desde trailhead Fairy Falls (~3km). Fountain Paint Pots. Tarde: Mammoth Hot Springs (terrazas de travertino). Drive a Gardiner → Super 8.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Old Faithful ⛲ (antes de 9h)</span>
+            <span class="plan-spot nature">Grand Prismatic Spring 🌈</span>
+            <span class="plan-spot nature">Fairy Falls Trail</span>
+            <span class="plan-spot nature">Mammoth Hot Springs</span>
+            <span class="plan-spot alert">Salir 7:30 AM</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">SAB 14/8 — Grand Canyon + Lamar Valley</div>
+          Amanecer: <strong>Grand Canyon of Yellowstone</strong> — Artist Point (cascadas + cañón dorado). Hayden Valley (bisontes garantizados). <strong>Lamar Valley</strong> (zona de lobos, llegar tarde tarde o muy temprano). Noche en Gardiner.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Grand Canyon Yellowstone 🏔️</span>
+            <span class="plan-spot nature">Artist Point (amanecer)</span>
+            <span class="plan-spot nature">Hayden Valley 🦬</span>
+            <span class="plan-spot nature">Lamar Valley 🐺</span>
+          </div>
+          <div class="plan-note">Lamar Valley: mejor al amanecer o atardecer para ver lobos. Binoculares recomendados.</div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">DOM 15/8 — Drive a Jackson Hole</div>
+          Checkout 10 AM. Drive Gardiner → Jackson Hole ~3.5h pasando por Grand Teton NP. Check-in Cache House 4 PM.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Ruta por Grand Teton NP</span>
+            <span class="plan-spot alert">Checkout 10 AM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GRAND TETON + JACKSON -->
+    <div class="plan-city">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#0f2a1a,#071a10);border-left:4px solid #4ade80;color:#86efac;">
+        ⛰️ GRAND TETON + JACKSON HOLE · 15–18 ago · Cache House
+      </div>
+      <div class="plan-days">
+
+        <div class="plan-day">
+          <div class="plan-day-label">DOM 15/8 — Llegada Jackson</div>
+          Jackson town square (arcos de cuernos de alce). Cena: Million Dollar Cowboy Bar o Persephone Bakery.
+          <div class="plan-spots">
+            <span class="plan-spot">Jackson Town Square</span>
+            <span class="plan-spot food">Million Dollar Cowboy Bar 🤠</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">LUN 16/8 — Grand Teton NP · Día 1: Amanecer, fauna y vistas</div>
+          🌅 <strong>Oxbow Bend</strong> (~5:30 AM, imprescindible) → <strong>Snake River Overlook</strong> → <strong>Antelope Flats</strong> (bisontes/pronghorns) → <strong>Mormon Row</strong> → Jackson Lake Dam → atardecer <strong>Moose-Wilson Road</strong>. Jenny Lake ferry: solo si sobra tiempo al mediodía.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Oxbow Bend 🌅🫎 (5:30 AM)</span>
+            <span class="plan-spot nature">Snake River Overlook 📸</span>
+            <span class="plan-spot nature">Antelope Flats 🦬🦌</span>
+            <span class="plan-spot nature">Mormon Row 📸</span>
+            <span class="plan-spot nature">Moose-Wilson Road 🫎🐻</span>
+            <span class="plan-spot alert">Jenny Lake: opcional si sobra tiempo</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">MAR 17/8 — Grand Teton NP · Día 2: Schwabacher y ritmo libre</div>
+          🌅 <strong>Schwabacher Landing</strong> al amanecer (caminar 15-20 min al norte del parking). <strong>Willow Flats</strong> (alces en zona húmeda). Tarde: horseback riding ($80pp) o rafting Snake River. Noche: Mangy Moose en Teton Village.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Schwabacher Landing 🌅 (amanecer)</span>
+            <span class="plan-spot nature">Willow Flats 🫎</span>
+            <span class="plan-spot">Horseback riding / Rafting</span>
+            <span class="plan-spot music">Mangy Moose (música en vivo)</span>
+            <span class="plan-spot alert">Schwabacher: caminar norte del parking</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">MIE 18/8 — Vuelo a LA</div>
+          Checkout 11 AM → devolver Kia Rio JAC → <strong>AA6471 12:54 PM → LAX 14:21</strong>
+          <div class="plan-spots">
+            <span class="plan-spot alert">Checkout 11 AM</span>
+            <span class="plan-spot alert">Devolver auto JAC antes de 12 PM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LOS ÁNGELES CIERRE -->
+    <div class="plan-city" style="grid-column: 1 / -1;">
+      <div class="plan-city-header" style="background:linear-gradient(135deg,#3a1a2e,#221020);border-left:4px solid #f472b6;color:#f9a8d4;">
+        🏖️ LOS ÁNGELES — Cierre · 18–22 ago · Ocean Park Hotel (18-21) + Studio 6 Gardena (21-22)
+      </div>
+      <div class="plan-days" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 24px;">
+
+        <div class="plan-day">
+          <div class="plan-day-label">MIE 18/8 — Llegada LAX 14:21</div>
+          Uber LAX → Ocean Park Hotel (Santa Mónica). Playa de Santa Mónica, puesta de sol. Cena en Main Street SM.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Santa Mónica Beach 🌅</span>
+            <span class="plan-spot food">Main Street SM (cena)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">JUE 19/8 — Arte + Cultura LA</div>
+          Getty Center (gratis, reservar online). La Brea Tar Pits + LACMA. Tarde: Melrose Ave o Abbot Kinney (Venice) — compras finales. <strong>🧳 Buscar valija económica de 23 kg</strong> (Walmart/Ross/TJ Maxx) para meter todo lo que juntaron en el viaje.
+          <div class="plan-spots">
+            <span class="plan-spot">Getty Center 🎨</span>
+            <span class="plan-spot">LACMA</span>
+            <span class="plan-spot">Abbot Kinney</span>
+            <span class="plan-spot alert">Reservar Getty online</span>
+            <span class="plan-spot alert">🧳 Comprar valija barata (Walmart/Ross)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">VIE 20/8 — Malibu</div>
+          El Matador Beach (acantilados, más salvaje) o Zuma Beach. Almuerzo en Malibu Seafood. Tarde: Beverly Hills / Bel-Air si quieren el clásico turístico.
+          <div class="plan-spots">
+            <span class="plan-spot nature">El Matador Beach 🏄</span>
+            <span class="plan-spot food">Malibu Seafood</span>
+            <span class="plan-spot">Beverly Hills</span>
+            <span class="plan-spot food">Gjusta Venice (cena final)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">SAB 21/8 — Checkout + Manhattan Beach</div>
+          Checkout Ocean Park → move a Studio 6 Gardena (cerca de LAX). Manhattan Beach → El Segundo. Cena tranqui, todo listo para el vuelo. <strong>Empacar valija de 23 kg con todo lo comprado</strong> — no exceder el peso.
+          <div class="plan-spots">
+            <span class="plan-spot nature">Manhattan Beach</span>
+            <span class="plan-spot alert">Check-in Studio 6 Gardena</span>
+            <span class="plan-spot alert">🧳 Empacar y pesar valija (máx 23 kg)</span>
+          </div>
+        </div>
+
+        <div class="plan-day">
+          <div class="plan-day-label">DOM 22/8 — Vuelo de vuelta ⚠️</div>
+          <strong>Vuelo 11:35 AM → salir hotel 8:00 AM.</strong> Despachar valija de 23 kg — llegar 3h antes al LAX obligatorio. LA2479 LAX→LIM 22:10. Conexión LIM→EZE LA1437 23:45 → Buenos Aires 23/8 06:10.
+          <div class="plan-spots">
+            <span class="plan-spot alert">Salir hotel 8:00 AM 🚨</span>
+            <span class="plan-spot alert">🧳 Despachar 23 kg en LAX</span>
+            <span class="plan-spot alert">LA2479 11:35 AM</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /plan-grid -->
+
+  <div style="padding:0 32px 32px;font-size:0.72rem;color:#64748b;line-height:1.6;">
+    💡 Basado en el Itinerario C (versión definitiva) · Todo lo no confirmado es propuesta ajustable · Lo reservado está marcado en el tab <strong>📅 Días</strong>
+  </div>
+</div>
+<!-- /PLAN OVERLAY -->
+
+</body>
+</html>
