@@ -155,6 +155,19 @@
     .section-divider { text-align: center; padding: 48px 0 20px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); display: flex; align-items: center; gap: 16px; }
     .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
+    /* ─── CHECKLIST PENDIENTES ─── */
+    .checklist-grid { max-width: 860px; margin: 0 auto 48px; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .check-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); }
+    .check-item.done { border-left: 4px solid var(--green); }
+    .check-item.pending { border-left: 4px solid var(--amber); }
+    .check-header { display: flex; align-items: center; gap: 10px; }
+    .check-badge { font-size: 1.1rem; flex-shrink: 0; }
+    .check-title { font-weight: 600; font-size: 0.85rem; color: var(--navy); flex: 1; }
+    .check-status { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
+    .check-item.done .check-status { background: var(--green-light); color: var(--green); }
+    .check-item.pending .check-status { background: var(--amber-light); color: var(--amber); }
+    .check-body { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
     /* ─── ZONES ─── */
     .zones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
     .zone-card { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
@@ -233,6 +246,7 @@ function checkPw(){
   <a class="nav-link" href="#la2">🌴 LA Cierre</a>
   <a class="nav-link" href="#logistica">⏱️ Tiempos</a>
   <a class="nav-link" href="#auto-la">🅿️ Auto LA</a>
+  <a class="nav-link" href="#pendientes">📋 Pendientes</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -758,8 +772,9 @@ function checkPw(){
         <div class="day-body">
           <div class="day-title">Llegada desde Jackson</div>
           <ul class="day-items">
-            <li>Llegada LAX 14:21 · retirar auto alquilado en aeropuerto</li>
+            <li>Llegada LAX 14:21 · <strong>Uber/Lyft al Ocean Park Hotel</strong> directo — sin trámites en aeropuerto</li>
             <li>Check-in Ocean Park Hotel, Santa Monica</li>
+            <li><strong>16:00 — Turo delivery</strong>: el host trae el auto al hotel</li>
             <li>Tarde tranquila — descompresión: naturaleza → ciudad</li>
           </ul>
         </div>
@@ -884,6 +899,149 @@ function checkPw(){
     <div class="rule-card"><span class="rule-icon">💡</span><div class="rule-heading">Garage &gt; calle en zonas turísticas</div><div class="rule-text">En áreas de mucho turismo, perder 5 min buscando un garage pago es mejor que arriesgarse a una multa o que te lleven el auto. El costo de recuperar el auto en LA es $250–300 USD.</div></div>
   </div>
 
+  <!-- ═══ PENDIENTES ═══ -->
+  <div class="section-divider" id="pendientes">📋 Antes de viajar — pendientes</div>
+  <div class="checklist-grid">
+
+    <div class="check-item pending">
+      <div class="check-header">
+        <span class="check-badge">🪪</span>
+        <span class="check-title">Permiso Internacional de Conducir (PID)</span>
+        <span class="check-status">Pendiente</span>
+      </div>
+      <div class="check-body">
+        <strong>ACA · 51 y 9</strong>, Lun–Vie 9:00–16:30 hs.<br>
+        Costo: $33.000 (no socio) · 2 fotos 4×4 (fondo blanco/celeste, sin anteojos) · DNI original + fotocopia ambos lados · Licencia argentina original (física, no MiArgentina) + fotocopia ambos lados.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">📱</span>
+        <span class="check-title">eSIM internacional</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        Opciones: <strong>Hola Fly, Airalo, Holafly</strong>. Activar <strong>antes de abordar en BUE</strong> para tener señal al bajar en LAX (necesaria para Uber del aeropuerto). Plan mínimo: 3–4 GB para 20 días (Maps + WhatsApp + fotos).
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <div class="check-header">
+        <span class="check-badge">🗺️</span>
+        <span class="check-title">Mapas offline — Google Maps</span>
+        <span class="check-status">Pendiente</span>
+      </div>
+      <div class="check-body">
+        Descargar antes de salir: Los Ángeles, San Francisco, Seattle, área de Yellowstone/Jackson. <strong>Vital en zonas sin señal</strong> (interior del parque, carreteras remotas).
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">📲</span>
+        <span class="check-title">Apps a instalar antes del viaje</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        <strong>SpotHero / ParkWhiz</strong> — garages en LA<br>
+        <strong>ParkMobile</strong> — parquímetros LA<br>
+        <strong>Waymo</strong> — autos autónomos SF (registrarse antes)<br>
+        <strong>GuideAlong</strong> — audio-guía GPS para Yellowstone y Grand Teton (muy recomendada)<br>
+        <strong>Turo</strong> — verificar licencia con anticipación (proceso puede tardar)
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">🔌</span>
+        <span class="check-title">Enchufes y adaptadores</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        USA usa <strong>Tipo A</strong> (2 patas planas) — igual que Argentina en forma. La mayoría de cargadores modernos (cel, cámara) son <strong>100–240V automático</strong>: revisar la etiqueta del cargador. Si dice "100–240V" no necesitás transformador, solo verificar el enchufe.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">🏦</span>
+        <span class="check-title">Avisar al banco del viaje</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        Notificar a <strong>VISA ICBC</strong> (y cualquier otra tarjeta) que habrá consumos en USA entre el 2/8 y el 22/8. Evita bloqueos por "transacción sospechosa" en el momento menos oportuno.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">💵</span>
+        <span class="check-title">Cash en dólares</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        Llevar ~<strong>$200–300 USD en efectivo</strong>. Útil para propinas (restaurantes, Uber, hotel), parkímetros viejos, mercados de pulgas, y emergencias donde no acepten tarjeta.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">📄</span>
+        <span class="check-title">Documentos digitales de respaldo</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        Subir a Google Drive o WhatsApp guardado: fotos de pasaportes, licencias, reservas de hoteles/vuelos y confirmación del Annual Pass. Accesibles sin internet desde el cel.
+      </div>
+    </div>
+
+    <div class="check-item done">
+      <div class="check-header">
+        <span class="check-badge">🏞️</span>
+        <span class="check-title">America the Beautiful Pass</span>
+        <span class="check-status">Listo ✓</span>
+      </div>
+      <div class="check-body">
+        Comprado. Orden recreation.gov <strong>#0819897495</strong>. Cubre Yellowstone, Grand Teton y todos los parques nacionales.
+      </div>
+    </div>
+
+    <div class="check-item done">
+      <div class="check-header">
+        <span class="check-badge">🛡️</span>
+        <span class="check-title">Seguros — coberturas</span>
+        <span class="check-status">Listo ✓</span>
+      </div>
+      <div class="check-body">
+        Chequeado con obra social. Cobertura confirmada para el viaje.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <div class="check-header">
+        <span class="check-badge">🐻</span>
+        <span class="check-title">Bear spray — comprar en destino</span>
+        <span class="check-status">En destino</span>
+      </div>
+      <div class="check-body">
+        No se puede volar con él. Comprar al llegar a <strong>West Yellowstone o Gardiner</strong> (hay tiendas de outdoor en ambas ciudades). Costo aprox. $40–50 USD.
+      </div>
+    </div>
+
+    <div class="check-item pending">
+      <span class="check-header">
+        <span class="check-badge">🚗</span>
+        <span class="check-title">Turo Bloque 2 — reservar</span>
+        <span class="check-status">Pendiente</span>
+      </span>
+      <div class="check-body">
+        18/8 16:00 → 22/8 8:00 AM. Delivery en Ocean Park Hotel (2680 32nd St, Santa Monica). Candidatos: <strong>Kia K5 2021 · Lewis ($290)</strong> o <strong>Honda Accord 2018 · Lewis ($278)</strong>. Coordinar por mensaje con el host para retiro en Studio 6 Gardena el 22/8.
+      </div>
+    </div>
+
+  </div>
+
 </main>
 
 <footer class="footer">
@@ -893,7 +1051,7 @@ function checkPw(){
 </footer>
 
 <script>
-const sections = document.querySelectorAll('section[id], #logistica, #auto-la');
+const sections = document.querySelectorAll('section[id], #logistica, #auto-la, #pendientes');
 const navLinks = document.querySelectorAll('.nav-link');
 window.addEventListener('scroll', () => {
   let current = '';
