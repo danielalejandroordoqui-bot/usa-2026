@@ -156,7 +156,7 @@
     .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
     /* ─── CHECKLIST PENDIENTES ─── */
-    .checklist-grid { max-width: 860px; margin: 0 auto 48px; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .checklist-grid { max-width: 680px; margin: 0 auto 48px; padding: 0 20px; display: flex; flex-direction: column; gap: 14px; }
     .check-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); }
     .check-item.done { border-left: 4px solid var(--green); }
     .check-item.pending { border-left: 4px solid var(--amber); }
@@ -916,105 +916,88 @@ function checkPw(){
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
-        <span class="check-badge">📱</span>
-        <span class="check-title">eSIM internacional</span>
+      <div class="check-header">
+        <span class="check-badge">🛡️</span>
+        <span class="check-title">Seguros — solicitar cobertura de viaje</span>
         <span class="check-status">Pendiente</span>
-      </span>
+      </div>
       <div class="check-body">
-        Opciones: <strong>Hola Fly, Airalo, Holafly</strong>. Activar <strong>antes de abordar en BUE</strong> para tener señal al bajar en LAX (necesaria para Uber del aeropuerto). Plan mínimo: 3–4 GB para 20 días (Maps + WhatsApp + fotos).
+        A través de la obra social (Mercado Libre). Confirmado que dan cobertura, pero el trámite se pide <strong>30 días antes del vuelo</strong> — no antes. Fecha tope para iniciar: <strong>2 de julio de 2026</strong>.
       </div>
     </div>
 
     <div class="check-item pending">
       <div class="check-header">
-        <span class="check-badge">🗺️</span>
-        <span class="check-title">Mapas offline — Google Maps</span>
+        <span class="check-badge">📱</span>
+        <span class="check-title">eSIM internacional</span>
         <span class="check-status">Pendiente</span>
       </div>
       <div class="check-body">
-        Descargar antes de salir: Los Ángeles, San Francisco, Seattle, área de Yellowstone/Jackson. <strong>Vital en zonas sin señal</strong> (interior del parque, carreteras remotas).
+        Opciones: <strong>Hola Fly, Airalo</strong>. Activar <strong>antes de abordar en BUE</strong> para tener señal al bajar en LAX (necesaria para Uber del aeropuerto). Plan mínimo: 3–4 GB para 20 días (Maps + WhatsApp + fotos).
       </div>
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
+      <div class="check-header">
         <span class="check-badge">📲</span>
         <span class="check-title">Apps a instalar antes del viaje</span>
         <span class="check-status">Pendiente</span>
-      </span>
+      </div>
       <div class="check-body">
-        <strong>SpotHero / ParkWhiz</strong> — garages en LA<br>
-        <strong>ParkMobile</strong> — parquímetros LA<br>
-        <strong>Waymo</strong> — autos autónomos SF (registrarse antes)<br>
-        <strong>GuideAlong</strong> — audio-guía GPS para Yellowstone y Grand Teton (muy recomendada)<br>
-        <strong>Turo</strong> — verificar licencia con anticipación (proceso puede tardar)
+        <strong>Uber + Lyft</strong> — rides en todas las ciudades (tener ambas, a veces una es más barata)<br>
+        <strong>SpotHero / ParkWhiz</strong> — garages en LA, reservar con anticipación<br>
+        <strong>ParkMobile</strong> — pagar parquímetros en LA sin monedas<br>
+        <strong>Waymo</strong> — autos autónomos en SF (registrarse antes del viaje)<br>
+        <strong>GuideAlong</strong> — audio-guía GPS para Yellowstone y Grand Teton<br>
+        <strong>AllTrails</strong> — senderos y trails en los parques<br>
+        <strong>Turo</strong> — verificar licencia con anticipación (proceso puede demorar)<br>
+        <strong>Yelp</strong> — reviews de restaurantes y bares en USA<br>
+        <strong>Google Translate</strong> — útil en menús, carteles y conversaciones
       </div>
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
+      <div class="check-header">
         <span class="check-badge">🔌</span>
         <span class="check-title">Enchufes y adaptadores</span>
         <span class="check-status">Pendiente</span>
-      </span>
+      </div>
       <div class="check-body">
         USA usa <strong>Tipo A</strong> (2 patas planas) — igual que Argentina en forma. La mayoría de cargadores modernos (cel, cámara) son <strong>100–240V automático</strong>: revisar la etiqueta del cargador. Si dice "100–240V" no necesitás transformador, solo verificar el enchufe.
       </div>
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
+      <div class="check-header">
         <span class="check-badge">🏦</span>
         <span class="check-title">Avisar al banco del viaje</span>
         <span class="check-status">Pendiente</span>
-      </span>
+      </div>
       <div class="check-body">
         Notificar a <strong>VISA ICBC</strong> (y cualquier otra tarjeta) que habrá consumos en USA entre el 2/8 y el 22/8. Evita bloqueos por "transacción sospechosa" en el momento menos oportuno.
       </div>
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
+      <div class="check-header">
         <span class="check-badge">💵</span>
         <span class="check-title">Cash en dólares</span>
         <span class="check-status">Pendiente</span>
-      </span>
+      </div>
       <div class="check-body">
         Llevar ~<strong>$200–300 USD en efectivo</strong>. Útil para propinas (restaurantes, Uber, hotel), parkímetros viejos, mercados de pulgas, y emergencias donde no acepten tarjeta.
       </div>
     </div>
 
     <div class="check-item pending">
-      <span class="check-header">
+      <div class="check-header">
         <span class="check-badge">📄</span>
-        <span class="check-title">Documentos digitales de respaldo</span>
+        <span class="check-title">Documentos — digital y carpeta impresa</span>
         <span class="check-status">Pendiente</span>
-      </span>
-      <div class="check-body">
-        Subir a Google Drive o WhatsApp guardado: fotos de pasaportes, licencias, reservas de hoteles/vuelos y confirmación del Annual Pass. Accesibles sin internet desde el cel.
-      </div>
-    </div>
-
-    <div class="check-item done">
-      <div class="check-header">
-        <span class="check-badge">🏞️</span>
-        <span class="check-title">America the Beautiful Pass</span>
-        <span class="check-status">Listo ✓</span>
       </div>
       <div class="check-body">
-        Comprado. Orden recreation.gov <strong>#0819897495</strong>. Cubre Yellowstone, Grand Teton y todos los parques nacionales.
-      </div>
-    </div>
-
-    <div class="check-item done">
-      <div class="check-header">
-        <span class="check-badge">🛡️</span>
-        <span class="check-title">Seguros — coberturas</span>
-        <span class="check-status">Listo ✓</span>
-      </div>
-      <div class="check-body">
-        Chequeado con obra social. Cobertura confirmada para el viaje.
+        <strong>Digital:</strong> subir a Google Drive o WhatsApp guardado — pasaportes, licencias, todas las reservas. Accesible sin internet.<br><br>
+        <strong>Carpeta impresa:</strong> llevar una carpeta física con todo impreso — pasajes internacionales (ida y vuelta), vuelos internos, confirmaciones de hospedaje, entradas (AC/DC, parques), Annual Pass. En USA piden comprobantes en más situaciones de las que se espera.
       </div>
     </div>
 
@@ -1026,17 +1009,6 @@ function checkPw(){
       </div>
       <div class="check-body">
         No se puede volar con él. Comprar al llegar a <strong>West Yellowstone o Gardiner</strong> (hay tiendas de outdoor en ambas ciudades). Costo aprox. $40–50 USD.
-      </div>
-    </div>
-
-    <div class="check-item pending">
-      <span class="check-header">
-        <span class="check-badge">🚗</span>
-        <span class="check-title">Turo Bloque 2 — reservar</span>
-        <span class="check-status">Pendiente</span>
-      </span>
-      <div class="check-body">
-        18/8 16:00 → 22/8 8:00 AM. Delivery en Ocean Park Hotel (2680 32nd St, Santa Monica). Candidatos: <strong>Kia K5 2021 · Lewis ($290)</strong> o <strong>Honda Accord 2018 · Lewis ($278)</strong>. Coordinar por mensaje con el host para retiro en Studio 6 Gardena el 22/8.
       </div>
     </div>
 
