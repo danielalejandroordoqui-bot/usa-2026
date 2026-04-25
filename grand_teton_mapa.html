@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏔️ Mapa Grand Teton — USA 2026</title>
+<style>
+:root {
+  --cream: #f5f0e8;
+  --navy: #1a2f4a;
+  --navy2: #0e1f33;
+  --amber: #d4700a;
+  --border: rgba(245,240,232,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; font-family:-apple-system,system-ui,'Inter',sans-serif; background:var(--navy2); color:var(--cream); }
+body { display:flex; flex-direction:column; }
+
+.hdr {
+  background:rgba(14,31,51,0.97);
+  border-bottom:1px solid var(--border);
+  padding:10px 14px;
+  display:flex; align-items:center; gap:10px;
+  flex-shrink:0; flex-wrap:wrap; z-index:20;
+}
+.hdr-left { display:flex; flex-direction:column; gap:1px; }
+.hdr-title { font-size:0.82rem; font-weight:700; }
+.hdr-sub { font-size:0.6rem; color:rgba(245,240,232,0.4); }
+.filters { display:flex; gap:5px; flex-wrap:wrap; margin-left:auto; }
+.fbtn {
+  font-size:0.6rem; font-weight:600;
+  padding:4px 9px; border-radius:20px; border:1px solid;
+  cursor:pointer; background:transparent;
+  transition:opacity 0.15s, background 0.15s;
+}
+.fbtn.off { opacity:0.28; }
+.f-fauna  { border-color:#86efac; color:#86efac; }
+.f-fauna.on  { background:rgba(134,239,172,0.13); }
+.f-foto   { border-color:#fbbf24; color:#fbbf24; }
+.f-foto.on   { background:rgba(251,191,36,0.13); }
+.f-logis  { border-color:#93c5fd; color:#93c5fd; }
+.f-logis.on  { background:rgba(147,197,253,0.13); }
+.f-hike   { border-color:#c084fc; color:#c084fc; }
+.f-hike.on   { background:rgba(192,132,252,0.13); }
+
+.map-wrap { flex:1; overflow:hidden; position:relative; cursor:grab; touch-action:none; }
+.map-wrap.dragging { cursor:grabbing; }
+#msvg { width:100%; height:100%; display:block; }
+
+.popup {
+  position:absolute; z-index:50;
+  background:rgba(14,31,51,0.97);
+  border:1px solid rgba(245,240,232,0.18);
+  border-radius:14px; padding:14px 16px;
+  width:250px; max-height:70vh; overflow-y:auto;
+  box-shadow:0 8px 40px rgba(0,0,0,0.55);
+  opacity:0; pointer-events:none;
+  transition:opacity 0.15s, transform 0.15s;
+  transform:translateY(6px);
+}
+.popup.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+.popup-close {
+  position:absolute; top:8px; right:10px;
+  background:none; border:none; color:rgba(245,240,232,0.35);
+  font-size:0.75rem; cursor:pointer; padding:2px 5px;
+}
+.popup-close:hover { color:rgba(245,240,232,0.7); }
+.popup-icon { font-size:1.3rem; display:block; margin-bottom:5px; }
+.popup-tag {
+  font-size:0.55rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.6px; padding:2px 7px; border-radius:10px;
+  display:inline-block; margin-bottom:8px;
+}
+.tag-fauna  { background:rgba(134,239,172,0.2); color:#86efac; }
+.tag-foto   { background:rgba(251,191,36,0.2);  color:#fbbf24; }
+.tag-logis  { background:rgba(147,197,253,0.2); color:#93c5fd; }
+.tag-hike   { background:rgba(192,132,252,0.2); color:#c084fc; }
+.popup-title { font-size:0.83rem; font-weight:700; margin-bottom:7px; color:var(--cream); }
+.popup-body { font-size:0.72rem; color:rgba(245,240,232,0.7); line-height:1.65; }
+.popup-body strong { color:rgba(245,240,232,0.95); }
+
+.legend {
+  position:absolute; bottom:14px; left:14px;
+  background:rgba(14,31,51,0.9);
+  border:1px solid var(--border);
+  border-radius:10px; padding:9px 11px;
+  font-size:0.58rem; line-height:1.9;
+  pointer-events:none;
+}
+.leg-item { display:flex; align-items:center; gap:6px; color:rgba(245,240,232,0.55); }
+.leg-line { width:18px; height:3px; border-radius:2px; flex-shrink:0; }
+.leg-dot  { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+
+.zooms { position:absolute; bottom:14px; right:14px; display:flex; flex-direction:column; gap:4px; }
+.zbtn {
+  width:32px; height:32px;
+  background:rgba(14,31,51,0.92);
+  border:1px solid rgba(245,240,232,0.15);
+  border-radius:8px; color:var(--cream);
+  font-size:1.1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.zbtn:hover { background:rgba(26,47,74,0.95); }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-title">🏔️ Mapa Grand Teton — USA 2026</div>
+    <div class="hdr-sub">Tocá los markers · Pellizco para zoom · Arrastrá para mover</div>
+  </div>
+  <div class="filters">
+    <button class="fbtn f-fauna on"  onclick="toggleCat('fauna')">🫎 Fauna</button>
+    <button class="fbtn f-foto  on"  onclick="toggleCat('foto')">📷 Foto</button>
+    <button class="fbtn f-hike  on"  onclick="toggleCat('hike')">🥾 Caminatas</button>
+    <button class="fbtn f-logis on"  onclick="toggleCat('logis')">🗺️ Logística</button>
+  </div>
+</div>
+
+<div class="map-wrap" id="wrap">
+
+<!-- Coordinate system:
+  latMax=44.05, latMin=43.44 → range=0.61
+  lonMin=-110.87, lonMax=-110.33 → range=0.54
+  viewBox "0 0 900 800"
+  x = (lon + 110.87) / 0.54 * 900
+  y = (44.05 - lat) / 0.61 * 800
+-->
+<svg id="msvg" viewBox="0 0 900 800" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <radialGradient id="parkgrad" cx="40%" cy="50%" r="70%">
+      <stop offset="0%"   stop-color="#1a2e1a"/>
+      <stop offset="100%" stop-color="#0f1f0f"/>
+    </radialGradient>
+    <!-- Mountain gradient for Teton Range -->
+    <linearGradient id="mtngradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#2a2a1e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- bg -->
+  <rect width="900" height="800" fill="#0c1a2e"/>
+
+  <!-- Park territory -->
+  <polygon points="0,66 750,66 900,236 817,616 450,629 233,590 83,564 0,341"
+    fill="url(#parkgrad)" stroke="#2d4d2d" stroke-width="1.5"/>
+
+  <!-- Teton Range (mountain silhouette, west side) -->
+  <polygon points="0,341 0,66 55,130 70,110 85,145 100,120 115,160 130,95 148,70 163,105 178,88 193,115 207,100 220,130 235,160 250,200 260,250 255,330 245,400 230,470 215,530 200,600 183,630 160,600 120,580 83,564"
+    fill="#1a1f2e" stroke="#2a2f4a" stroke-width="1"/>
+
+  <!-- Grand Teton peak indicator -->
+  <polygon points="148,70 163,105 133,105" fill="#3a3f5e" stroke="#4a4f6e" stroke-width="1"/>
+
+  <!-- Jackson Lake -->
+  <polygon points="283,105 483,118 533,157 517,262 417,354 333,394 283,354 267,250 275,175"
+    fill="#0d2436" stroke="#1a4060" stroke-width="1.5"/>
+  <text x="400" y="220" text-anchor="middle" fill="rgba(147,197,253,0.45)" font-size="9" font-style="italic">Jackson Lake</text>
+
+  <!-- Jenny Lake -->
+  <ellipse cx="228" cy="394" rx="32" ry="28" fill="#0d2436" stroke="#1a4060" stroke-width="1.2"/>
+  <text x="228" y="437" text-anchor="middle" fill="rgba(147,197,253,0.4)" font-size="7.5" font-style="italic">Jenny Lake</text>
+
+  <!-- String Lake (tiny, north of Jenny) -->
+  <ellipse cx="217" cy="341" rx="12" ry="22" fill="#0d2436" stroke="#1a4060" stroke-width="1"/>
+
+  <!-- Leigh Lake (north of String) -->
+  <ellipse cx="210" cy="289" rx="15" ry="25" fill="#0d2436" stroke="#1a4060" stroke-width="1"/>
+
+  <!-- Taggart Lake -->
+  <ellipse cx="195" cy="472" rx="14" ry="11" fill="#0d2436" stroke="#1a4060" stroke-width="1"/>
+
+  <!-- Bradley Lake -->
+  <ellipse cx="225" cy="459" rx="12" ry="10" fill="#0d2436" stroke="#1a4060" stroke-width="1"/>
+
+  <!-- Snake River (meandering south) -->
+  <path d="M500,236 C510,270 520,310 510,350 C500,390 480,410 470,450 C460,490 455,520 440,550 C425,580 400,610 383,433"
+    stroke="#1a4060" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <!-- Snake River south section -->
+  <path d="M383,433 C370,470 355,510 340,540 C320,575 290,600 270,640 C255,668 240,700 230,747"
+    stroke="#1a4060" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- ══ ROADS ══ -->
+
+  <!-- US-89/191 outer highway (east side, north-south) -->
+  <path d="M230,747 C232,720 233,690 235,660 C237,630 238,610 240,590 C243,560 245,540 248,520 C252,490 258,470 265,445 C272,420 280,400 290,375 C305,340 330,310 360,280 C385,255 420,240 450,223 C490,200 560,185 620,180 C680,175 733,184 780,190"
+    stroke="#c8c0b0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Teton Park Road (inner road, west side) -->
+  <!-- Moose → Jenny Lake → String → Leigh → Jackson Lake Lodge -->
+  <path d="M240,524 C235,500 232,470 228,437 C225,415 224,405 228,394"
+    stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M228,394 C220,370 218,355 217,341"
+    stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M217,341 C215,315 212,305 210,289"
+    stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M210,289 C215,270 230,255 260,248 C310,238 380,232 417,249 C440,258 450,223 450,223"
+    stroke="#c8c0b0" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Jenny Lake Loop Road -->
+  <path d="M228,394 C235,380 248,370 260,375 C272,380 268,394 260,405 C250,415 238,408 228,394"
+    stroke="#c8c0b0" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4,2"/>
+
+  <!-- Moose-Wilson Road (west, narrow) -->
+  <path d="M240,524 C220,545 180,555 130,565 C100,572 75,580 67,603"
+    stroke="#c8c0b0" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-dasharray="5,3"/>
+
+  <!-- Signal Mountain Road (spur) -->
+  <path d="M460,249 C450,260 435,268 417,276"
+    stroke="#c8c0b0" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4,2"/>
+
+  <!-- Antelope Flats Road -->
+  <path d="M290,450 C320,445 355,443 383,433"
+    stroke="#c8c0b0" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4,2"/>
+
+  <!-- Road to Taggart Lake trailhead -->
+  <path d="M240,524 C230,510 218,490 205,480 C198,474 195,472 183,472"
+    stroke="#c8c0b0" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="3,3"/>
+
+  <!-- Colter Bay road -->
+  <path d="M383,249 C373,235 365,215 367,197"
+    stroke="#c8c0b0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- South entrance road (from Jackson) -->
+  <path d="M230,747 C232,730 233,710 233,690 C233,680 232,670 230,660"
+    stroke="rgba(200,190,170,0.35)" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
+
+  <!-- Area labels -->
+  <text x="148" y="58"  text-anchor="middle" fill="rgba(245,240,232,0.5)"  font-size="9"   font-weight="bold">Grand Teton Peak</text>
+  <text x="75"  y="350" text-anchor="middle" fill="rgba(245,240,232,0.2)"  font-size="8"   letter-spacing="0.3" transform="rotate(-70,75,350)">Teton Range</text>
+  <text x="240" y="515" text-anchor="middle" fill="rgba(245,240,232,0.22)" font-size="8"   letter-spacing="0.3">Moose</text>
+  <text x="450" y="215" text-anchor="middle" fill="rgba(245,240,232,0.22)" font-size="8"   letter-spacing="0.3">Jac. Lake Lodge</text>
+  <text x="367" y="190" text-anchor="middle" fill="rgba(245,240,232,0.2)"  font-size="7.5" letter-spacing="0.3">Colter Bay</text>
+  <text x="210" y="276" text-anchor="middle" fill="rgba(147,197,253,0.35)" font-size="7"   font-style="italic">Leigh L.</text>
+  <text x="217" y="328" text-anchor="middle" fill="rgba(147,197,253,0.35)" font-size="7"   font-style="italic">String L.</text>
+  <text x="195" y="488" text-anchor="middle" fill="rgba(147,197,253,0.35)" font-size="7"   font-style="italic">Taggart L.</text>
+  <text x="230" y="747" text-anchor="middle" fill="rgba(147,197,253,0.55)" font-size="7.5">Jackson →</text>
+
+  <!-- Entrance labels -->
+  <text x="820" y="180" text-anchor="start"  fill="rgba(147,197,253,0.55)" font-size="7.5">Moran Entrance</text>
+  <text x="236" y="540" text-anchor="start"  fill="rgba(147,197,253,0.55)" font-size="7.5">Moose Entrance</text>
+  <text x="375" y="62"  text-anchor="middle" fill="rgba(147,197,253,0.55)" font-size="7.5">→ Yellowstone</text>
+
+  <!-- Markers layer -->
+  <g id="mlayer"></g>
+</svg>
+
+<div class="popup" id="popup">
+  <button class="popup-close" id="pclose">✕</button>
+  <span class="popup-icon" id="picon"></span>
+  <span class="popup-tag"  id="ptag"></span>
+  <div class="popup-title" id="ptitle"></div>
+  <div class="popup-body"  id="pbody"></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-line" style="background:#c8c0b0"></div>Rutas principales</div>
+  <div class="leg-item"><div class="leg-line" style="background:#c8c0b0;opacity:0.4" style="border-top:dashed"></div>Rutas secundarias</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#86efac"></div>Fauna</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#fbbf24"></div>Fotografía</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#c084fc"></div>Caminatas</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#93c5fd"></div>Logística</div>
+</div>
+
+<div class="zooms">
+  <button class="zbtn" onclick="doZoom(1.3)">+</button>
+  <button class="zbtn" onclick="doZoom(0.77)">−</button>
+</div>
+
+</div>
+
+<script>
+const MARKERS = [
+  // ── FAUNA ──
+  { id:'oxbow', x:500, y:236, cat:'fauna', icon:'🫎',
+    title:'Oxbow Bend — Wildlife Premium',
+    body:`<strong>El mejor spot de fauna de Grand Teton.</strong> No es caminata — es un pullout sobre la ruta.<br><br>
+→ <strong>Alces</strong> frecuentes en los sauces ribereños<br>
+→ <strong>Garzas azules</strong>, cisnes trompeteros, pelícanos<br>
+→ <strong>Nutrias</strong> en el río, osprey y águilas pescando<br>
+→ Reflejo del Monte Moran al amanecer (Día 16: 5:30 AM)<br>
+→ Misma área que Jackson Lake Lodge — fácil de combinar`},
+
+  { id:'moose-wilson', x:100, y:564, cat:'fauna', icon:'🫎',
+    title:'Moose-Wilson Road',
+    body:`<strong>El mejor spot de alces y osos negros del parque.</strong><br><br>
+→ Carretera estrecha entre Teton Village y Moose (~8 km)<br>
+→ Manejar muy despacio, ventanas abiertas<br>
+→ Mejor al atardecer cuando el sol está bajo<br>
+→ <strong>Alces en los sauces</strong> casi garantizados<br>
+→ Osos negros frecuentes en agosto (comiendo bayas)`},
+
+  { id:'willow-flats', x:430, y:220, cat:'fauna', icon:'🫎',
+    title:'Willow Flats',
+    body:`<strong>Zona húmeda — alces al amanecer.</strong><br><br>
+→ Cerca de Jackson Lake Lodge<br>
+→ Alces en los sauces a primera hora<br>
+→ Buena combinación con Oxbow Bend en la misma mañana<br>
+→ Trompeteros (cisnes) en el área`},
+
+  { id:'schwabacher', x:383, y:433, cat:'fauna', icon:'🦫',
+    title:'Schwabacher Landing',
+    body:`<strong>Amanecer icónico + fauna.</strong><br><br>
+→ Diques de <strong>castores</strong> visibles desde el camino<br>
+→ <strong>Alces</strong> en los sauces ribereños al amanecer<br>
+→ Caminar 15–20 min al norte del parking → ángulos únicos<br>
+→ Casi sin gente a las 5:30 AM<br>
+→ Reflejo de los Tetons en el río (foto de carátula)`},
+
+  // ── FOTO ──
+  { id:'snake-overlook', x:440, y:367, cat:'foto', icon:'📷',
+    title:'Snake River Overlook',
+    body:`<strong>La foto de Ansel Adams — imprescindible.</strong><br><br>
+→ Vista del río serpenteando con los Tetons de fondo<br>
+→ Mejor al amanecer o al atardecer (luz lateral)<br>
+→ Gran angular para capturar el río completo<br>
+→ Teleobjetivo para comprimir Tetons + río`},
+
+  { id:'mormon-row', x:367, y:472, cat:'foto', icon:'📷',
+    title:'Mormon Row',
+    body:`<strong>Los graneros históricos con los Tetons de fondo.</strong><br><br>
+→ Foto más icónica y reconocible del parque<br>
+→ El granero Moulton (el más conocido) al amanecer<br>
+→ Gran angular para incluir el cielo + montañas<br>
+→ Bisontes frecuentes en Antelope Flats alrededor<br>
+→ Acceso por Antelope Flats Road desde la US-89`},
+
+  { id:'signal-foto', x:417, y:276, cat:'foto', icon:'🚗',
+    title:'Signal Mountain',
+    body:`<strong>Vistas panorámicas de todo el parque — en auto.</strong><br><br>
+→ Drive hasta la cima (~5 min desde la Teton Park Road)<br>
+→ Dos miradores: Jackson Point Overlook y otro al oeste<br>
+→ Vista 360°: Jackson Lake, Teton Range, Antelope Flats<br>
+→ Senderos cortos en la cima (~1 km total)<br>
+→ Mejor al atardecer para luz sobre los Tetons`},
+
+  { id:'schwabacher-foto', x:370, y:445, cat:'foto', icon:'🌅',
+    title:'Schwabacher Landing — Amanecer',
+    body:`<strong>El mejor amanecer fotográfico de Grand Teton.</strong><br><br>
+→ Salir antes de las 5:15 AM desde Jackson (~30 min de drive)<br>
+→ Los castores crean reflejos perfectos en el agua<br>
+→ Trípode imprescindible<br>
+→ Gran angular + teleobjetivo para los Tetons reflejados<br>
+→ Día 17 del itinerario (mañana principal)`},
+
+  // ── CAMINATAS ──
+  { id:'taggart', x:183, y:472, cat:'hike', icon:'🥾',
+    title:'Taggart Lake',
+    body:`<strong>5 km ida y vuelta · ~1.5h · Fácil</strong><br><br>
+→ La caminata más recomendada por viajeros para Grand Teton<br>
+→ Lago glaciar con vista directa a los Tetons<br>
+→ <strong>Alces en los sauces</strong> alrededor del lago<br>
+→ Osos negros y grizzly frecuentes en el área<br>
+→ Se puede extender a Bradley Lake (+1.5 km, ~6.5 km total)<br>
+→ Encaja en la tarde del Día 16`},
+
+  { id:'string-lake', x:217, y:341, cat:'hike', icon:'🥾',
+    title:'String Lake + Leigh Lake',
+    body:`<strong>String Lake loop: ~5.5 km · Plano · Fácil</strong><br>
+<strong>Leigh Lake: ~6 km RT · Plano · Fácil</strong><br><br>
+→ Alternativa al Jenny Lake ferry<br>
+→ <strong>Alces muy frecuentes</strong> en zonas pantanosas<br>
+→ <strong>Nutrias</strong> en Leigh Lake, águilas pescando<br>
+→ Terrain completamente plano — ideal para tomarlo con calma<br>
+→ Poca gente comparado con Jenny Lake`},
+
+  { id:'hidden-falls', x:195, y:394, cat:'hike', icon:'🥾',
+    title:'Hidden Falls + Inspiration Point',
+    body:`<strong>1.6 km desde el dock · Fácil (con ferry)</strong><br>
+<strong>Ferry: ~$18 RT por persona · sin reserva</strong><br><br>
+→ Cruzar Jenny Lake en bote → Hidden Falls (~0.8 km a pie)<br>
+→ Subir a Inspiration Point (+0.8 km) → vista del lago y Tetons<br>
+→ Se puede entrar más a <strong>Cascade Canyon</strong> (+varios km)<br>
+→ Pika y marmotas en las zonas rocosas cerca de Inspiration Point<br>
+→ Encaja en el Día 17`},
+
+  { id:'cascade', x:155, y:394, cat:'hike', icon:'🥾',
+    title:'Cascade Canyon',
+    body:`<strong>9+ km RT · Moderada (si se va profundo)</strong><br><br>
+→ Desde el dock de Jenny Lake (ferry incluido)<br>
+→ Los primeros 2 km son fáciles y muy fotogénicos<br>
+→ <strong>Osos negros y ocasionalmente grizzly</strong> en el canyon<br>
+→ Pika y marmotas en las zonas rocosas<br>
+→ No es necesario llegar al final: la parte baja ya vale`},
+
+  // ── LOGÍSTICA ──
+  { id:'jackson-log', x:230, y:747, cat:'logis', icon:'🏙️',
+    title:'Jackson — Base (Días 15–18)',
+    body:`<strong>Cache House · Town Square.</strong><br><br>
+→ Plaza con 4 arcos de astas de alce (foto icónica)<br>
+→ Cierres 18–20h — aprovechar las tardes para pueblo<br>
+→ Cowboy Coffee Co.: 125 N Cache St, abre 6 AM<br>
+→ Million Dollar Cowboy Bar, Kemo Sabe, Jackson Mercantile<br>
+→ Cowboy Coffee es el mejor café de la zona (hacer cada mañana si se puede)`},
+
+  { id:'jac-airport', x:250, y:603, cat:'logis', icon:'✈️',
+    title:'JAC Airport — Día 18',
+    body:`<strong>Devolución RAV4 10:00 AM · Vuelo 13:58 PM a LAX</strong><br><br>
+→ Bear Aware Kiosk en baggage claim → devolver bear spray acá<br>
+→ Cargar nafta al nivel del contrato antes de devolver<br>
+→ Fotografiar tablero del combustible al recibir el auto el Día 12<br>
+→ Hotel → aeropuerto: 30–45 min`},
+
+  { id:'moose-vc', x:240, y:524, cat:'logis', icon:'🏛️',
+    title:'Moose Visitor Center',
+    body:`<strong>Craig Thomas Discovery & Visitor Center</strong><br><br>
+→ Mejores mapas del parque (gratis)<br>
+→ Info de avistamientos recientes de fauna<br>
+→ Condiciones de senderos actualizadas<br>
+→ Necesario para obtener el backcountry permit si planean ir a Cascade Canyon profundo`},
+
+  { id:'colter-bay', x:367, y:197, cat:'logis', icon:'⛽',
+    title:'Colter Bay — Servicios',
+    body:`<strong>Combustible, baños, comida.</strong><br><br>
+→ Una de las pocas estaciones de nafta del parque (cara)<br>
+→ Supermercado básico y tienda de souvenirs<br>
+→ Baños públicos<br>
+→ Marina con vistas a Jackson Lake y los Tetons`},
+];
+
+const state = { fauna:true, foto:true, hike:true, logis:true };
+const colors = { fauna:'#86efac', foto:'#fbbf24', hike:'#c084fc', logis:'#93c5fd' };
+const tagLabels = { fauna:'Fauna', foto:'Fotografía', hike:'Caminata', logis:'Logística' };
+
+function toggleCat(cat) {
+  state[cat] = !state[cat];
+  const btn = document.querySelector(`.f-${cat}`);
+  btn.classList.toggle('on', state[cat]);
+  btn.classList.toggle('off', !state[cat]);
+  renderMarkers();
+}
+
+function renderMarkers() {
+  const layer = document.getElementById('mlayer');
+  layer.innerHTML = '';
+  MARKERS.forEach(m => {
+    if (!state[m.cat]) return;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor = 'pointer';
+
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    glow.setAttribute('cx', m.x); glow.setAttribute('cy', m.y); glow.setAttribute('r','15');
+    glow.setAttribute('fill', colors[m.cat]); glow.setAttribute('opacity','0.12');
+    g.appendChild(glow);
+
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', m.x); c.setAttribute('cy', m.y); c.setAttribute('r','10');
+    c.setAttribute('fill', colors[m.cat]); c.setAttribute('opacity','0.88');
+    g.appendChild(c);
+
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', m.x); t.setAttribute('y', m.y+4);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','9');
+    t.textContent = m.icon;
+    g.appendChild(t);
+
+    g.addEventListener('click', e => { e.stopPropagation(); openPopup(m, e); });
+    layer.appendChild(g);
+  });
+}
+
+function openPopup(m, e) {
+  document.getElementById('picon').textContent  = m.icon;
+  document.getElementById('ptitle').textContent = m.title;
+  document.getElementById('pbody').innerHTML    = m.body;
+  document.getElementById('ptag').className     = `popup-tag tag-${m.cat}`;
+  document.getElementById('ptag').textContent   = tagLabels[m.cat];
+
+  const svg  = document.getElementById('msvg');
+  const wrap = document.getElementById('wrap');
+  const wRect = wrap.getBoundingClientRect();
+
+  const pt = svg.createSVGPoint();
+  pt.x = m.x; pt.y = m.y;
+  const sc = pt.matrixTransform(svg.getScreenCTM());
+
+  const W = 250, popup = document.getElementById('popup');
+  let left = sc.x - wRect.left + 14;
+  let top  = sc.y - wRect.top  - 20;
+  if (left + W > wRect.width  - 8) left = sc.x - wRect.left - W - 14;
+  if (left < 8) left = 8;
+  if (top < 8)  top  = 8;
+  if (top + 280 > wRect.height - 8) top = wRect.height - 288;
+
+  popup.style.left = left + 'px';
+  popup.style.top  = top  + 'px';
+  popup.classList.add('show');
+}
+
+function closePopup() { document.getElementById('popup').classList.remove('show'); }
+document.getElementById('pclose').addEventListener('click', e => { e.stopPropagation(); closePopup(); });
+document.getElementById('wrap').addEventListener('click', closePopup);
+
+let tx = 0, ty = 0, sc = 1;
+let drag = null, lastDist = null;
+const wrap = document.getElementById('wrap');
+const svg  = document.getElementById('msvg');
+
+function applyT() {
+  svg.style.transformOrigin = '0 0';
+  svg.style.transform = `translate(${tx}px,${ty}px) scale(${sc})`;
+}
+
+function doZoom(factor, cx, cy) {
+  const r = wrap.getBoundingClientRect();
+  const ocx = cx ?? r.width  / 2;
+  const ocy = cy ?? r.height / 2;
+  const ns = Math.min(Math.max(sc * factor, 0.55), 6);
+  const f  = ns / sc;
+  tx = ocx * (1 - f) + f * tx;
+  ty = ocy * (1 - f) + f * ty;
+  sc = ns;
+  applyT();
+}
+
+wrap.addEventListener('mousedown', e => {
+  if (e.target.closest('.popup')) return;
+  drag = { sx: e.clientX - tx, sy: e.clientY - ty };
+  wrap.classList.add('dragging');
+});
+window.addEventListener('mousemove', e => {
+  if (!drag) return;
+  tx = e.clientX - drag.sx;
+  ty = e.clientY - drag.sy;
+  applyT();
+});
+window.addEventListener('mouseup', () => { drag = null; wrap.classList.remove('dragging'); });
+wrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = wrap.getBoundingClientRect();
+  doZoom(e.deltaY < 0 ? 1.15 : 0.87, e.clientX - r.left, e.clientY - r.top);
+}, { passive:false });
+
+wrap.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    drag = { sx: e.touches[0].clientX - tx, sy: e.touches[0].clientY - ty };
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastDist = Math.hypot(dx, dy);
+    drag = null;
+  }
+}, { passive:true });
+wrap.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && drag) {
+    tx = e.touches[0].clientX - drag.sx;
+    ty = e.touches[0].clientY - drag.sy;
+    applyT();
+  } else if (e.touches.length === 2 && lastDist) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d  = Math.hypot(dx, dy);
+    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    const r  = wrap.getBoundingClientRect();
+    doZoom(d / lastDist, cx - r.left, cy - r.top);
+    lastDist = d;
+  }
+}, { passive:false });
+wrap.addEventListener('touchend', () => { drag = null; lastDist = null; });
+
+renderMarkers();
+</script>
+</body>
+</html>

@@ -46,6 +46,8 @@ body { display:flex; flex-direction:column; }
 .f-logis.on  { background:rgba(147,197,253,0.13); }
 .f-seg    { border-color:#fca5a5; color:#fca5a5; }
 .f-seg.on    { background:rgba(252,165,165,0.13); }
+.f-hike   { border-color:#c084fc; color:#c084fc; }
+.f-hike.on   { background:rgba(192,132,252,0.13); }
 
 /* MAP */
 .map-wrap { flex:1; overflow:hidden; position:relative; cursor:grab; touch-action:none; }
@@ -131,6 +133,7 @@ body { display:flex; flex-direction:column; }
     <button class="fbtn f-foto  on"  onclick="toggleCat('foto')">📷 Foto</button>
     <button class="fbtn f-logis on"  onclick="toggleCat('logis')">🗺️ Logística</button>
     <button class="fbtn f-seg   on"  onclick="toggleCat('seg')">⚠️ Seguridad</button>
+    <button class="fbtn f-hike  on"  onclick="toggleCat('hike')">🥾 Caminatas</button>
   </div>
 </div>
 
@@ -241,6 +244,7 @@ body { display:flex; flex-direction:column; }
   <div class="leg-item"><div class="leg-dot"  style="background:#fbbf24"></div>Fotografía</div>
   <div class="leg-item"><div class="leg-dot"  style="background:#93c5fd"></div>Logística</div>
   <div class="leg-item"><div class="leg-dot"  style="background:#fca5a5"></div>Seguridad</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#c084fc"></div>Caminatas</div>
 </div>
 
 <!-- Zoom controls -->
@@ -402,6 +406,42 @@ const MARKERS = [
 → No volar con bear spray (no puede hacer check-in)<br>
 → Si no se devuelve: $50/can (se descuenta lo pagado)`},
 
+  // ── CAMINATAS ──
+  { id:'trout-lake', x:740, y:115, cat:'hike', icon:'🥾',
+    title:'Trout Lake — Lamar Valley',
+    body:`<strong>1.9 km ida y vuelta · ~30 min · Fácil</strong><br><br>
+→ Justo después de Soda Butte Creek (Northern Range Corridor)<br>
+→ <strong>Nutrias de río muy frecuentes</strong> en el lago<br>
+→ Osos (negros y grizzly) en los alrededores<br>
+→ Osprey pescando desde el aire<br>
+→ Poco visitado — casi sin turistas`},
+
+  { id:'hellroaring', x:414, y:148, cat:'hike', icon:'🥾',
+    title:'Hellroaring Suspension Bridge',
+    body:`<strong>3.2 km ida y vuelta · ~1h15 · Moderada</strong><br><br>
+→ Trailhead entre Mammoth y Tower Junction<br>
+→ Bajada con switchbacks hasta un <strong>puente colgante sobre rápidos</strong><br>
+→ <strong>Borregos cimarrón</strong> en las paredes del cañón<br>
+→ Raptors en el cañón del río Yellowstone<br>
+→ Encaja perfecto en el Día 14 de camino a Lamar`},
+
+  { id:'fairy-falls-hike', x:195, y:448, cat:'hike', icon:'🥾',
+    title:'Fairy Falls + Grand Prismatic Overlook',
+    body:`<strong>Grand Prismatic Overlook: 1.6 km · ~30 min · Fácil</strong><br>
+<strong>Hasta Fairy Falls: ~8 km · ~2.5h · Fácil/moderada</strong><br><br>
+→ Mismo trailhead, distintas distancias<br>
+→ El overlook da la vista aérea icónica de Grand Prismatic Spring<br>
+→ Bison frecuentes en el área del Midway Geyser Basin<br>
+→ Encaja en Día 13 (Lower Loop)`},
+
+  { id:'lamar-trail', x:660, y:182, cat:'hike', icon:'🥾',
+    title:'Lamar River Trail',
+    body:`<strong>~3.5 km ida y vuelta hasta el río · ~45 min · Fácil</strong><br><br>
+→ Valle abierto — los lobos a veces cruzan el sendero<br>
+→ Bison y pronghorn en el llano<br>
+→ Llevar tele: si hay lobos, suelen estar lejos<br>
+→ Bear spray obligatorio fuera del auto`},
+
   // ── SEGURIDAD ──
   { id:'dist-seg', x:520, y:210, cat:'seg', icon:'⚠️',
     title:'Distancias de Seguridad',
@@ -429,9 +469,9 @@ const MARKERS = [
 ];
 
 // ── STATE ────────────────────────────────────────────────────────────────────
-const state = { fauna:true, foto:true, logis:true, seg:true };
-const colors = { fauna:'#86efac', foto:'#fbbf24', logis:'#93c5fd', seg:'#fca5a5' };
-const tagLabels = { fauna:'Fauna', foto:'Fotografía', logis:'Logística', seg:'Seguridad' };
+const state = { fauna:true, foto:true, logis:true, seg:true, hike:true };
+const colors = { fauna:'#86efac', foto:'#fbbf24', logis:'#93c5fd', seg:'#fca5a5', hike:'#c084fc' };
+const tagLabels = { fauna:'Fauna', foto:'Fotografía', logis:'Logística', seg:'Seguridad', hike:'Caminata' };
 
 function toggleCat(cat) {
   state[cat] = !state[cat];
