@@ -40,14 +40,7 @@ body{display:flex;flex-direction:column;}
 .f-logis{border-color:#7aaed4;color:#7aaed4;}.f-logis.on{background:rgba(122,174,212,0.12);}
 .f-seg{border-color:#d4806a;color:#d4806a;}.f-seg.on{background:rgba(212,128,106,0.12);}
 .f-hike{border-color:#b48ad4;color:#b48ad4;}.f-hike.on{background:rgba(180,138,212,0.12);}
-.rsep{width:1px;height:20px;background:rgba(237,228,204,0.1);flex-shrink:0;margin:0 3px;}
-.rbtn{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:700;letter-spacing:0.07em;
-  padding:3px 10px;border-radius:2px;border:2px solid;cursor:pointer;background:transparent;
-  transition:all 0.15s;text-transform:uppercase;}
-.rbtn.off{opacity:0.18;}
-.r-d13{border-color:#4a7adc;color:#4a7adc;}.r-d13.on{background:rgba(74,122,220,0.15);}
-.r-d14{border-color:#4dd0e1;color:#4dd0e1;}.r-d14.on{background:rgba(77,208,225,0.15);}
-.r-d15{border-color:#f0a060;color:#f0a060;}.r-d15.on{background:rgba(240,160,96,0.15);}
+.f-rutas{border-color:var(--amber);color:var(--amber);}.f-rutas:hover{background:rgba(212,137,26,0.12);}
 .hdr-hint{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.48rem;color:rgba(237,228,204,0.18);flex-shrink:0;}
 
 /* MAP VIEWPORT */
@@ -162,10 +155,7 @@ body{display:flex;flex-direction:column;}
     <button class="fbtn f-logis on" onclick="toggleCat('logis')">Logística</button>
     <button class="fbtn f-seg   on" onclick="toggleCat('seg')">Seguridad</button>
     <button class="fbtn f-hike  on" onclick="toggleCat('hike')">Caminatas</button>
-    <div class="rsep"></div>
-    <button class="rbtn r-d13 on" onclick="toggleRoute('r13')">D·13</button>
-    <button class="rbtn r-d14 on" onclick="toggleRoute('r14')">D·14</button>
-    <button class="rbtn r-d15 on" onclick="toggleRoute('r15')">D·15</button>
+    <button class="fbtn f-rutas" onclick="openRutas()">Rutas / día</button>
   </div>
   <span class="hdr-hint">arrastrar · scroll · pellizco</span>
 </div>
@@ -812,18 +802,54 @@ vp.addEventListener('touchmove', e => {
 },{passive:false});
 vp.addEventListener('touchend', ()=>{drag=null;lastDist=null;});
 
-// ── ROUTE TOGGLES ─────────────────────────────────────────────────────────────
-function toggleRoute(id) {
-  const path = document.getElementById(id);
-  const btn  = document.querySelector(`.r-${id}`);
-  const visible = path.style.display !== 'none';
-  path.style.display = visible ? 'none' : '';
-  btn.classList.toggle('on',  !visible);
-  btn.classList.toggle('off',  visible);
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape') closePanel();});
+// ── RUTAS MODAL ───────────────────────────────────────────────────────────────
+function openRutas(){document.getElementById('rmodal').classList.add('open');}
+function closeRutas(){document.getElementById('rmodal').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRutas();closePanel();}});
 </script>
 
+<!-- RUTAS MODAL -->
+<div class="rmodal" id="rmodal" onclick="closeRutas()">
+  <div class="rmodal-inner" onclick="event.stopPropagation()">
+    <div class="rmodal-hdr">
+      <div>
+        <div class="rmodal-title">Rutas por día — propuesta de recorrido</div>
+        <div class="rmodal-sub">Las líneas sobre el mapa usan los mismos colores · ESC o click afuera para cerrar</div>
+      </div>
+      <button class="rmodal-close" onclick="closeRutas()">✕ cerrar</button>
+    </div>
+    <div class="rmodal-hint">
+      <strong>Cómo leer el mapa:</strong> cada color corresponde a un día — las líneas pintadas sobre el mapa siguen las rutas reales de las carreteras del parque.
+    </div>
+    <img class="rmodal-img" src="itinerario-rutas.jpg" alt="Mapa de rutas por día">
+    <div class="rdays">
+      <div class="rday">
+        <div class="rday-bar" style="background:#4a7adc"></div>
+        <div>
+          <div class="rday-title" style="color:#93bbf7">Día 13 — West Yellowstone → Gardiner · Lower Loop</div>
+          <div class="rday-text">Sale al amanecer (~6 AM). Madison con primera luz, géiseres (Old Faithful × 2 erupciones + Inn, Grand Prismatic overlook, Fountain Paint Pots), West Thumb, Hayden Valley, Gran Cañón (si llega el tiempo), Norris, Mammoth → Gardiner.</div>
+          <div class="rday-note">Línea azul en el mapa · inamovible en géiseres, aspiracional en Canyon/Norris.</div>
+        </div>
+      </div>
+      <div class="rday">
+        <div class="rday-bar" style="background:#0ea5c0"></div>
+        <div>
+          <div class="rday-title" style="color:#4dd0e1">Día 14 — Loop Lamar Valley desde Gardiner</div>
+          <div class="rday-text">5:45 AM. Bighorn corridor → Tower → Lamar Valley antes de las 7h (prime time fauna). Cooke City (nafta + provisiones) → segunda pasada por Lamar. Mediodía: Gran Cañón completo (Artist Point + Uncle Tom's + Inspiration Point). Hayden → Norris → Gardiner.</div>
+          <div class="rday-note">Línea cian en el mapa · Lamar es el corazón, Canyon/Hayden de vuelta es aspiracional.</div>
+        </div>
+      </div>
+      <div class="rday">
+        <div class="rday-bar" style="background:#e08030"></div>
+        <div>
+          <div class="rday-title" style="color:#f0a060">Día 15 — Gardiner → Jackson Hole · ruta sur</div>
+          <div class="rday-text">~6 AM. Último bighorn corridor. Norris sin prisa (su momento real). Hayden con luz de mañana. West Thumb tranquilo. South Entrance → Jackson al mediodía — tarde completa en el pueblo.</div>
+          <div class="rday-note">Línea naranja en el mapa · el ritmo lo decide el día.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
