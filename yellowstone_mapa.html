@@ -678,11 +678,42 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRutas()
       </div>
       <button class="rutas-close" onclick="closeRutas()">✕ Cerrar</button>
     </div>
+    <div style="font-size:0.62rem;color:rgba(245,240,232,0.38);background:rgba(245,240,232,0.05);border-radius:8px;padding:8px 12px;margin-bottom:10px;line-height:1.7">
+      <strong style="color:rgba(245,240,232,0.6)">Cómo leer el mapa:</strong> el grosor de cada línea indica certeza — gruesa donde empieza el día (paradas garantizadas), se afina y entrecorta hacia el final (aspiracional, "si el tiempo da"). No es un itinerario rígido, es una hoja de ruta con prioridades visuales.
+    </div>
     <img class="rutas-img" src="itinerario-rutas.jpg" alt="Mapa de rutas por día — Yellowstone">
-    <div class="rutas-legend">
-      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#1a56db"></div>Día 13 — West Yellowstone → Gardiner (Lower Loop)</div>
-      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#06b6d4"></div>Día 14 — Loop Lamar Valley desde Gardiner</div>
-      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#f97316"></div>Día 15 — Gardiner → Jackson Hole (ruta sur)</div>
+    <div class="rutas-legend" style="flex-direction:column;gap:14px;margin-top:18px">
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#1a56db;width:36px;height:5px"></div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#93bbf7;margin-bottom:3px">Día 13 — West Yellowstone → Gardiner (Lower Loop)</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Sale del Ho Hum al amanecer por el West Entrance. Recorre el Madison al alba, baja a los géiseres (Old Faithful con 2 erupciones, Grand Prismatic desde el overlook, Fountain Paint Pots), sigue por West Thumb y Hayden Valley hacia el norte. Termina en Canyon, Norris y Mammoth Hot Springs antes de entrar a Gardiner. <span style="color:rgba(245,240,232,0.35)">La línea es gruesa en géiseres — esa parte es inamovible. Se afina en Canyon/Norris porque depende de la energía y el tiempo del día.</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#06b6d4;width:36px;height:5px"></div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#67e8f9;margin-bottom:3px">Día 14 — Loop Lamar Valley desde Gardiner</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Sale del Super 8 a las 5:45 AM. Bighorn corridor Gardiner→Mammoth→Tower, y directo a Lamar Valley antes de las 7 AM — hora pico para lobos, grizzly y pronghorns. Continúa hasta Cooke City (nafta + provisiones) y vuelve pasando por Lamar una segunda vez con otra luz. Al mediodía: Gran Cañón de Yellowstone (Artist Point, Uncle Tom's Trail, Inspiration Point). Tarde: Hayden Valley y cierre por Norris→Gardiner. <span style="color:rgba(245,240,232,0.35)">La línea es gruesa en el corredor noreste — Lamar es el corazón del día. El regreso por Canyon/Hayden es aspiracional.</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#f97316;width:36px;height:5px"></div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;color:#fdba74;margin-bottom:3px">Día 15 — Gardiner → Jackson Hole (ruta sur)</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Salida ~6 AM. Último bighorn corridor y Norris Geyser Basin sin prisa (el momento real de Norris, que en los días anteriores siempre quedó como "si da el tiempo"). Baja por Hayden Valley con luz de mañana y para en West Thumb antes de salir por el South Entrance. Jackson al mediodía — tarde completa en el pueblo. <span style="color:rgba(245,240,232,0.35)">La línea se afina hacia el sur porque el ritmo lo decide el día, no el reloj.</span></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
