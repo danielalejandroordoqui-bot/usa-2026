@@ -119,6 +119,48 @@ body { display:flex; flex-direction:column; }
   background:rgba(14,31,51,0.7); padding:4px 10px; border-radius:20px;
   pointer-events:none; white-space:nowrap;
 }
+
+/* RUTAS MODAL */
+.rutas-modal {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(10,20,35,0.96);
+  flex-direction:column; align-items:center;
+  overflow-y:auto; padding:14px;
+}
+.rutas-modal.open { display:flex; }
+.rutas-modal-header {
+  width:100%; max-width:900px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px; flex-shrink:0;
+}
+.rutas-modal-title {
+  font-size:0.78rem; font-weight:700; color:var(--cream);
+}
+.rutas-modal-sub {
+  font-size:0.6rem; color:rgba(245,240,232,0.4); margin-top:2px;
+}
+.rutas-close {
+  background:rgba(245,240,232,0.08); border:1px solid rgba(245,240,232,0.15);
+  border-radius:8px; color:var(--cream); font-size:0.72rem;
+  padding:6px 13px; cursor:pointer; white-space:nowrap;
+}
+.rutas-close:hover { background:rgba(245,240,232,0.15); }
+.rutas-img {
+  width:100%; max-width:900px;
+  border-radius:10px; border:1px solid rgba(245,240,232,0.1);
+  display:block;
+}
+.rutas-legend {
+  width:100%; max-width:900px; margin-top:16px; margin-bottom:8px;
+  display:flex; flex-wrap:wrap; gap:10px;
+}
+.rutas-leg-item {
+  display:flex; align-items:center; gap:7px;
+  font-size:0.65rem; color:rgba(245,240,232,0.7);
+}
+.rutas-leg-line {
+  width:28px; height:4px; border-radius:2px; flex-shrink:0;
+}
 </style>
 </head>
 <body>
@@ -134,6 +176,7 @@ body { display:flex; flex-direction:column; }
     <button class="fbtn f-logis on"  onclick="toggleCat('logis')">🗺️ Logística</button>
     <button class="fbtn f-seg   on"  onclick="toggleCat('seg')">⚠️ Seguridad</button>
     <button class="fbtn f-hike  on"  onclick="toggleCat('hike')">🥾 Caminatas</button>
+    <button class="fbtn f-logis on" style="border-color:#e2a84b;color:#e2a84b;background:rgba(226,168,75,0.13)" onclick="openRutas()">🗺️ Rutas por día</button>
   </div>
 </div>
 
@@ -619,6 +662,30 @@ wrap.addEventListener('touchend', () => { drag = null; lastDist = null; });
 
 // Init
 renderMarkers();
+
+// Rutas modal
+function openRutas() { document.getElementById('rutasModal').classList.add('open'); }
+function closeRutas() { document.getElementById('rutasModal').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRutas(); });
 </script>
+
+<div class="rutas-modal" id="rutasModal" onclick="closeRutas()">
+  <div style="width:100%;max-width:900px" onclick="event.stopPropagation()">
+    <div class="rutas-modal-header">
+      <div>
+        <div class="rutas-modal-title">🗺️ Rutas por día — propuesta de recorrido</div>
+        <div class="rutas-modal-sub">Grosor = certeza · línea entrecortada = aspiracional · tocá fuera para cerrar</div>
+      </div>
+      <button class="rutas-close" onclick="closeRutas()">✕ Cerrar</button>
+    </div>
+    <img class="rutas-img" src="itinerario-rutas.jpg" alt="Mapa de rutas por día — Yellowstone">
+    <div class="rutas-legend">
+      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#1a56db"></div>Día 13 — West Yellowstone → Gardiner (Lower Loop)</div>
+      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#06b6d4"></div>Día 14 — Loop Lamar Valley desde Gardiner</div>
+      <div class="rutas-leg-item"><div class="rutas-leg-line" style="background:#f97316"></div>Día 15 — Gardiner → Jackson Hole (ruta sur)</div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
