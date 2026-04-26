@@ -3,850 +3,747 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Yellowstone — Campo de Operaciones</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>🌋 Mapa Yellowstone — USA 2026</title>
 <style>
 :root {
-  --ink:   #0a0f08;
-  --amber: #d4891a;
-  --amber2:#f0a832;
-  --cream: #ede4cc;
-  --border:rgba(212,137,26,0.28);
+  --cream: #f5f0e8;
+  --navy: #1a2f4a;
+  --navy2: #0e1f33;
+  --amber: #d4700a;
+  --green: #2a6645;
+  --terracotta: #c8481f;
+  --border: rgba(245,240,232,0.12);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);}
-body{display:flex;flex-direction:column;}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; font-family:-apple-system,system-ui,'Inter',sans-serif; background:var(--navy2); color:var(--cream); }
+body { display:flex; flex-direction:column; }
 
 /* HEADER */
-.hdr{
-  height:50px;flex-shrink:0;z-index:100;position:relative;
-  background:rgba(8,12,6,0.97);
+.hdr {
+  background:rgba(14,31,51,0.97);
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 14px;gap:12px;
+  padding:10px 14px;
+  display:flex; align-items:center; gap:10px;
+  flex-shrink:0; flex-wrap:wrap;
+  z-index:20;
 }
-.hdr::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(212,137,26,0.55),transparent);}
-.brand-name{font-family:'Cinzel',serif;font-size:0.9rem;font-weight:600;color:var(--amber2);letter-spacing:0.1em;flex-shrink:0;}
-.brand-coords{font-family:'DM Mono',monospace;font-size:0.47rem;color:rgba(237,228,204,0.22);letter-spacing:0.05em;flex-shrink:0;}
-.sep{width:1px;height:20px;background:rgba(237,228,204,0.1);flex-shrink:0;}
-.filters{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
-.fbtn{font-family:'DM Mono',monospace;font-size:0.56rem;font-weight:500;letter-spacing:0.06em;
-  padding:3px 9px;border-radius:2px;border:1px solid;cursor:pointer;background:transparent;
-  transition:all 0.15s;text-transform:uppercase;}
-.fbtn.off{opacity:0.2;}
-.f-fauna{border-color:#7ec8a0;color:#7ec8a0;}.f-fauna.on{background:rgba(126,200,160,0.12);}
-.f-foto{border-color:#e0b84a;color:#e0b84a;}.f-foto.on{background:rgba(224,184,74,0.12);}
-.f-logis{border-color:#7aaed4;color:#7aaed4;}.f-logis.on{background:rgba(122,174,212,0.12);}
-.f-seg{border-color:#d4806a;color:#d4806a;}.f-seg.on{background:rgba(212,128,106,0.12);}
-.f-hike{border-color:#b48ad4;color:#b48ad4;}.f-hike.on{background:rgba(180,138,212,0.12);}
-.f-rutas{border-color:var(--amber);color:var(--amber);}.f-rutas:hover{background:rgba(212,137,26,0.12);}
-.hdr-hint{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.48rem;color:rgba(237,228,204,0.18);flex-shrink:0;}
+.hdr-left { display:flex; flex-direction:column; gap:1px; }
+.hdr-title { font-size:0.82rem; font-weight:700; }
+.hdr-sub { font-size:0.6rem; color:rgba(245,240,232,0.4); }
+.filters { display:flex; gap:5px; flex-wrap:wrap; margin-left:auto; }
+.fbtn {
+  font-size:0.6rem; font-weight:600;
+  padding:4px 9px; border-radius:20px; border:1px solid;
+  cursor:pointer; background:transparent;
+  transition:opacity 0.15s, background 0.15s;
+}
+.fbtn.off { opacity:0.28; }
+.f-fauna  { border-color:#86efac; color:#86efac; }
+.f-fauna.on  { background:rgba(134,239,172,0.13); }
+.f-foto   { border-color:#fbbf24; color:#fbbf24; }
+.f-foto.on   { background:rgba(251,191,36,0.13); }
+.f-logis  { border-color:#93c5fd; color:#93c5fd; }
+.f-logis.on  { background:rgba(147,197,253,0.13); }
+.f-seg    { border-color:#fca5a5; color:#fca5a5; }
+.f-seg.on    { background:rgba(252,165,165,0.13); }
+.f-hike   { border-color:#c084fc; color:#c084fc; }
+.f-hike.on   { background:rgba(192,132,252,0.13); }
 
-/* MAP VIEWPORT */
-.viewport{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none;}
-.viewport.dragging{cursor:grabbing;}
-.canvas{position:absolute;top:0;left:0;transform-origin:0 0;}
-.canvas img{display:block;width:1304px;height:1500px;user-select:none;-webkit-user-drag:none;}
+/* MAP */
+.map-wrap { flex:1; overflow:hidden; position:relative; cursor:grab; touch-action:none; }
+.map-wrap.dragging { cursor:grabbing; }
+#msvg { width:100%; height:100%; display:block; }
 
-/* MARKERS */
-.marker{
-  position:absolute;
-  transform:translate(-50%,-50%);
-  cursor:pointer;
-  width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
+/* POPUP */
+.popup {
+  position:absolute; z-index:50;
+  background:rgba(14,31,51,0.97);
+  border:1px solid rgba(245,240,232,0.18);
+  border-radius:14px; padding:14px 16px;
+  width:250px; max-height:70vh; overflow-y:auto;
+  box-shadow:0 8px 40px rgba(0,0,0,0.55);
+  opacity:0; pointer-events:none;
+  transition:opacity 0.15s, transform 0.15s;
+  transform:translateY(6px);
 }
-.marker-inner{
-  width:22px;height:22px;border-radius:50%;
-  background:#0a0f08;border:2px solid;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;line-height:1;
-  transition:transform 0.15s,box-shadow 0.15s;
-  box-shadow:0 2px 8px rgba(0,0,0,0.6);
+.popup.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+.popup-close {
+  position:absolute; top:8px; right:10px;
+  background:none; border:none; color:rgba(245,240,232,0.35);
+  font-size:0.75rem; cursor:pointer; padding:2px 5px;
 }
-.marker:hover .marker-inner{transform:scale(1.25);box-shadow:0 4px 16px rgba(0,0,0,0.7);}
-.marker.hidden{display:none;}
-
-/* SIDE PANEL */
-.panel{
-  position:fixed;right:0;top:50px;bottom:0;
-  width:300px;z-index:200;
-  background:#0a100a;
-  border-left:1px solid var(--border);
-  transform:translateX(100%);
-  transition:transform 0.22s cubic-bezier(0.4,0,0.2,1);
-  display:flex;flex-direction:column;
-  overflow:hidden;
+.popup-close:hover { color:rgba(245,240,232,0.7); }
+.popup-icon { font-size:1.3rem; display:block; margin-bottom:5px; }
+.popup-tag {
+  font-size:0.55rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.6px; padding:2px 7px; border-radius:10px;
+  display:inline-block; margin-bottom:8px;
 }
-.panel.open{transform:translateX(0);}
-.panel-head{
-  padding:14px 16px 12px;
-  border-bottom:1px solid rgba(212,137,26,0.18);
-  background:rgba(212,137,26,0.07);
-  flex-shrink:0;
-}
-.panel-row{display:flex;align-items:flex-start;gap:10px;}
-.panel-icon{font-size:1.35rem;flex-shrink:0;margin-top:2px;}
-.panel-cat{font-family:'DM Mono',monospace;font-size:0.45rem;text-transform:uppercase;letter-spacing:0.12em;opacity:0.65;display:block;margin-bottom:3px;}
-.panel-title{font-family:'Cinzel',serif;font-size:0.8rem;font-weight:600;color:var(--cream);line-height:1.3;letter-spacing:0.02em;}
-.panel-close{margin-left:auto;background:none;border:none;color:rgba(237,228,204,0.25);font-size:1rem;cursor:pointer;padding:2px 4px;flex-shrink:0;}
-.panel-close:hover{color:var(--amber);}
-.panel-body{padding:14px 16px;font-size:0.71rem;color:rgba(237,228,204,0.6);line-height:1.8;overflow-y:auto;flex:1;}
-.panel-body strong{color:rgba(237,228,204,0.9);font-weight:500;}
-.panel-dia{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.08em;
-  padding:3px 8px;border-radius:2px;display:inline-block;margin-bottom:10px;border:1px solid;}
+.tag-fauna  { background:rgba(134,239,172,0.2); color:#86efac; }
+.tag-foto   { background:rgba(251,191,36,0.2);  color:#fbbf24; }
+.tag-logis  { background:rgba(147,197,253,0.2); color:#93c5fd; }
+.tag-seg    { background:rgba(252,165,165,0.2); color:#fca5a5; }
+.popup-title { font-size:0.83rem; font-weight:700; margin-bottom:7px; color:var(--cream); }
+.popup-body { font-size:0.72rem; color:rgba(245,240,232,0.7); line-height:1.65; }
+.popup-body strong { color:rgba(245,240,232,0.95); }
 
 /* LEGEND */
-.legend{
-  position:fixed;bottom:16px;left:14px;z-index:90;
-  background:rgba(8,12,6,0.9);
-  border:1px solid rgba(212,137,26,0.2);
-  border-radius:2px;padding:9px 12px;
-  backdrop-filter:blur(4px);
+.legend {
+  position:absolute; bottom:14px; left:14px;
+  background:rgba(14,31,51,0.9);
+  border:1px solid var(--border);
+  border-radius:10px; padding:9px 11px;
+  font-size:0.58rem; line-height:1.9;
+  pointer-events:none;
 }
-.leg-title{font-family:'Cinzel',serif;font-size:0.46rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);opacity:0.65;margin-bottom:7px;}
-.leg-row{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:0.52rem;color:rgba(237,228,204,0.38);margin-bottom:3px;}
-.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;border:1.5px solid;}
-.leg-sep{height:1px;background:rgba(237,228,204,0.07);margin:5px 0;}
+.leg-item { display:flex; align-items:center; gap:6px; color:rgba(245,240,232,0.55); }
+.leg-line { width:18px; height:3px; border-radius:2px; flex-shrink:0; }
+.leg-dot  { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
 
-/* DAY BADGES */
-.dbadges{position:fixed;bottom:16px;right:14px;z-index:90;display:flex;flex-direction:column;gap:4px;pointer-events:none;}
-.db{display:flex;align-items:center;gap:7px;
-  background:rgba(8,12,6,0.88);border:1px solid rgba(237,228,204,0.07);border-left:3px solid;
-  padding:4px 9px;border-radius:2px;backdrop-filter:blur(4px);}
-.db-n{font-family:'DM Mono',monospace;font-size:0.52rem;font-weight:500;}
-.db-t{font-family:'DM Sans',sans-serif;font-size:0.54rem;color:rgba(237,228,204,0.38);}
+/* ZOOM BTNS */
+.zooms { position:absolute; bottom:14px; right:14px; display:flex; flex-direction:column; gap:4px; }
+.zbtn {
+  width:32px; height:32px;
+  background:rgba(14,31,51,0.92);
+  border:1px solid rgba(245,240,232,0.15);
+  border-radius:8px; color:var(--cream);
+  font-size:1.1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.zbtn:hover { background:rgba(26,47,74,0.95); }
+
+/* HINT */
+.hint {
+  position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  font-size:0.6rem; color:rgba(245,240,232,0.3);
+  background:rgba(14,31,51,0.7); padding:4px 10px; border-radius:20px;
+  pointer-events:none; white-space:nowrap;
+}
 
 /* RUTAS MODAL */
-.rmodal{display:none;position:fixed;inset:0;z-index:500;
-  background:rgba(5,8,4,0.97);flex-direction:column;align-items:center;
-  overflow-y:auto;padding:20px 16px;}
-.rmodal.open{display:flex;}
-.rmodal-inner{width:100%;max-width:860px;}
-.rmodal-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
-.rmodal-title{font-family:'Cinzel',serif;font-size:0.95rem;font-weight:600;color:var(--amber2);letter-spacing:0.05em;}
-.rmodal-sub{font-family:'DM Mono',monospace;font-size:0.49rem;color:rgba(237,228,204,0.26);margin-top:3px;letter-spacing:0.04em;}
-.rmodal-close{background:rgba(237,228,204,0.05);border:1px solid rgba(212,137,26,0.3);border-radius:2px;
-  color:var(--amber);font-family:'DM Mono',monospace;font-size:0.6rem;padding:6px 14px;cursor:pointer;
-  flex-shrink:0;margin-left:14px;letter-spacing:0.05em;transition:background 0.15s;}
-.rmodal-close:hover{background:rgba(212,137,26,0.15);}
-.rmodal-hint{font-size:0.61rem;color:rgba(237,228,204,0.32);border:1px solid rgba(237,228,204,0.07);
-  border-radius:2px;padding:9px 12px;margin-bottom:13px;line-height:1.7;}
-.rmodal-hint strong{color:rgba(237,228,204,0.56);}
-.rmodal-img{width:100%;border-radius:2px;border:1px solid rgba(212,137,26,0.18);display:block;}
-.rdays{margin-top:18px;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;}
-.rday{display:flex;gap:13px;padding:13px;border-radius:2px;border:1px solid rgba(237,228,204,0.06);background:rgba(237,228,204,0.02);}
-.rday-bar{width:4px;border-radius:2px;flex-shrink:0;}
-.rday-title{font-family:'Cinzel',serif;font-size:0.7rem;font-weight:600;margin-bottom:4px;letter-spacing:0.02em;}
-.rday-text{font-size:0.62rem;color:rgba(237,228,204,0.5);line-height:1.72;}
-.rday-note{font-family:'DM Mono',monospace;font-size:0.52rem;color:rgba(237,228,204,0.24);margin-top:5px;line-height:1.6;}
+.rutas-modal {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(10,20,35,0.96);
+  flex-direction:column; align-items:center;
+  overflow-y:auto; padding:14px;
+}
+.rutas-modal.open { display:flex; }
+.rutas-modal-header {
+  width:100%; max-width:900px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px; flex-shrink:0;
+}
+.rutas-modal-title {
+  font-size:0.78rem; font-weight:700; color:var(--cream);
+}
+.rutas-modal-sub {
+  font-size:0.6rem; color:rgba(245,240,232,0.4); margin-top:2px;
+}
+.rutas-close {
+  background:rgba(245,240,232,0.08); border:1px solid rgba(245,240,232,0.15);
+  border-radius:8px; color:var(--cream); font-size:0.72rem;
+  padding:6px 13px; cursor:pointer; white-space:nowrap;
+}
+.rutas-close:hover { background:rgba(245,240,232,0.15); }
+.rutas-img {
+  width:100%; max-width:900px;
+  border-radius:10px; border:1px solid rgba(245,240,232,0.1);
+  display:block;
+}
+.rutas-legend {
+  width:100%; max-width:900px; margin-top:16px; margin-bottom:8px;
+  display:flex; flex-wrap:wrap; gap:10px;
+}
+.rutas-leg-item {
+  display:flex; align-items:center; gap:7px;
+  font-size:0.65rem; color:rgba(245,240,232,0.7);
+}
+.rutas-leg-line {
+  width:28px; height:4px; border-radius:2px; flex-shrink:0;
+}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <span class="brand-name">YELLOWSTONE</span>
-  <span class="brand-coords">44.5°N · 110.5°W · AGO 2026</span>
-  <div class="sep"></div>
+  <div class="hdr-left">
+    <div class="hdr-title">🌋 Mapa Yellowstone — USA 2026</div>
+    <div class="hdr-sub">Tocá los markers · Pellizco para zoom · Arrastrá para mover</div>
+  </div>
   <div class="filters">
-    <button class="fbtn f-fauna on" onclick="toggleCat('fauna')">Fauna</button>
-    <button class="fbtn f-foto  on" onclick="toggleCat('foto')">Foto</button>
-    <button class="fbtn f-logis on" onclick="toggleCat('logis')">Logística</button>
-    <button class="fbtn f-seg   on" onclick="toggleCat('seg')">Seguridad</button>
-    <button class="fbtn f-hike  on" onclick="toggleCat('hike')">Caminatas</button>
-    <button class="fbtn f-rutas" onclick="openRutas()">Rutas / día</button>
+    <button class="fbtn f-fauna on"  onclick="toggleCat('fauna')">🦬 Fauna</button>
+    <button class="fbtn f-foto  on"  onclick="toggleCat('foto')">📷 Foto</button>
+    <button class="fbtn f-logis on"  onclick="toggleCat('logis')">🗺️ Logística</button>
+    <button class="fbtn f-seg   on"  onclick="toggleCat('seg')">⚠️ Seguridad</button>
+    <button class="fbtn f-hike  on"  onclick="toggleCat('hike')">🥾 Caminatas</button>
+    <button class="fbtn f-logis on" style="border-color:#e2a84b;color:#e2a84b;background:rgba(226,168,75,0.13)" onclick="openRutas()">🗺️ Rutas por día</button>
   </div>
-  <span class="hdr-hint">arrastrar · scroll · pellizco</span>
 </div>
 
-<div class="viewport" id="vp">
-  <div class="canvas" id="canvas">
-    <img src="yw-map-base.jpg" id="mapimg" draggable="false">
+<div class="map-wrap" id="wrap">
 
-    <!-- ── RUTAS SVG ── -->
-    <svg id="routes-svg" style="position:absolute;top:0;left:0;width:1304px;height:1500px;pointer-events:none;overflow:visible;">
-      <defs>
-        <filter id="rt-glow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
+<svg id="msvg" viewBox="0 0 900 780" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <radialGradient id="parkgrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#1e3320"/>
+      <stop offset="100%" stop-color="#152518"/>
+    </radialGradient>
+  </defs>
 
-      <!-- DÍA 13 — azul: West Entrance→Madison→Géiseres→Old Faithful→West Thumb→Hayden→Canyon→Norris→Mammoth→Gardiner -->
-      <path id="r13"
-        d="M 82,820
-           C 175,818 235,814 274,810
-           C 271,848 258,902 248,952
-           C 256,967 280,972 298,964
-           C 286,1024 273,1062 268,1093
-           C 332,1108 414,1121 495,1126
-           C 516,1092 542,1044 563,1004
-           C 600,956 640,910 670,878
-           C 662,840 656,810 651,781
-           C 640,738 629,658 617,584
-           C 537,574 488,562 443,556
-           C 420,474 402,370 387,253
-           C 383,198 380,128 378,60"
-        stroke="#4a7adc" stroke-width="5.5" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"
-        filter="url(#rt-glow)" opacity="0.9"/>
+  <!-- bg -->
+  <rect width="900" height="780" fill="#0c1a2e"/>
 
-      <!-- DÍA 14 — cian: Gardiner→Mammoth→Tower→Lamar→Cooke City→vuelta→Canyon→Hayden→Norris→Gardiner -->
-      <!-- Outbound -->
-      <path id="r14"
-        d="M 378,60
-           L 378,166
-           C 378,212 378,233 378,253
-           C 408,268 444,286 466,296
-           C 502,319 521,362 535,394
-           C 600,375 654,348 704,333
-           C 760,319 816,309 862,306
-           C 912,286 967,265 1017,258
-           C 1063,194 1098,139 1135,90
-           C 1099,145 1064,205 1018,264
-           C 967,280 912,294 863,311
-           C 817,321 763,331 713,344
-           C 685,427 655,504 624,591
-           C 637,659 647,726 652,784
-           C 640,720 626,642 622,589
-           C 540,578 490,566 443,559
-           C 406,470 391,351 386,256
-           L 378,60"
-        stroke="#4dd0e1" stroke-width="5.5" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"
-        filter="url(#rt-glow)" opacity="0.9"/>
+  <!-- Park territory -->
+  <polygon points="14,92 101,15 319,15 544,15 875,50 900,92 900,497 690,765 334,765 14,719"
+    fill="url(#parkgrad)" stroke="#2d4d2d" stroke-width="1.5"/>
 
-      <!-- DÍA 15 — naranja: Gardiner→Mammoth→Norris→Canyon→Hayden→West Thumb→South Entrance -->
-      <path id="r15"
-        d="M 378,60
-           L 378,166
-           C 378,210 378,232 378,253
-           C 412,372 430,466 443,559
-           C 532,569 580,579 622,587
-           C 638,660 648,726 652,783
-           C 665,850 674,870 680,882
-           C 645,934 596,994 560,1028
-           C 527,1079 510,1105 495,1129
-           C 495,1236 495,1332 495,1413"
-        stroke="#f0a060" stroke-width="5.5" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"
-        filter="url(#rt-glow)" opacity="0.9"/>
-    </svg>
+  <!-- Yellowstone Lake -->
+  <polygon points="450,420 617,420 680,497 617,642 472,642 414,590 435,497"
+    fill="#0d2436" stroke="#1a4060" stroke-width="1.5"/>
+  <text x="530" y="535" text-anchor="middle" fill="rgba(147,197,253,0.4)" font-size="9" font-style="italic">Yellowstone Lake</text>
 
-    <!-- ── FAUNA ── -->
-    <!-- Lamar Valley -->
-    <div class="marker" data-id="lamar" style="left:67%;top:20%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🐺</div></div>
+  <!-- Lewis Lake -->
+  <ellipse cx="420" cy="698" rx="24" ry="15" fill="#0d2436" stroke="#1a4060" stroke-width="1"/>
 
-    <!-- Hayden Valley -->
-    <div class="marker" data-id="hayden" style="left:50%;top:52%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🦬</div></div>
+  <!-- ══ ROADS ══ -->
 
-    <!-- Mammoth fauna -->
-    <div class="marker" data-id="mammoth-fauna" style="left:30%;top:19%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🦌</div></div>
+  <!-- Entry roads (dashed, outside loop) -->
+  <!-- West Entrance external -->
+  <line x1="0" y1="352" x2="22" y2="352" stroke="rgba(200,190,170,0.35)" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- N Entrance external (to Gardiner town) -->
+  <line x1="298" y1="15" x2="298" y2="69" stroke="rgba(200,190,170,0.35)" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- S Entrance external -->
+  <line x1="360" y1="765" x2="360" y2="790" stroke="rgba(200,190,170,0.35)" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- E Entrance road -->
+  <path d="M813,482 C870,475 900,470 900,470" stroke="rgba(200,190,170,0.35)" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
 
-    <!-- Madison / Firehole -->
-    <div class="marker" data-id="madison" style="left:21%;top:54%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🦦</div></div>
+  <!-- Grand Loop Road — Lower Loop -->
+  <!-- W Entrance → Madison Jct -->
+  <path d="M22,352 C80,352 140,355 189,359" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Madison Jct → Old Faithful (via Firehole) -->
+  <path d="M189,359 C185,390 192,430 200,460 C205,480 208,494 212,505" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Old Faithful → West Thumb -->
+  <path d="M212,505 C260,510 330,525 399,535" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- West Thumb → Fishing Bridge (lake shore) -->
+  <path d="M399,535 C435,520 490,475 545,428" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Fishing Bridge → Canyon (via Hayden Valley) -->
+  <path d="M545,428 C530,390 500,345 457,298" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Canyon → Norris -->
+  <path d="M457,298 C400,298 350,298 305,298" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Norris → Madison Jct -->
+  <path d="M305,298 C280,325 240,345 189,359" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 
-    <!-- Fishing Bridge / LeHardy -->
-    <div class="marker" data-id="lehardy" style="left:56%;top:55%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🦆</div></div>
+  <!-- Grant → South Entrance -->
+  <path d="M399,535 C400,580 385,640 370,700 C365,730 362,752 360,765" stroke="#b8b0a0" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="6,3"/>
+  <!-- Fishing Bridge → East Entrance -->
+  <path d="M545,428 C625,432 720,450 813,482" stroke="#b8b0a0" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="6,3"/>
+  <!-- Canyon → Tower (connecting upper) -->
+  <path d="M457,298 C458,270 470,220 515,153" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Norris → Mammoth -->
+  <path d="M305,298 C305,250 305,180 305,107" stroke="#b8b0a0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 
-    <!-- Pebble Creek -->
-    <div class="marker" data-id="pebble" style="left:78%;top:17%">
-      <div class="marker-inner" style="border-color:#7ec8a0">🐦</div></div>
+  <!-- ★ NORTHERN RANGE CORRIDOR — highlighted orange -->
+  <!-- Gardiner (N Entrance) → Mammoth -->
+  <path d="M298,69 C300,82 302,95 305,107" stroke="#d4700a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Mammoth → Tower Junction -->
+  <path d="M305,107 C350,115 430,133 515,153" stroke="#d4700a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Tower Junction → Lamar Valley → Soda Butte → NE Entrance / Cooke City -->
+  <path d="M515,153 C575,156 625,162 675,168 C720,174 762,150 810,115 C838,97 856,83 864,76" stroke="#d4700a" stroke-width="4" fill="none" stroke-linecap="round"/>
 
-    <!-- ── FOTO ── -->
-    <!-- Gran Cañón / Artist Point -->
-    <div class="marker" data-id="canyon-foto" style="left:48%;top:40%">
-      <div class="marker-inner" style="border-color:#e0b84a">📷</div></div>
+  <!-- ══ RUTAS POR DÍA ══ -->
 
-    <!-- Grand Prismatic -->
-    <div class="marker" data-id="gps" style="left:21%;top:65%">
-      <div class="marker-inner" style="border-color:#e0b84a">🌡️</div></div>
+  <!-- DÍA 13 — azul: West Entrance → géiseres → West Thumb → Hayden → Canyon → Norris → Mammoth → Gardiner -->
+  <path d="M22,352 C80,352 140,355 189,359" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M189,359 C185,390 192,430 200,460 C205,480 208,494 212,505" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M212,505 C260,510 330,525 399,535" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M399,535 C435,520 490,475 545,428" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M545,428 C530,390 500,345 457,298" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M457,298 C400,298 350,298 305,298" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,298 C305,250 305,180 305,107" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,107 C302,95 300,82 298,69" stroke="#4a7adc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
 
-    <!-- Old Faithful -->
-    <div class="marker" data-id="oldfaithful" style="left:21%;top:73%">
-      <div class="marker-inner" style="border-color:#e0b84a">⛲</div></div>
+  <!-- DÍA 14 — cian: Gardiner → Northern Range → Lamar → Cooke City → vuelta → Canyon → Norris → Gardiner -->
+  <path d="M298,69 C300,82 302,95 305,107" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,107 C350,115 430,133 515,153" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M515,153 C575,156 625,162 675,168 C720,174 762,150 810,115 C838,97 856,83 864,76" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M515,153 C458,270 457,292 457,298" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M457,298 C400,298 350,298 305,298" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,298 C305,250 305,180 305,107" stroke="#4dd0e1" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
 
-    <!-- Fountain Paint Pots -->
-    <div class="marker" data-id="fountain" style="left:23%;top:64%">
-      <div class="marker-inner" style="border-color:#e0b84a">🌋</div></div>
+  <!-- DÍA 15 — naranja: Gardiner → Norris → Canyon → Hayden → West Thumb → South Entrance -->
+  <path d="M298,69 C300,82 302,95 305,107" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,107 C305,180 305,250 305,298" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M305,298 C350,298 400,298 457,298" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M457,298 C500,345 530,390 545,428" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M545,428 C490,475 435,520 399,535" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M399,535 C400,580 385,640 370,700 C365,730 362,752 360,765" stroke="#f0a060" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
 
-    <!-- West Thumb -->
-    <div class="marker" data-id="westthumb" style="left:38%;top:75%">
-      <div class="marker-inner" style="border-color:#e0b84a">🫧</div></div>
+  <!-- Area labels -->
+  <text x="155" y="400" text-anchor="middle" fill="rgba(245,240,232,0.18)" font-size="8.5" letter-spacing="0.4">Madison</text>
+  <text x="305" y="284" text-anchor="middle" fill="rgba(245,240,232,0.2)"  font-size="8"   letter-spacing="0.4">Norris</text>
+  <text x="460" y="283" text-anchor="middle" fill="rgba(245,240,232,0.2)"  font-size="8"   letter-spacing="0.4">Canyon</text>
+  <text x="490" y="385" text-anchor="middle" fill="rgba(245,240,232,0.18)" font-size="8.5" letter-spacing="0.3">Hayden Valley</text>
+  <text x="185" y="495" text-anchor="middle" fill="rgba(245,240,232,0.18)" font-size="8"   letter-spacing="0.3">Old Faithful</text>
+  <text x="305" y="93"  text-anchor="middle" fill="rgba(245,240,232,0.22)" font-size="8"   letter-spacing="0.3">Mammoth</text>
+  <text x="672" y="188" text-anchor="middle" fill="rgba(212,112,10,0.75)"  font-size="9.5" font-weight="bold" letter-spacing="0.3">Lamar Valley</text>
 
-    <!-- Lamar amanecer foto -->
-    <div class="marker" data-id="lamar-foto" style="left:65%;top:22%">
-      <div class="marker-inner" style="border-color:#e0b84a">🌅</div></div>
+  <!-- Entrance labels -->
+  <text x="22"  y="342" text-anchor="start"  fill="rgba(147,197,253,0.55)" font-size="7.5">West Entrance</text>
+  <text x="284" y="12"  text-anchor="middle" fill="rgba(147,197,253,0.55)" font-size="7.5">North Entrance</text>
+  <text x="360" y="778" text-anchor="middle" fill="rgba(147,197,253,0.55)" font-size="7.5">South Entrance</text>
+  <text x="870" y="478" text-anchor="end"    fill="rgba(147,197,253,0.55)" font-size="7.5">East Entrance</text>
+  <text x="864" y="92"  text-anchor="middle" fill="rgba(147,197,253,0.55)" font-size="7.5">NE Entrance</text>
 
-    <!-- Old Gardiner Road -->
-    <div class="marker" data-id="oldgardiner" style="left:29%;top:11%">
-      <div class="marker-inner" style="border-color:#e0b84a">🐏</div></div>
+  <!-- Markers layer (populated by JS) -->
+  <g id="mlayer"></g>
+</svg>
 
-    <!-- ── LOGÍSTICA ── -->
-    <!-- Gardiner / North Entrance -->
-    <div class="marker" data-id="gardiner" style="left:29%;top:4%">
-      <div class="marker-inner" style="border-color:#7aaed4">🏠</div></div>
-
-    <!-- West Yellowstone -->
-    <div class="marker" data-id="westye" style="left:11%;top:57%">
-      <div class="marker-inner" style="border-color:#7aaed4">🏪</div></div>
-
-    <!-- Canyon Village servicios -->
-    <div class="marker" data-id="canyon-logis" style="left:47%;top:38%">
-      <div class="marker-inner" style="border-color:#7aaed4">🚻</div></div>
-
-    <!-- Cooke City -->
-    <div class="marker" data-id="cookecity" style="left:87%;top:6%">
-      <div class="marker-inner" style="border-color:#7aaed4">🏘️</div></div>
-
-    <!-- South Entrance -->
-    <div class="marker" data-id="south" style="left:38%;top:94%">
-      <div class="marker-inner" style="border-color:#7aaed4">↓</div></div>
-
-    <!-- Bear spray pickup -->
-    <div class="marker" data-id="bearspray" style="left:13%;top:60%">
-      <div class="marker-inner" style="border-color:#7aaed4">🎒</div></div>
-
-    <!-- Norris logística / servicios -->
-    <div class="marker" data-id="norris" style="left:34%;top:37%">
-      <div class="marker-inner" style="border-color:#7aaed4">🌋</div></div>
-
-    <!-- Mammoth logística -->
-    <div class="marker" data-id="mammoth-logis" style="left:29%;top:16%">
-      <div class="marker-inner" style="border-color:#7aaed4">♨️</div></div>
-
-    <!-- ── CAMINATAS ── -->
-    <!-- Trout Lake -->
-    <div class="marker" data-id="trout" style="left:80%;top:20%">
-      <div class="marker-inner" style="border-color:#b48ad4">🥾</div></div>
-
-    <!-- Hellroaring -->
-    <div class="marker" data-id="hellroaring" style="left:41%;top:26%">
-      <div class="marker-inner" style="border-color:#b48ad4">🥾</div></div>
-
-    <!-- Fairy Falls / Grand Prismatic Overlook -->
-    <div class="marker" data-id="fairyfalls" style="left:19%;top:64%">
-      <div class="marker-inner" style="border-color:#b48ad4">🥾</div></div>
-
-    <!-- Lamar River Trail -->
-    <div class="marker" data-id="lamar-trail" style="left:63%;top:24%">
-      <div class="marker-inner" style="border-color:#b48ad4">🥾</div></div>
-
-    <!-- Uncle Tom's Trail (Canyon) -->
-    <div class="marker" data-id="uncletoms" style="left:50%;top:41%">
-      <div class="marker-inner" style="border-color:#b48ad4">🥾</div></div>
-
-    <!-- Tower-Roosevelt / Calcite Springs -->
-    <div class="marker" data-id="tower" style="left:54%;top:22%">
-      <div class="marker-inner" style="border-color:#b48ad4">🦌</div></div>
-
-    <!-- ── SEGURIDAD ── -->
-    <div class="marker" data-id="distancias" style="left:62%;top:35%">
-      <div class="marker-inner" style="border-color:#d4806a">⚠️</div></div>
-    <div class="marker" data-id="osos" style="left:52%;top:46%">
-      <div class="marker-inner" style="border-color:#d4806a">🐻</div></div>
-    <div class="marker" data-id="bisontes-seg" style="left:24%;top:57%">
-      <div class="marker-inner" style="border-color:#d4806a">🦬</div></div>
-
-  </div><!-- /canvas -->
-</div>
-
-<!-- Side panel -->
-<div class="panel" id="panel">
-  <div class="panel-head">
-    <div class="panel-row">
-      <div class="panel-icon" id="p-icon"></div>
-      <div style="flex:1;min-width:0">
-        <span class="panel-cat" id="p-cat"></span>
-        <div class="panel-title" id="p-title"></div>
-      </div>
-      <button class="panel-close" onclick="closePanel()">✕</button>
-    </div>
-    <div id="p-dia" style="margin-top:8px"></div>
-  </div>
-  <div class="panel-body" id="p-body"></div>
+<!-- Popup -->
+<div class="popup" id="popup">
+  <button class="popup-close" id="pclose">✕</button>
+  <span class="popup-icon" id="picon"></span>
+  <span class="popup-tag"  id="ptag"></span>
+  <div class="popup-title" id="ptitle"></div>
+  <div class="popup-body"  id="pbody"></div>
 </div>
 
 <!-- Legend -->
 <div class="legend">
-  <div class="leg-title">Referencias</div>
-  <div class="leg-row"><div class="leg-dot" style="border-color:#7ec8a0;background:rgba(126,200,160,0.15)"></div>Fauna</div>
-  <div class="leg-row"><div class="leg-dot" style="border-color:#e0b84a;background:rgba(224,184,74,0.15)"></div>Fotografía</div>
-  <div class="leg-row"><div class="leg-dot" style="border-color:#7aaed4;background:rgba(122,174,212,0.15)"></div>Logística</div>
-  <div class="leg-row"><div class="leg-dot" style="border-color:#d4806a;background:rgba(212,128,106,0.15)"></div>Seguridad</div>
-  <div class="leg-row"><div class="leg-dot" style="border-color:#b48ad4;background:rgba(180,138,212,0.15)"></div>Caminatas</div>
+  <div class="leg-item"><div class="leg-line" style="background:#4a7adc"></div>Día 13 — Lower Loop</div>
+  <div class="leg-item"><div class="leg-line" style="background:#4dd0e1"></div>Día 14 — Lamar Valley</div>
+  <div class="leg-item"><div class="leg-line" style="background:#f0a060"></div>Día 15 — Ruta sur</div>
+  <div class="leg-item"><div class="leg-line" style="background:#b8b0a0;opacity:0.5"></div>Grand Loop (el "8")</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#86efac"></div>Fauna</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#fbbf24"></div>Fotografía</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#93c5fd"></div>Logística</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#fca5a5"></div>Seguridad</div>
+  <div class="leg-item"><div class="leg-dot"  style="background:#c084fc"></div>Caminatas</div>
 </div>
 
-<!-- Day badges -->
-<div class="dbadges">
-  <div class="db" style="border-left-color:#4a7adc"><span class="db-n" style="color:#7aaad4">DÍA 13</span><span class="db-t">WY → Gardiner · Lower Loop</span></div>
-  <div class="db" style="border-left-color:#0ea5c0"><span class="db-n" style="color:#4dd0e1">DÍA 14</span><span class="db-t">Loop Lamar · Cooke City</span></div>
-  <div class="db" style="border-left-color:#e08030"><span class="db-n" style="color:#f0a060">DÍA 15</span><span class="db-t">Gardiner → Jackson · ruta sur</span></div>
+<!-- Zoom controls -->
+<div class="zooms">
+  <button class="zbtn" onclick="doZoom(1.3)">+</button>
+  <button class="zbtn" onclick="doZoom(0.77)">−</button>
 </div>
+
+</div><!-- /map-wrap -->
 
 <script>
-// ── MARKER DATA ───────────────────────────────────────────────────────────────
-const DATA = {
-  // FAUNA
-  'lamar': {
-    cat:'fauna', icon:'🐺', title:'Lamar Valley',
-    dias:[{n:14,c:'#4dd0e1'}],
+// ── MARKER DATA ─────────────────────────────────────────────────────────────
+// Coordinates pre-computed for viewBox "0 0 900 780"
+// x = (lon + 111.12) / 1.24 * 900   |   y = (45.12 - lat) / 1.02 * 780
+
+const MARKERS = [
+  // ── FAUNA ──
+  { id:'lamar', x:640, y:168, cat:'fauna', icon:'🐺',
+    title:'Lamar Valley — Fauna estelar',
     body:`<strong>La zona de fauna más rica del parque.</strong> Lobos (Lamar Canyon Pack), grizzly, pronghorn, borrego cimarrón.<br><br>
 → Ir más allá de <strong>Soda Butte Creek</strong> para evitar la masa turística<br>
-→ Salida Gardiner <strong>5:45 AM</strong> → llegada ~6:30 AM (prime time)<br>
-→ Autos parados con telescopios = <strong>frenar siempre, siempre hay algo</strong><br>
-→ Segunda pasada de vuelta desde Cooke City: diferente luz y diferente fauna`},
+→ Salir de Gardiner a las <strong>5:45 AM</strong> → llegar ~6:30 AM<br>
+→ Autos parados con telescopios = <strong>siempre frenar</strong><br>
+→ Lamar River Trail si hay tiempo (~45 min ida)`},
 
-  'hayden': {
-    cat:'fauna', icon:'🦬', title:'Hayden Valley',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'},{n:15,c:'#f0a060'}],
-    body:`<strong>Grandes manadas de bisontes + grizzly garantizados.</strong><br><br>
-→ Grizzly buscando raíces y carroña en agosto (hiperfagia pre-invierno)<br>
-→ Mirador clásico: río Yellowstone serpenteando hacia las montañas<br>
-→ Día 13: en ruta Canyon → Fishing Bridge<br>
-→ Día 14: drive-through al mediodía volviendo de Lamar<br>
-→ Día 15: pasada con luz de mañana (la mejor)`},
+  { id:'hayden', x:485, y:370, cat:'fauna', icon:'🦬',
+    title:'Hayden Valley',
+    body:`<strong>Grandes manadas de bisontes + grizzly.</strong><br><br>
+→ Grizzly buscando raíces y carroña en agosto<br>
+→ Wapiti Lake Pack ronda esta zona<br>
+→ Mirador clásico: río Yellowstone serpenteando hacia montañas<br>
+→ En ruta Día 13: Canyon → Fishing Bridge`},
 
-  'mammoth-fauna': {
-    cat:'fauna', icon:'🦌', title:'Mammoth Hot Springs — Fauna',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'}],
+  { id:'mammoth-fauna', x:305, y:110, cat:'fauna', icon:'🦌',
+    title:'Mammoth — Fauna',
     body:`→ <strong>Alces</strong> frente a las Travertine Cliffs: contraste único con las formaciones blancas<br>
-→ <strong>Borregos cimarrón (Bachelor herds)</strong> en Old Gardiner Road: muy tolerantes, ideales para retratos<br>
-→ <strong>Búhos cornudos</strong> (Great Horned Owls) cerca del Albright Visitor Center — vale 15 min`},
+→ <strong>Borregos cimarrón (Bachelor herds)</strong> en Old Gardiner Road: toleran la presencia humana, ideal para retratos<br>
+→ <strong>Great Horned Owls</strong> (búhos cornudos) anidando en el Albright Visitor Center — vale 15 min`},
 
-  'madison': {
-    cat:'fauna', icon:'🦦', title:'Valle del Río Madison',
-    dias:[{n:13,c:'#7aaad4'}],
-    body:`<strong>Ruta de entrada obligatoria por el West Entrance (Día 13).</strong><br><br>
-→ Bisontes constantes en las orillas del río<br>
+  { id:'madison', x:138, y:380, cat:'fauna', icon:'🦦',
+    title:'Valle del Río Madison',
+    body:`<strong>Ruta de entrada por West Entrance.</strong><br><br>
+→ Bisontes constantes en orillas del río<br>
 → <strong>Nutrias de río</strong> — buscar sobre las rocas<br>
-→ <strong>Cisnes trompeteros</strong> en el río Firehole<br>
-→ Vapor de géiseres con luz de amanecer = fotos de atmósfera única<br>
-→ Posibles linces (bobcats) al alba`},
+→ <strong>Cisnes trompeteros</strong> en el Firehole<br>
+→ <strong>Patos arlequín</strong> en zonas rocosas<br>
+→ Posibles linces (bobcats) al amanecer`},
 
-  'lehardy': {
-    cat:'fauna', icon:'🦆', title:'Fishing Bridge / LeHardy Rapids',
-    dias:[{n:13,c:'#7aaad4'}],
-    body:`<em>Prescindible en agosto</em> — los patos arlequín ya migraron.<br><br>
-→ <strong>Truchas</strong> saltando los rápidos — sí vale la parada<br>
-→ Entre Fishing Bridge y Canyon Village (en ruta, sin desvío)<br>
-→ Larga exposición con trípode: agua difuminada, acción congelada<br>
-→ Frenar solo si hay fauna visible desde la ruta`},
+  { id:'lehardy', x:537, y:408, cat:'fauna', icon:'🦆',
+    title:'LeHardy Rapids',
+    body:`<strong>Pato Arlequín</strong> — buscar sobre las rocas dentro de los rápidos.<br><br>
+→ Entre Fishing Bridge y Canyon Village<br>
+→ Truchas saltando los rápidos en agosto<br>
+→ Técnica recomendada: <strong>larga exposición con trípode</strong> (ave nítida, agua difuminada)<br>
+→ Encaja en el recorrido del Día 13`},
 
-  'pebble': {
-    cat:'fauna', icon:'🐦', title:'Pebble Creek',
-    dias:[{n:14,c:'#4dd0e1'}],
-    body:`<strong>Mirlo Acuático (American Dipper)</strong> — camina y bucea en arroyos de montaña.<br><br>
-→ Arroyos con corriente rápida entre Tower y NE Entrance<br>
-→ Zona con pronghorn y borregos cimarrón<br>
-→ Dentro del Northern Range Corridor — fuera del Grand Loop`},
+  { id:'pebble', x:778, y:132, cat:'fauna', icon:'🐦',
+    title:'Pebble Creek',
+    body:`<strong>Mirlo Acuático (American Dipper)</strong> — ave que bucea y camina bajo el agua en arroyos de montaña.<br><br>
+→ Buscar en arroyos con corriente rápida entre Tower y NE Entrance<br>
+→ Zona con pronghorn y borregos cimarrón cerca<br>
+→ Dentro del <strong>Northern Range Corridor</strong>, no del "8"`},
 
-  // FOTO
-  'canyon-foto': {
-    cat:'foto', icon:'📷', title:'Gran Cañón de Yellowstone ⭐',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'}],
-    body:`<strong>⭐ Imprescindible — reservar 1h45–2h mínimo</strong><br><br>
-→ <strong>Artist Point</strong> (South Rim): Lower Falls sobre el cañón dorado-naranja. La foto del parque.<br>
-→ <strong>Uncle Tom's Trail</strong>: 328 escalones metálicos bajando hasta las cataratas. Primer plano total. Vale cada escalón.<br>
-→ <strong>Upper Falls viewpoint</strong>: en el camino al Artist Point<br>
-→ <strong>Inspiration Point</strong> (North Rim): ángulo completamente distinto, mucho menos gente<br>
-→ Gran angular + teleobjetivo para texturas del cañón<br>
-→ Día 13 si llega el tiempo · Día 14 al mediodía: garantizado`},
+  // ── FOTO ──
+  { id:'artist-point', x:462, y:308, cat:'foto', icon:'📷',
+    title:'Artist Point — Grand Canyon',
+    body:`<strong>La vista icónica de Yellowstone.</strong><br><br>
+→ Cañón dorado + Lower Falls + Upper Falls<br>
+→ Teleobjetivo para texturas de paredes y detalles<br>
+→ Gran angular para capturar la inmensidad (no dejarlo en el auto)<br>
+→ Mejor al mediodía (la fauna ya descansó) o al atardecer`},
 
-  'gps': {
-    cat:'foto', icon:'🌡️', title:'Grand Prismatic Spring',
-    dias:[{n:13,c:'#7aaad4'}],
+  { id:'gps', x:200, y:450, cat:'foto', icon:'🌡️',
+    title:'Grand Prismatic Spring',
     body:`<strong>La piscina termal más fotogénica del parque.</strong><br><br>
-→ Vista aérea: <strong>Fairy Falls Trail overlook</strong> — 3.2 km RT, ~1.5h<br>
-→ Los anillos de colores son bacterias termófilas vivas (naranja, verde, amarillo)<br>
-→ Mejor antes de las 11h: luz lateral, colores más saturados<br>
-→ Gran angular imprescindible para capturar la escala`},
+→ Vista aérea desde el <strong>Grand Prismatic Overlook</strong> (sendero corto desde la ruta)<br>
+→ Mejor con luz de mañana: colores más saturados<br>
+→ Los anillos de colores son bacterias termófilas<br>
+→ Gran angular imprescindible`},
 
-  'oldfaithful': {
-    cat:'foto', icon:'⛲', title:'Old Faithful + Upper Geyser Basin',
-    dias:[{n:13,c:'#7aaad4'}],
-    body:`<strong>Plan: 2 erupciones desde distintos POVs + desayuno en el Inn.</strong><br><br>
-→ Llegar ~7 AM: estacionamiento vacío, vapor denso con el frío<br>
-→ App NPS muestra horario de la próxima erupción (~90 min entre erupciones)<br>
-→ Caminata Upper Geyser Basin entre erupciones: Castle, Riverside, Beehive<br>
-→ Old Faithful Inn (1904, histórico): café/desayuno con vista al géiser`},
+  { id:'firehole-foto', x:200, y:470, cat:'foto', icon:'🌫️',
+    title:'Firehole River + Géiseres',
+    body:`<strong>Atmósfera única: vapor, niebla y fauna juntos.</strong><br><br>
+→ Bisontes caminando entre vapor de géiseres<br>
+→ Cisnes trompeteros en el río Firehole<br>
+→ Luz filtrada al amanecer = fotos de atmósfera<br>
+→ Cuencas de géiseres: Midway, Lower, Upper`},
 
-  'fountain': {
-    cat:'foto', icon:'🌋', title:'Fountain Paint Pots',
-    dias:[{n:13,c:'#7aaad4'}],
-    body:`<strong>Campo geotérmico variado: géiseres, piscinas, fumarolas y mud pots.</strong><br><br>
-→ Boardwalk de ~0.8 km, ~30 min<br>
-→ En ruta entre Grand Prismatic y West Thumb (sin desvío)<br>
-→ Los mud pots (lodo hirviendo) son especialmente únicos y fotogénicos`},
+  { id:'oldfaithful-foto', x:212, y:515, cat:'foto', icon:'⛲',
+    title:'Old Faithful',
+    body:`<strong>Erupciones cada ~90 min, predecibles.</strong><br><br>
+→ El Visitor Center muestra horario de la próxima erupción<br>
+→ Teleobjetivo para comprimir perspectiva con el lodge<br>
+→ Amanecer: menos gente + vapor más denso con el frío<br>
+→ Encaja en Día 13 (Lower Loop)`},
 
-  'westthumb': {
-    cat:'foto', icon:'🫧', title:'West Thumb Geyser Basin',
-    dias:[{n:13,c:'#7aaad4'},{n:15,c:'#f0a060'}],
-    body:`<strong>Géiseres humeantes en el borde mismo del lago Yellowstone.</strong><br><br>
-→ Contraste único: agua termal azul + lago de montaña de fondo<br>
-→ Mejor con luz de mañana — Día 15 en ruta sur es el momento ideal (sin multitudes)<br>
-→ Boardwalk de ~0.6 km, 20–30 min tranquilos<br>
-→ Si el Día 13 fue muy ajustado, el Día 15 cubre esto perfectamente`},
+  { id:'lamar-foto', x:650, y:185, cat:'foto', icon:'🌅',
+    title:'Lamar Valley al Amanecer',
+    body:`<strong>Luz dorada + fauna activa = la mejor combinación del parque.</strong><br><br>
+→ Salida de Gardiner <strong>5:45 AM</strong> → llegada ~6:30 AM<br>
+→ Sigma 150-600mm imprescindible<br>
+→ Teleconversor cuando la acción está a más de 1 km<br>
+→ Autos con telescopios = frenar y aprovechar siempre`},
 
-  'lamar-foto': {
-    cat:'foto', icon:'🌅', title:'Lamar Valley al Amanecer',
-    dias:[{n:14,c:'#4dd0e1'}],
-    body:`<strong>Luz dorada + fauna activa = mejor combinación del parque.</strong><br><br>
-→ Salida Gardiner <strong>5:45 AM</strong> → llegada Lamar ~6:30 AM<br>
-→ <strong>Sigma 150-600mm</strong> imprescindible + teleconversor cuando la acción está lejos<br>
-→ Binoculares en mano desde el auto — nunca guardarlos<br>
-→ Segunda pasada al volver de Cooke City (~10h): otra luz, otra fauna`},
-
-  'oldgardiner': {
-    cat:'foto', icon:'🐏', title:'Old Gardiner Road',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'}],
+  { id:'oldgardiner-foto', x:340, y:88, cat:'foto', icon:'🐏',
+    title:'Old Gardiner Road',
     body:`<strong>Ruta histórica alternativa Gardiner ↔ Mammoth.</strong><br><br>
-→ Menos tráfico que la ruta asfaltada principal<br>
-→ <strong>Borregos cimarrón (Bachelor herds)</strong> muy tolerantes: retratos a corta distancia, ideales para el Sigma<br>
+→ Menos tráfico que la ruta principal<br>
+→ <strong>Borregos cimarrón (Bachelor herds)</strong> muy tolerantes con la gente<br>
 → Vistas elevadas de las terrazas de Mammoth<br>
-→ Usar al llegar a Gardiner en el Día 13 o salir hacia el parque el Día 14`},
+→ Ideal para la tarde del Día 13 o mañana del 14`},
 
-  // LOGÍSTICA
-  'gardiner': {
-    cat:'logis', icon:'🏠', title:'Gardiner — Base Días 13–15',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'},{n:15,c:'#f0a060'}],
-    body:`<strong>Super 8 Gardiner · North Entrance · 2 noches</strong><br><br>
-→ Día 14: salida <strong>5:45 AM</strong> para Lamar prime time<br>
-→ Día 15: salida <strong>~6 AM</strong> para ruta sur tranquila con luz de mañana<br>
-→ Cargar nafta de noche (bombas 24h con tarjeta — sin necesidad de que el local esté abierto)<br>
-→ <strong>Town & Country Foods</strong>: compra nocturna de provisiones para el día siguiente<br>
-→ Cierres de locales: 18–20h — ir antes del atardecer`},
+  // ── LOGÍSTICA ──
+  { id:'gardiner-log', x:298, y:57, cat:'logis', icon:'🏠',
+    title:'Gardiner — Base Días 13–15',
+    body:`<strong>Super 8 Gardiner · North Entrance.</strong><br><br>
+→ Pueblo pequeño: cierres a las <strong>18–20h</strong> — ir antes del atardecer<br>
+→ Salida al parque: <strong>5:45 AM</strong> para fauna matinal en Lamar<br>
+→ North Entrance = puerta directa al Northern Range Corridor<br>
+→ A metros del arco histórico de entrada al parque (foto obligatoria)`},
 
-  'westye': {
-    cat:'logis', icon:'🏪', title:'West Yellowstone — Día 12',
-    dias:[{n:12,c:'#aaa'}],
-    body:`<strong>Ho Hum Motel · West Entrance</strong><br><br>
-→ 🐻 <strong>Bear spray</strong>: Freeheel and Wheel, 33 Yellowstone Ave — Bear Aware alquiler ($28/can × 2 = $56 por 6 días)<br>
-→ <strong>Food Roundup</strong> (107 Dunraven St): compra principal de provisiones para Días 13–14. Agua, pan, fiambre, barras, fruta. ~$50–60.<br>
-→ Cargar nafta esta noche (bombas 24h con tarjeta) — mañana salís directo al parque sin paradas`},
+  { id:'westye-log', x:22, y:355, cat:'logis', icon:'🏪',
+    title:'West Yellowstone — Día 12',
+    body:`<strong>Ho Hum Motel · West Entrance.</strong><br><br>
+→ 🐻 <strong>Bear spray</strong>: Freeheel and Wheel, 33 Yellowstone Ave — Bear Aware alquiler ($28/can × 2 = $56 total por 6 días)<br>
+→ Cargar <strong>nafta full</strong> antes de entrar al parque<br>
+→ Canyon Street: compras y recuerdos (única oportunidad de la zona)<br>
+→ Grizzly & Wolf Discovery Center (~$20pp, desde las 8 AM)`},
 
-  'canyon-logis': {
-    cat:'logis', icon:'🚻', title:'Canyon Village — Servicios',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'}],
-    body:`<strong>Principal centro de servicios del interior del parque.</strong><br><br>
-→ Baños · General Store · deli · cafetería<br>
-→ Canyon Visitor Education Center: exposición del supervolcán — vale la parada<br>
-→ Bear Aware Kiosk: drop-off alternativo del bear spray<br>
-→ Nafta disponible pero cara — preferir siempre cargar en Gardiner o WY`},
+  { id:'canyon-log', x:457, y:315, cat:'logis', icon:'🚻',
+    title:'Canyon Village — Servicios',
+    body:`<strong>Principal centro de servicios del parque.</strong><br><br>
+→ Baños · tiendas · comida<br>
+→ Canyon Visitor Education Center (supervolcán — imperdible)<br>
+→ Bear Aware Kiosk: drop-off del bear spray (opción alternativa a JAC)<br>
+→ Nafta cara → preferir cargar en West Yellowstone o Gardiner`},
 
-  'cookecity': {
-    cat:'logis', icon:'🏘️', title:'Cooke City / Silver Gate — Día 14',
-    dias:[{n:14,c:'#4dd0e1'}],
-    body:`<strong>Parada estratégica de nafta y provisiones (~9–9:30 AM)</strong><br><br>
+  { id:'cookecity-log', x:864, y:70, cat:'logis', icon:'🏘️',
+    title:'Cooke City / Silver Gate',
+    body:`<strong>Pueblos minúsculos fuera del "8" — casi nadie llega acá.</strong><br><br>
 → Final del Northern Range Corridor por el este<br>
-→ Cooke City Store + estación de nafta (abren ~8–9h en temporada)<br>
-→ Fauna hasta en las calles del pueblo, casi sin turistas<br>
-→ Al volver hacia el oeste: <strong>segunda pasada por Lamar Valley</strong> con diferente luz (~9:30–10h)`},
+→ Fauna frecuente hasta en las calles del pueblo<br>
+→ Sin presión de completar ningún loop: podés hacer Gardiner → Lamar → acá y volver<br>
+→ Cierres tempranos igual que el resto de la zona`},
 
-  'south': {
-    cat:'logis', icon:'↓', title:'South Entrance — Salida Día 15',
-    dias:[{n:15,c:'#f0a060'}],
-    body:`<strong>Salida ~10h → Jackson Hole a 15 minutos.</strong><br><br>
-→ Con salida 6 AM de Gardiner y paradas en Norris + Hayden + West Thumb: Jackson al mediodía<br>
-→ Tarde completa en el pueblo antes del check-in 4 PM<br>
-→ Cache House Jackson: dejar equipaje y recorrer el Town Square`},
+  { id:'south-log', x:360, y:755, cat:'logis', icon:'↓',
+    title:'South Entrance — Salida Día 15',
+    body:`<strong>Salida hacia Jackson Hole (~3.5h en total).</strong><br><br>
+→ Dos opciones de ruta (decidir en el momento):<br>
+→ <strong>Opción A:</strong> US-89/191/287 directo hacia el sur por el parque<br>
+→ <strong>Opción B:</strong> salir por West Thumb → Grand Teton NP (más paisajístico)<br>
+→ <strong>Schwabacher Landing</strong> en Grand Teton: parada obligatoria si el tiempo lo permite`},
 
-  'bearspray': {
-    cat:'logis', icon:'🎒', title:'Bear Spray — Pickup Día 12',
-    dias:[{n:12,c:'#aaa'}],
+  { id:'bearspray-log', x:88, y:338, cat:'logis', icon:'🎒',
+    title:'Bear Spray — Pickup Día 12',
     body:`<strong>Bear Aware · Freeheel and Wheel</strong><br>33 Yellowstone Ave, West Yellowstone MT<br><br>
-→ 2 cans × $28 = <strong>$56 total</strong> (tope para 5+ días)<br>
-→ Drop-off Día 18: <strong>JAC Airport, baggage claim kiosk</strong> — al volar a LAX<br>
-→ No se puede hacer check-in con bear spray (prohibido en vuelos)<br>
-→ Si no se devuelve: $50/can (se descuenta lo ya pagado)`},
+→ 2 cans (Daniel + Melisa) × $28 = <strong>$56 total</strong> (tope de 5+ días)<br>
+→ Drop-off Día 18: <strong>JAC Airport — kiosk en baggage claim</strong> (ideal al volar a LAX)<br>
+→ No volar con bear spray (no puede hacer check-in)<br>
+→ Si no se devuelve: $50/can (se descuenta lo pagado)`},
 
-  'norris': {
-    cat:'logis', icon:'🌋', title:'Norris Geyser Basin',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'},{n:15,c:'#f0a060'}],
-    body:`<strong>El campo geotérmico más activo del planeta.</strong><br><br>
-→ Steamboat Geyser: el géiser activo más alto del mundo<br>
-→ Día 13: si el tiempo da (línea fina — aspiracional)<br>
-→ Día 14: de vuelta de Canyon en el cierre del loop<br>
-→ <strong>Día 15: el momento real de Norris</strong> — sin competencia, 40 min tranquilos en la ruta sur`},
-
-  'mammoth-logis': {
-    cat:'logis', icon:'♨️', title:'Mammoth Hot Springs',
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'},{n:15,c:'#f0a060'}],
-    body:`<strong>Terrazas de travertino + hub logístico del norte del parque.</strong><br><br>
-→ Terrazas de travertino: formaciones únicas en blanco-naranja<br>
-→ Albright Visitor Center: búhos cornudos anidando cerca — vale 15 min<br>
-→ Travertine Cliffs: buscar alces frente a las formaciones blancas<br>
-→ General Store con servicios básicos<br>
-→ Aparece en los 3 días como punto de paso obligatorio`},
-
-  // CAMINATAS
-  'trout': {
-    cat:'hike', icon:'🥾', title:'Trout Lake',
-    dias:[{n:14,c:'#4dd0e1'}],
+  // ── CAMINATAS ──
+  { id:'trout-lake', x:740, y:115, cat:'hike', icon:'🥾',
+    title:'Trout Lake — Lamar Valley',
     body:`<strong>1.9 km ida y vuelta · ~30 min · Fácil</strong><br><br>
-→ Justo después de Soda Butte Creek, en el corredor Lamar<br>
+→ Justo después de Soda Butte Creek (Northern Range Corridor)<br>
 → <strong>Nutrias de río muy frecuentes</strong> en el lago<br>
 → Osos (negros y grizzly) en los alrededores<br>
-→ Osprey pescando desde el aire · Muy poco visitado`},
+→ Osprey pescando desde el aire<br>
+→ Poco visitado — casi sin turistas`},
 
-  'hellroaring': {
-    cat:'hike', icon:'🥾', title:'Hellroaring Suspension Bridge',
-    dias:[{n:14,c:'#4dd0e1'}],
+  { id:'hellroaring', x:414, y:148, cat:'hike', icon:'🥾',
+    title:'Hellroaring Suspension Bridge',
     body:`<strong>3.2 km ida y vuelta · ~1h15 · Moderada</strong><br><br>
-→ Trailhead entre Mammoth y Tower Junction (en la ruta del Día 14)<br>
-→ Bajada con switchbacks hasta puente colgante sobre rápidos del río Yellowstone<br>
+→ Trailhead entre Mammoth y Tower Junction<br>
+→ Bajada con switchbacks hasta un <strong>puente colgante sobre rápidos</strong><br>
 → <strong>Borregos cimarrón</strong> en las paredes del cañón<br>
-→ Solo si salen antes de las 5h — agrega 1h15 antes de Lamar`},
+→ Raptors en el cañón del río Yellowstone<br>
+→ Encaja perfecto en el Día 14 de camino a Lamar`},
 
-  'fairyfalls': {
-    cat:'hike', icon:'🥾', title:'Fairy Falls + Grand Prismatic Overlook',
-    dias:[{n:13,c:'#7aaad4'}],
-    body:`<strong>Overlook: 3.2 km RT · ~1.5h · Fácil</strong><br>
-<strong>Fairy Falls completo: ~8 km · ~2.5h</strong><br><br>
-→ Mismo trailhead para ambas rutas<br>
-→ El overlook da la vista aérea icónica de Grand Prismatic (los anillos de colores)<br>
-→ Bisontes frecuentes en el Midway Geyser Basin<br>
-→ Día 13: antes de las 11h para luz lateral y menos multitudes`},
+  { id:'fairy-falls-hike', x:195, y:448, cat:'hike', icon:'🥾',
+    title:'Fairy Falls + Grand Prismatic Overlook',
+    body:`<strong>Grand Prismatic Overlook: 1.6 km · ~30 min · Fácil</strong><br>
+<strong>Hasta Fairy Falls: ~8 km · ~2.5h · Fácil/moderada</strong><br><br>
+→ Mismo trailhead, distintas distancias<br>
+→ El overlook da la vista aérea icónica de Grand Prismatic Spring<br>
+→ Bison frecuentes en el área del Midway Geyser Basin<br>
+→ Encaja en Día 13 (Lower Loop)`},
 
-  'lamar-trail': {
-    cat:'hike', icon:'🥾', title:'Lamar River Trail',
-    dias:[{n:14,c:'#4dd0e1'}],
-    body:`<strong>~3.5 km ida y vuelta · ~45 min · Fácil</strong><br><br>
-→ Valle abierto — lobos a veces cruzan el sendero<br>
-→ Bisontes y pronghorn en el llano<br>
-→ Teleobjetivo: si hay lobos, suelen estar muy lejos<br>
-→ Bear spray obligatorio fuera del auto en cualquier trail`},
+  { id:'lamar-trail', x:660, y:182, cat:'hike', icon:'🥾',
+    title:'Lamar River Trail',
+    body:`<strong>~3.5 km ida y vuelta hasta el río · ~45 min · Fácil</strong><br><br>
+→ Valle abierto — los lobos a veces cruzan el sendero<br>
+→ Bison y pronghorn en el llano<br>
+→ Llevar tele: si hay lobos, suelen estar lejos<br>
+→ Bear spray obligatorio fuera del auto`},
 
-  'uncletoms': {
-    cat:'hike', icon:'🥾', title:"Uncle Tom's Trail",
-    dias:[{n:13,c:'#7aaad4'},{n:14,c:'#4dd0e1'}],
-    body:`<strong>328 escalones metálicos · ~45 min · Moderado</strong><br><br>
-→ La única forma de bajar hasta el primer plano de las Lower Falls<br>
-→ Parte del bloque del Gran Cañón de Yellowstone (Artist Point + Uncle Tom's + Inspiration Point)<br>
-→ Moderado por la bajada: los escalones son empinados y pueden estar húmedos`},
+  // ── SEGURIDAD ──
+  { id:'dist-seg', x:520, y:210, cat:'seg', icon:'⚠️',
+    title:'Distancias de Seguridad',
+    body:`<strong>Los guardaparques son muy estrictos — multas altas:</strong><br><br>
+→ Osos y lobos: <strong>100 yardas (91 m)</strong><br>
+→ Bisontes, alces, todos los demás: <strong>25 yardas (23 m)</strong><br><br>
+→ Los bisontes parecen lentos pero son extremadamente rápidos y agresivos<br>
+→ Bisonte en la ruta: apagar motor y <strong>esperar</strong> (puede ser 30–60 min, no tocar la bocina)`},
 
-  'tower': {
-    cat:'hike', icon:'🦌', title:'Tower-Roosevelt · Calcite Springs',
-    dias:[{n:14,c:'#4dd0e1'}],
-    body:`<strong>Punto de paso clave del Northern Range Corridor.</strong><br><br>
-→ <strong>Bighorn sheep</strong> en cornisas verticales de Calcite Springs — escanear desde el auto<br>
-→ Tower Fall: cascada de 40m, mirador a 2 min del estacionamiento<br>
-→ En el camino de ida y vuelta a Lamar Valley (Día 14)<br>
-→ Roosevelt Lodge: desayuno/almuerzo disponible`},
-
-  // SEGURIDAD
-  'distancias': {
-    cat:'seg', icon:'⚠️', title:'Distancias de Seguridad',
-    dias:[],
-    body:`<strong>Guardaparques estrictos — multas altas:</strong><br><br>
-→ Osos y lobos: <strong>100 yardas (91 m)</strong> — nunca acercarse más<br>
-→ Bisontes, alces y demás: <strong>25 yardas (23 m)</strong><br><br>
-→ Los bisontes corren a 50 km/h y son impredecibles<br>
-→ Bisonte en ruta: apagar motor y <strong>esperar</strong> (puede ser 30–60 min, nunca tocar la bocina)`},
-
-  'osos': {
-    cat:'seg', icon:'🐻', title:'Osos — Protocolo',
-    dias:[],
+  { id:'bears-seg', x:400, y:245, cat:'seg', icon:'🐻',
+    title:'Bears — Protocolo',
     body:`<strong>Bear spray siempre en cinturón al salir del auto.</strong><br><br>
-→ Agosto = hiperfagia pre-invierno — osos muy activos buscando comida<br>
-→ Nunca interponerse entre madre e hijo (especialmente osas negras con crías)<br>
-→ Grizzly más activos: Hayden Valley, Lamar Valley, zona del lago<br>
-→ Distancia mínima siempre: 91 m`},
+→ En agosto los osos buscan comida activamente (hiperfagia pre-invierno)<br>
+→ Osos negros con gemelos/crías: no interponer entre madre e hijo<br>
+→ Grizzly en Hayden Valley, Lamar y Thorofare — estos son los zonas más activas<br>
+→ Distancia mínima: 91 m (100 yardas) sin importar dónde estés`},
 
-  'bisontes-seg': {
-    cat:'seg', icon:'🦬', title:'Bisontes — Regla de Oro',
-    dias:[],
+  { id:'bison-seg', x:200, y:320, cat:'seg', icon:'🦬',
+    title:'Bisontes — Regla de Oro',
     body:`<strong>El animal que más incidentes causa en Yellowstone.</strong><br><br>
-→ Todo en Yellowstone tarda el doble: bisontes bloquean rutas 30–60 min sin aviso<br>
-→ Nunca bocina ni movimientos bruscos cerca de un bisonte<br>
-→ "Red Dogs" en agosto: crías naranjas fotogénicas — madres muy alertas<br>
-→ Siempre buffer de tiempo generoso en todos los traslados`},
-};
+→ Yellowstone todo tarda el doble: los bisontes bloquean rutas 30–60 min sin aviso<br>
+→ Nunca tocar bocina ni mover el auto bruscamente cerca de bisontes<br>
+→ "Red Dogs" (crías naranjas) en agosto — fotogénicos pero las madres están alerta<br>
+→ Siempre buffer de tiempo en los traslados`},
+];
 
-// ── FILTER STATE ──────────────────────────────────────────────────────────────
+// ── STATE ────────────────────────────────────────────────────────────────────
 const state = { fauna:true, foto:true, logis:true, seg:true, hike:true };
-const catColors = { fauna:'#7ec8a0', foto:'#e0b84a', logis:'#7aaed4', seg:'#d4806a', hike:'#b48ad4' };
-const catLabel  = { fauna:'Fauna', foto:'Fotografía', logis:'Logística', seg:'Seguridad', hike:'Caminata' };
-const catMap    = {
-  fauna:['lamar','hayden','mammoth-fauna','madison','lehardy','pebble'],
-  foto: ['canyon-foto','gps','oldfaithful','fountain','westthumb','lamar-foto','oldgardiner'],
-  logis:['gardiner','westye','canyon-logis','cookecity','south','bearspray','norris','mammoth-logis'],
-  hike: ['trout','hellroaring','fairyfalls','lamar-trail','uncletoms','tower'],
-  seg:  ['distancias','osos','bisontes-seg'],
-};
+const colors = { fauna:'#86efac', foto:'#fbbf24', logis:'#93c5fd', seg:'#fca5a5', hike:'#c084fc' };
+const tagLabels = { fauna:'Fauna', foto:'Fotografía', logis:'Logística', seg:'Seguridad', hike:'Caminata' };
 
 function toggleCat(cat) {
   state[cat] = !state[cat];
-  document.querySelector(`.f-${cat}`).classList.toggle('on',  state[cat]);
-  document.querySelector(`.f-${cat}`).classList.toggle('off', !state[cat]);
-  catMap[cat].forEach(id => {
-    const el = document.querySelector(`[data-id="${id}"]`);
-    if (el) el.classList.toggle('hidden', !state[cat]);
+  const btn = document.querySelector(`.f-${cat}`);
+  btn.classList.toggle('on', state[cat]);
+  btn.classList.toggle('off', !state[cat]);
+  renderMarkers();
+}
+
+// ── RENDER MARKERS ───────────────────────────────────────────────────────────
+function renderMarkers() {
+  const layer = document.getElementById('mlayer');
+  layer.innerHTML = '';
+  MARKERS.forEach(m => {
+    if (!state[m.cat]) return;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor = 'pointer';
+
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    glow.setAttribute('cx', m.x); glow.setAttribute('cy', m.y); glow.setAttribute('r','15');
+    glow.setAttribute('fill', colors[m.cat]); glow.setAttribute('opacity','0.12');
+    g.appendChild(glow);
+
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', m.x); c.setAttribute('cy', m.y); c.setAttribute('r','10');
+    c.setAttribute('fill', colors[m.cat]); c.setAttribute('opacity','0.88');
+    g.appendChild(c);
+
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', m.x); t.setAttribute('y', m.y+4);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','9');
+    t.textContent = m.icon;
+    g.appendChild(t);
+
+    g.addEventListener('click', e => { e.stopPropagation(); openPopup(m, e); });
+    layer.appendChild(g);
   });
 }
 
-// ── PANEL ─────────────────────────────────────────────────────────────────────
-function openPanel(id) {
-  const d = DATA[id]; if (!d) return;
-  document.getElementById('p-icon').textContent  = d.icon;
-  document.getElementById('p-title').textContent = d.title;
-  document.getElementById('p-body').innerHTML    = d.body;
-  const catEl = document.getElementById('p-cat');
-  catEl.textContent = catLabel[d.cat];
-  catEl.style.color = catColors[d.cat];
+// ── POPUP ────────────────────────────────────────────────────────────────────
+function openPopup(m, e) {
+  document.getElementById('picon').textContent  = m.icon;
+  document.getElementById('ptitle').textContent = m.title;
+  document.getElementById('pbody').innerHTML    = m.body;
+  document.getElementById('ptag').className     = `popup-tag tag-${m.cat}`;
+  document.getElementById('ptag').textContent   = tagLabels[m.cat];
 
-  const diaEl = document.getElementById('p-dia');
-  if (d.dias && d.dias.length) {
-    diaEl.innerHTML = d.dias.map(di =>
-      `<span class="panel-dia" style="color:${di.c};border-color:${di.c};background:${di.c}18">DÍA ${di.n}</span>&nbsp;`
-    ).join('');
-  } else {
-    diaEl.innerHTML = '';
-  }
-  document.getElementById('panel').classList.add('open');
+  const svg  = document.getElementById('msvg');
+  const wrap = document.getElementById('wrap');
+  const wRect = wrap.getBoundingClientRect();
+
+  const pt = svg.createSVGPoint();
+  pt.x = m.x; pt.y = m.y;
+  const sc = pt.matrixTransform(svg.getScreenCTM());
+
+  const W = 250, popup = document.getElementById('popup');
+  let left = sc.x - wRect.left + 14;
+  let top  = sc.y - wRect.top  - 20;
+  if (left + W > wRect.width  - 8) left = sc.x - wRect.left - W - 14;
+  if (left < 8) left = 8;
+  if (top < 8)  top  = 8;
+  if (top + 280 > wRect.height - 8) top = wRect.height - 288;
+
+  popup.style.left = left + 'px';
+  popup.style.top  = top  + 'px';
+  popup.classList.add('show');
 }
-function closePanel() { document.getElementById('panel').classList.remove('open'); }
 
-document.querySelectorAll('.marker').forEach(m => {
-  m.addEventListener('click', e => { e.stopPropagation(); openPanel(m.dataset.id); });
-});
-document.getElementById('vp').addEventListener('click', () => closePanel());
+function closePopup() { document.getElementById('popup').classList.remove('show'); }
+document.getElementById('pclose').addEventListener('click', e => { e.stopPropagation(); closePopup(); });
+document.getElementById('wrap').addEventListener('click', closePopup);
 
-// ── PAN & ZOOM ────────────────────────────────────────────────────────────────
+// ── PAN & ZOOM ───────────────────────────────────────────────────────────────
 let tx = 0, ty = 0, sc = 1;
 let drag = null, lastDist = null;
-const vp = document.getElementById('vp');
-const canvas = document.getElementById('canvas');
 
-function clampT() {
-  const img = document.getElementById('mapimg');
-  const W = img.offsetWidth * sc, H = img.offsetHeight * sc;
-  const vW = vp.offsetWidth, vH = vp.offsetHeight;
-  tx = Math.min(0, Math.max(vW - W, tx));
-  ty = Math.min(0, Math.max(vH - H, ty));
-}
+const wrap = document.getElementById('wrap');
+const svg  = document.getElementById('msvg');
+
 function applyT() {
-  clampT();
-  canvas.style.transform = `translate(${tx}px,${ty}px) scale(${sc})`;
+  svg.style.transformOrigin = '0 0';
+  svg.style.transform = `translate(${tx}px,${ty}px) scale(${sc})`;
 }
-
-// Start centered
-window.addEventListener('load', () => {
-  const img = document.getElementById('mapimg');
-  const vW = vp.offsetWidth, vH = vp.offsetHeight;
-  const W = img.offsetWidth, H = img.offsetHeight;
-  const fit = Math.min(vW/W, vH/H);
-  sc = fit;
-  tx = (vW - W*sc)/2;
-  ty = (vH - H*sc)/2;
-  applyT();
-});
 
 function doZoom(factor, cx, cy) {
-  const img = document.getElementById('mapimg');
-  const maxSc = Math.min(6, 1800/img.offsetWidth);
-  const vW = vp.offsetWidth, vH = vp.offsetHeight;
-  const ocx = cx ?? vW/2, ocy = cy ?? vH/2;
-  const ns = Math.min(Math.max(sc*factor, 0.4), maxSc);
-  const f = ns/sc;
-  tx = ocx*(1-f) + f*tx;
-  ty = ocy*(1-f) + f*ty;
-  sc = ns; applyT();
+  const r = wrap.getBoundingClientRect();
+  const ocx = cx ?? r.width  / 2;
+  const ocy = cy ?? r.height / 2;
+  const ns = Math.min(Math.max(sc * factor, 0.55), 6);
+  const f  = ns / sc;
+  tx = ocx * (1 - f) + f * tx;
+  ty = ocy * (1 - f) + f * ty;
+  sc = ns;
+  applyT();
 }
 
-vp.addEventListener('mousedown', e => {
-  if (e.target.closest('.marker') || e.target.closest('.panel')) return;
-  drag = { sx: e.clientX-tx, sy: e.clientY-ty };
-  vp.classList.add('dragging');
+// Mouse
+wrap.addEventListener('mousedown', e => {
+  if (e.target.closest('.popup')) return;
+  drag = { sx: e.clientX - tx, sy: e.clientY - ty };
+  wrap.classList.add('dragging');
 });
 window.addEventListener('mousemove', e => {
   if (!drag) return;
-  tx = e.clientX - drag.sx; ty = e.clientY - drag.sy; applyT();
+  tx = e.clientX - drag.sx;
+  ty = e.clientY - drag.sy;
+  applyT();
 });
-window.addEventListener('mouseup', () => { drag=null; vp.classList.remove('dragging'); });
-vp.addEventListener('wheel', e => {
+window.addEventListener('mouseup', () => { drag = null; wrap.classList.remove('dragging'); });
+wrap.addEventListener('wheel', e => {
   e.preventDefault();
-  const r = vp.getBoundingClientRect();
-  doZoom(e.deltaY<0?1.13:0.89, e.clientX-r.left, e.clientY-r.top);
-},{passive:false});
+  const r = wrap.getBoundingClientRect();
+  doZoom(e.deltaY < 0 ? 1.15 : 0.87, e.clientX - r.left, e.clientY - r.top);
+}, { passive:false });
 
-vp.addEventListener('touchstart', e => {
-  if (e.target.closest('.marker')) return;
-  if (e.touches.length===1) {
-    drag={sx:e.touches[0].clientX-tx, sy:e.touches[0].clientY-ty};
-  } else if (e.touches.length===2) {
-    const dx=e.touches[0].clientX-e.touches[1].clientX;
-    const dy=e.touches[0].clientY-e.touches[1].clientY;
-    lastDist=Math.hypot(dx,dy); drag=null;
+// Touch
+wrap.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    drag = { sx: e.touches[0].clientX - tx, sy: e.touches[0].clientY - ty };
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastDist = Math.hypot(dx, dy);
+    drag = null;
   }
-},{passive:true});
-vp.addEventListener('touchmove', e => {
+}, { passive:true });
+wrap.addEventListener('touchmove', e => {
   e.preventDefault();
-  if (e.touches.length===1 && drag) {
-    tx=e.touches[0].clientX-drag.sx; ty=e.touches[0].clientY-drag.sy; applyT();
-  } else if (e.touches.length===2 && lastDist) {
-    const dx=e.touches[0].clientX-e.touches[1].clientX;
-    const dy=e.touches[0].clientY-e.touches[1].clientY;
-    const d=Math.hypot(dx,dy);
-    const cx=(e.touches[0].clientX+e.touches[1].clientX)/2;
-    const cy=(e.touches[0].clientY+e.touches[1].clientY)/2;
-    const r=vp.getBoundingClientRect();
-    doZoom(d/lastDist, cx-r.left, cy-r.top); lastDist=d;
+  if (e.touches.length === 1 && drag) {
+    tx = e.touches[0].clientX - drag.sx;
+    ty = e.touches[0].clientY - drag.sy;
+    applyT();
+  } else if (e.touches.length === 2 && lastDist) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d  = Math.hypot(dx, dy);
+    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    const r  = wrap.getBoundingClientRect();
+    doZoom(d / lastDist, cx - r.left, cy - r.top);
+    lastDist = d;
   }
-},{passive:false});
-vp.addEventListener('touchend', ()=>{drag=null;lastDist=null;});
+}, { passive:false });
+wrap.addEventListener('touchend', () => { drag = null; lastDist = null; });
 
-// ── RUTAS MODAL ───────────────────────────────────────────────────────────────
-function openRutas(){document.getElementById('rmodal').classList.add('open');}
-function closeRutas(){document.getElementById('rmodal').classList.remove('open');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRutas();closePanel();}});
+// Init
+renderMarkers();
+
+// Rutas modal
+function openRutas() { document.getElementById('rutasModal').classList.add('open'); }
+function closeRutas() { document.getElementById('rutasModal').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRutas(); });
 </script>
 
-<!-- RUTAS MODAL -->
-<div class="rmodal" id="rmodal" onclick="closeRutas()">
-  <div class="rmodal-inner" onclick="event.stopPropagation()">
-    <div class="rmodal-hdr">
+<div class="rutas-modal" id="rutasModal" onclick="closeRutas()">
+  <div style="width:100%;max-width:900px" onclick="event.stopPropagation()">
+    <div class="rutas-modal-header">
       <div>
-        <div class="rmodal-title">Rutas por día — propuesta de recorrido</div>
-        <div class="rmodal-sub">Las líneas sobre el mapa usan los mismos colores · ESC o click afuera para cerrar</div>
+        <div class="rutas-modal-title">🗺️ Rutas por día — propuesta de recorrido</div>
+        <div class="rutas-modal-sub">Grosor = certeza · línea entrecortada = aspiracional · tocá fuera para cerrar</div>
       </div>
-      <button class="rmodal-close" onclick="closeRutas()">✕ cerrar</button>
+      <button class="rutas-close" onclick="closeRutas()">✕ Cerrar</button>
     </div>
-    <div class="rmodal-hint">
-      <strong>Cómo leer el mapa:</strong> cada color corresponde a un día — las líneas pintadas sobre el mapa siguen las rutas reales de las carreteras del parque.
+    <div style="font-size:0.62rem;color:rgba(245,240,232,0.38);background:rgba(245,240,232,0.05);border-radius:8px;padding:8px 12px;margin-bottom:10px;line-height:1.7">
+      <strong style="color:rgba(245,240,232,0.6)">Cómo leer el mapa:</strong> el grosor de cada línea indica certeza — gruesa donde empieza el día (paradas garantizadas), se afina y entrecorta hacia el final (aspiracional, "si el tiempo da"). No es un itinerario rígido, es una hoja de ruta con prioridades visuales.
     </div>
-    <img class="rmodal-img" src="itinerario-rutas.jpg" alt="Mapa de rutas por día">
-    <div class="rdays">
-      <div class="rday">
-        <div class="rday-bar" style="background:#4a7adc"></div>
+    <img class="rutas-img" src="itinerario-rutas.jpg" alt="Mapa de rutas por día — Yellowstone">
+    <div class="rutas-legend" style="flex-direction:column;gap:14px;margin-top:18px">
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#1a56db;width:36px;height:5px"></div>
+        </div>
         <div>
-          <div class="rday-title" style="color:#93bbf7">Día 13 — West Yellowstone → Gardiner · Lower Loop</div>
-          <div class="rday-text">Sale al amanecer (~6 AM). Madison con primera luz, géiseres (Old Faithful × 2 erupciones + Inn, Grand Prismatic overlook, Fountain Paint Pots), West Thumb, Hayden Valley, Gran Cañón (si llega el tiempo), Norris, Mammoth → Gardiner.</div>
-          <div class="rday-note">Línea azul en el mapa · inamovible en géiseres, aspiracional en Canyon/Norris.</div>
+          <div style="font-size:0.7rem;font-weight:700;color:#93bbf7;margin-bottom:3px">Día 13 — West Yellowstone → Gardiner (Lower Loop)</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Sale del Ho Hum al amanecer por el West Entrance. Recorre el Madison al alba, baja a los géiseres (Old Faithful con 2 erupciones, Grand Prismatic desde el overlook, Fountain Paint Pots), sigue por West Thumb y Hayden Valley hacia el norte. Termina en Canyon, Norris y Mammoth Hot Springs antes de entrar a Gardiner. <span style="color:rgba(245,240,232,0.35)">La línea es gruesa en géiseres — esa parte es inamovible. Se afina en Canyon/Norris porque depende de la energía y el tiempo del día.</span></div>
         </div>
       </div>
-      <div class="rday">
-        <div class="rday-bar" style="background:#0ea5c0"></div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#06b6d4;width:36px;height:5px"></div>
+        </div>
         <div>
-          <div class="rday-title" style="color:#4dd0e1">Día 14 — Loop Lamar Valley desde Gardiner</div>
-          <div class="rday-text">5:45 AM. Bighorn corridor → Tower → Lamar Valley antes de las 7h (prime time fauna). Cooke City (nafta + provisiones) → segunda pasada por Lamar. Mediodía: Gran Cañón completo (Artist Point + Uncle Tom's + Inspiration Point). Hayden → Norris → Gardiner.</div>
-          <div class="rday-note">Línea cian en el mapa · Lamar es el corazón, Canyon/Hayden de vuelta es aspiracional.</div>
+          <div style="font-size:0.7rem;font-weight:700;color:#67e8f9;margin-bottom:3px">Día 14 — Loop Lamar Valley desde Gardiner</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Sale del Super 8 a las 5:45 AM. Bighorn corridor Gardiner→Mammoth→Tower, y directo a Lamar Valley antes de las 7 AM — hora pico para lobos, grizzly y pronghorns. Continúa hasta Cooke City (nafta + provisiones) y vuelve pasando por Lamar una segunda vez con otra luz. Al mediodía: Gran Cañón de Yellowstone (Artist Point, Uncle Tom's Trail, Inspiration Point). Tarde: Hayden Valley y cierre por Norris→Gardiner. <span style="color:rgba(245,240,232,0.35)">La línea es gruesa en el corredor noreste — Lamar es el corazón del día. El regreso por Canyon/Hayden es aspiracional.</span></div>
         </div>
       </div>
-      <div class="rday">
-        <div class="rday-bar" style="background:#e08030"></div>
+
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:3px">
+          <div class="rutas-leg-line" style="background:#f97316;width:36px;height:5px"></div>
+        </div>
         <div>
-          <div class="rday-title" style="color:#f0a060">Día 15 — Gardiner → Jackson Hole · ruta sur</div>
-          <div class="rday-text">~6 AM. Último bighorn corridor. Norris sin prisa (su momento real). Hayden con luz de mañana. West Thumb tranquilo. South Entrance → Jackson al mediodía — tarde completa en el pueblo.</div>
-          <div class="rday-note">Línea naranja en el mapa · el ritmo lo decide el día.</div>
+          <div style="font-size:0.7rem;font-weight:700;color:#fdba74;margin-bottom:3px">Día 15 — Gardiner → Jackson Hole (ruta sur)</div>
+          <div style="font-size:0.63rem;color:rgba(245,240,232,0.55);line-height:1.65">Salida ~6 AM. Último bighorn corridor y Norris Geyser Basin sin prisa (el momento real de Norris, que en los días anteriores siempre quedó como "si da el tiempo"). Baja por Hayden Valley con luz de mañana y para en West Thumb antes de salir por el South Entrance. Jackson al mediodía — tarde completa en el pueblo. <span style="color:rgba(245,240,232,0.35)">La línea se afina hacia el sur porque el ritmo lo decide el día, no el reloj.</span></div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
