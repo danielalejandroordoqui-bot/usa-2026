@@ -648,39 +648,51 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeRutas
     <div class="rutas-modal-header">
       <div>
         <div class="rutas-modal-title">Rutas por día — Grand Teton</div>
-        <div class="rutas-modal-sub">Pintá los colores sobre el mapa · ESC o click afuera para cerrar</div>
+        <div class="rutas-modal-sub">Rutas reales de Google Maps · Línea roja = Moose-Wilson Road · ESC para cerrar</div>
       </div>
       <button class="rutas-close" onclick="closeRutas()">✕ cerrar</button>
     </div>
-    <img class="rutas-img" src="gt-map-base.jpg" alt="Mapa Grand Teton National Park">
     <div class="rutas-days">
       <div class="rutas-day">
         <div class="rutas-day-bar" style="background:#4ec87a"></div>
         <div>
-          <div class="rutas-day-title" style="color:#4ec87a">Día 16 — Loop de fauna y fotografía · Color verde</div>
+          <div class="rutas-day-title" style="color:#4ec87a">Día 16 — Fauna y fotografía</div>
           <div class="rutas-day-text">
-            Salida 5:15 AM. <strong>Oxbow Bend</strong> (amanecer, alces + reflejo Monte Moran) →
-            US-89 sur → <strong>Snake River Overlook</strong> (foto Ansel Adams) →
-            <strong>Antelope Flats / Mormon Row</strong> (granero + bisontes + Tetons) →
+            Salida 5:15 AM. <strong>Oxbow Bend</strong> (amanecer, quedarse largo — alces + reflejo Monte Moran) →
+            <strong>Antelope Flats / Mormon Row</strong> → <strong>Snake River Overlook</strong> →
             opcional <strong>Taggart Lake</strong> (~1.5h) →
-            <strong>Moose-Wilson Road</strong> al atardecer (alces + osos negros) → Jackson.
+            <strong>Moose-Wilson Road</strong> al atardecer (primera pasada — alces + osos negros).
           </div>
-          <div class="rutas-day-note">Ruta principal: US-89/191 · Bifurcaciones: Antelope Flats Rd + Moose-Wilson Rd</div>
+          <div class="rutas-day-note">🔴 Línea roja = tramo Moose-Wilson Road (Google Maps no la rutea por restricción de RVs)</div>
         </div>
+      </div>
+      <div style="position:relative;width:100%;margin-bottom:8px;">
+        <img src="teton-dia16-map.png" style="width:100%;border-radius:10px;display:block;">
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 1212 1462" preserveAspectRatio="xMidYMid meet">
+          <path d="M 480,725 C 420,800 330,880 270,965" stroke="rgba(0,0,0,0.4)" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M 480,725 C 420,800 330,880 270,965" stroke="#ff4422" stroke-width="8" fill="none" stroke-linecap="round"/>
+        </svg>
       </div>
       <div class="rutas-day">
         <div class="rutas-day-bar" style="background:#f0c040"></div>
         <div>
-          <div class="rutas-day-title" style="color:#f0c040">Día 17 — Lagos y montaña · Color amarillo/dorado</div>
+          <div class="rutas-day-title" style="color:#f0c040">Día 17 — Schwabacher + segunda pasada Moose-Wilson</div>
           <div class="rutas-day-text">
-            Salida 5:00 AM. <strong>Schwabacher Landing</strong> (amanecer icónico, castores, trípode) →
-            US-89 norte → <strong>Jackson Lake Dam</strong> →
-            <strong>Willow Flats</strong> (alces mañana, cerca de Jackson Lake Lodge) →
-            Teton Park Road sur → <strong>Jenny Lake</strong> (ferry $18 RT → Hidden Falls → Inspiration Point) →
-            checkout Cache House 11 AM → maletas en RAV4 → aeropuerto.
+            Salida 5:00 AM. <strong>Schwabacher Landing</strong> (amanecer, castores, trípode) →
+            <strong>Willow Flats</strong> (bloque largo 08:30–11:00, scanning alces) →
+            <strong>Jackson Lake Lodge + Jackson Lake Dam</strong> → <strong>Signal Mountain</strong> →
+            <strong>String Lake</strong> (opcional, mediodía) →
+            <strong>Moose-Wilson Road</strong> 17:00 → última luz (segunda pasada — doble chances de fauna).
           </div>
-          <div class="rutas-day-note">Ruta: US-89 norte + Teton Park Road sur · Ferry Jenny Lake: sin reserva, abren ~7 AM</div>
+          <div class="rutas-day-note">🔴 Línea roja = tramo Moose-Wilson Road · Repetir la ruta = estrategia clave en Tetons</div>
         </div>
+      </div>
+      <div style="position:relative;width:100%;">
+        <img src="teton-dia17-map.png" style="width:100%;border-radius:10px;display:block;">
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 1070 1402" preserveAspectRatio="xMidYMid meet">
+          <path d="M 390,730 C 340,775 280,820 235,868" stroke="rgba(0,0,0,0.4)" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M 390,730 C 340,775 280,820 235,868" stroke="#ff4422" stroke-width="8" fill="none" stroke-linecap="round"/>
+        </svg>
       </div>
     </div>
   </div>
