@@ -351,6 +351,15 @@ const MARKERS = [
 → Zona con pronghorn y borregos cimarrón cerca<br>
 → Dentro del <strong>Northern Range Corridor</strong>, no del "8"`},
 
+  { id:'mud-volcano', x:507, y:347, cat:'fauna', icon:'🌋',
+    title:'Mud Volcano',
+    body:`<strong>Área termal activa + bisontes garantizados.</strong><br><br>
+→ Pozas de barro hirviente, fumarolas y el cráter del Dragón<br>
+→ <strong>Bisontes</strong> frecuentes en los pastizales aledaños<br>
+→ Caminata corta de tablones (~800m, 20 min) — plano y fácil<br>
+→ Entre Hayden Valley y Fishing Bridge — parada obligatoria Día 13<br>
+→ Olor fuerte a azufre (completamente normal)`},
+
   // ── FOTO ──
   { id:'artist-point', x:462, y:308, cat:'foto', icon:'📷',
     title:'Artist Point — Grand Canyon',
@@ -399,6 +408,32 @@ const MARKERS = [
 → <strong>Borregos cimarrón (Bachelor herds)</strong> muy tolerantes con la gente<br>
 → Vistas elevadas de las terrazas de Mammoth<br>
 → Ideal para la tarde del Día 13 o mañana del 14`},
+
+  { id:'tower-fall', x:534, y:174, cat:'foto', icon:'💧',
+    title:'Tower Fall',
+    body:`<strong>Cascada de 40m con formaciones de roca basáltica.</strong><br><br>
+→ Parada de 20–30 min — corto mirador desde el parking<br>
+→ En ruta Día 13: Tower Junction → Lamar Valley<br>
+→ Contexto geológico: columnas de roca volcánica únicas<br>
+→ Buena luz en la mañana (sol de frente en la tarde)`},
+
+  { id:'norris', x:303, y:301, cat:'foto', icon:'♨️',
+    title:'Norris Geyser Basin',
+    body:`<strong>El área termal más caliente y antigua del parque.</strong><br><br>
+→ Steamboat Geyser: el géiser activo más alto del mundo<br>
+→ Back Basin + Porcelain Basin: dos loops (~3 km, 1h total)<br>
+→ Colores extremos: turquesa, naranja, negro — foto espectacular<br>
+→ En ruta Día 13 (regreso) o Día 14 (salida hacia sur)<br>
+→ Menos masivo que Old Faithful — más auténtico`},
+
+  { id:'west-thumb', x:394, y:538, cat:'foto', icon:'🌡️',
+    title:'West Thumb Geyser Basin',
+    body:`<strong>Géiseres al borde del lago Yellowstone.</strong><br><br>
+→ Las únicas piscinas termales con el lago de fondo<br>
+→ Abyss Pool: 53m de profundidad, azul profundo<br>
+→ Caminata de tablones ~1.6 km, 30 min<br>
+→ Día 12: parada entre Old Faithful y Fishing Bridge<br>
+→ Posibles pelícanos y águilas sobre el lago`},
 
   // ── LOGÍSTICA ──
   { id:'gardiner-log', x:298, y:57, cat:'logis', icon:'🏠',
@@ -693,16 +728,25 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRutas()
         <div class="rutas-day-bar" style="background:#06b6d4"></div>
         <div>
           <div class="rutas-day-title" style="color:#67e8f9">Día 13 — Northern Range: Lamar Valley y Cooke City</div>
-          <div class="rutas-day-text">Salida 5:45 AM. <strong>Mammoth</strong> → <strong>Tower Junction</strong> → <strong>Tower Fall</strong> → <strong>Lamar Valley</strong> (lobos, grizzly, pronghorns — ir más allá de Soda Butte Creek) → <strong>Cooke City / Silver Gate</strong>. Vuelta por el mismo corredor con distinta luz. Autos con telescopios en la ruta = siempre frenar.</div>
+          <div class="rutas-day-text">Salida 5:45 AM. <strong>Mammoth</strong> → <strong>Tower Junction</strong> → <strong>Tower Fall</strong> → <strong>Lamar Valley</strong> (lobos, grizzly, pronghorns — ir más allá de Soda Butte Creek) → <strong>Cooke City / Silver Gate</strong>. Regreso: volver vía <strong>Canyon → Norris → Mammoth</strong> (loop completo, ~148 millas). Autos con telescopios en la ruta = siempre frenar. El mapa muestra solo la ruta de ida.</div>
         </div>
       </div>
       <img src="yw-dia13-map.png" style="width:100%;border-radius:10px;display:block;margin-bottom:12px;">
 
       <div class="rutas-day">
+        <div class="rutas-day-bar" style="background:#16a34a"></div>
+        <div>
+          <div class="rutas-day-title" style="color:#86efac">Día 14 — Segunda pasada: Lamar + Hayden Valley + Mud Volcano</div>
+          <div class="rutas-day-text">Segunda y última noche en Gardiner. Amanecer en <strong>Lamar Valley</strong> (segunda pasada = doble de chances con lobos). <strong>Canyon Village</strong> (Artist Point). Tarde larga en <strong>Hayden Valley</strong> — manadas de bisontes, grizzly. <strong>Mud Volcano</strong> al volver hacia el norte. Noche Gardiner.</div>
+        </div>
+      </div>
+      <div style="height:12px;"></div>
+
+      <div class="rutas-day">
         <div class="rutas-day-bar" style="background:#f97316"></div>
         <div>
-          <div class="rutas-day-title" style="color:#fdba74">Día 14 — Canyon, Hayden Valley y salida sur a Jackson</div>
-          <div class="rutas-day-text">Salida ~6 AM. <strong>Mammoth</strong> → <strong>Canyon Village</strong> (Gran Cañón, Artist Point) → <strong>Hayden Valley</strong> (manadas de bisontes, grizzly) → <strong>West Thumb</strong> → <strong>South Entrance</strong> → Grand Teton NP → Jackson al mediodía.</div>
+          <div class="rutas-day-title" style="color:#fdba74">Día 15 — Salida a Jackson vía Canyon y Hayden</div>
+          <div class="rutas-day-text">Salida ~6 AM. <strong>Gardiner</strong> → <strong>Mammoth</strong> → <strong>Tower Junction</strong> → <strong>Canyon Village</strong> → <strong>Hayden Valley</strong> → <strong>South Entrance</strong> → Grand Teton NP → Jackson. 3h 25min por el parque + ~2h a Jackson. Check-in Rustic Inn.</div>
         </div>
       </div>
       <img src="yw-dia14-map.png" style="width:100%;border-radius:10px;display:block;">
