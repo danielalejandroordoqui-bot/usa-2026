@@ -130,6 +130,16 @@ body { display:flex; flex-direction:column; }
 .rutas-day-title { font-size:0.72rem; font-weight:700; margin-bottom:4px; }
 .rutas-day-text  { font-size:0.62rem; color:rgba(245,240,232,0.5); line-height:1.7; }
 .rutas-day-note  { font-family:monospace; font-size:0.52rem; color:rgba(245,240,232,0.25); margin-top:5px; }
+
+@media (max-width: 600px) {
+  .fbtn { font-size:0.7rem; padding:6px 11px; }
+  .popup { width:min(285px, calc(100vw - 20px)); }
+  .popup-title { font-size:0.9rem; }
+  .popup-body { font-size:0.8rem; }
+  .zbtn { width:40px; height:40px; font-size:1.2rem; }
+  .zooms { bottom:18px; right:18px; gap:6px; }
+  .legend { font-size:0.62rem; }
+}
 </style>
 </head>
 <body>
@@ -586,6 +596,7 @@ wrap.addEventListener('wheel', e => {
 }, { passive:false });
 
 wrap.addEventListener('touchstart', e => {
+  if (e.target.closest('.popup')) return;
   if (e.touches.length === 1) {
     drag = { sx: e.touches[0].clientX - tx, sy: e.touches[0].clientY - ty };
   } else if (e.touches.length === 2) {
@@ -596,6 +607,7 @@ wrap.addEventListener('touchstart', e => {
   }
 }, { passive:true });
 wrap.addEventListener('touchmove', e => {
+  if (e.target.closest('.popup')) return;
   e.preventDefault();
   if (e.touches.length === 1 && drag) {
     tx = e.touches[0].clientX - drag.sx;
