@@ -192,6 +192,10 @@
     .footer { background: var(--navy2); padding: 40px; text-align: center; color: rgba(245,240,232,0.4); font-size: 0.72rem; line-height: 2; }
     .footer strong { color: rgba(245,240,232,0.7); }
 
+    /* ─── SCROLL TO TOP ─── */
+    .scroll-top-btn { display: none; position: fixed; bottom: 24px; right: 16px; width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: #f5f0e8; border: 1px solid rgba(245,240,232,0.2); font-size: 1.1rem; cursor: pointer; z-index: 90; box-shadow: 0 4px 20px rgba(0,0,0,0.35); align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.22s; transform: translateY(8px); }
+    .scroll-top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
     /* ─── HAMBURGER + MOBILE SIDEBAR ─── */
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 11px 6px 11px 12px; font-size: 1.25rem; color: var(--navy); margin-left: auto; flex-shrink: 0; line-height: 1; }
     .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(14,31,51,0.55); z-index: 998; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
@@ -223,9 +227,11 @@
       .topnav .nav-link { display: none; }
       .hamburger { display: flex; }
 
-      /* hero stats: caben mejor en 320–375px */
-      .hero-stat { min-width: 70px; padding: 10px 10px; }
-      .hero-stat-num { font-size: 1.4rem; }
+      /* hero stats: fila única de 5, sin el AC/DC solo abajo */
+      .hero-stats { gap: 6px; flex-wrap: nowrap; }
+      .hero-stat { flex: 1 1 0; min-width: 0; padding: 8px 4px; }
+      .hero-stat-num { font-size: 1.25rem; }
+      .hero-stat-label { font-size: 0.5rem; letter-spacing: 0.3px; }
 
       /* day card: fuentes legibles */
       .day-title { font-size: 0.95rem; }
@@ -268,6 +274,9 @@
 
       /* footer */
       .footer { padding: 32px 20px; font-size: 0.75rem; }
+
+      /* botón volver arriba */
+      .scroll-top-btn { display: flex; }
     }
   </style>
 </head>
@@ -1208,6 +1217,8 @@ function checkPw(){
   23 días · 9 hoteles · 8 vuelos · 1 show AC/DC · infinitos bisontes 🦬
 </footer>
 
+<button id="scroll-top" class="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">↑</button>
+
 <script>
 const sections = document.querySelectorAll('section[id], #logistica, #auto-la, #pendientes');
 const navLinks = document.querySelectorAll('.nav-link');
@@ -1228,6 +1239,11 @@ function closeMobileMenu() {
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileMenu(); });
+
+const scrollTopBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => {
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+}, { passive: true });
 </script>
 
 </body>
