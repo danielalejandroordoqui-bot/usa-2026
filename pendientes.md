@@ -7,7 +7,7 @@
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
 - [ ] **eSIM datos ilimitados** — proveedor a definir (Holafly, Holasim u otro). Activar antes de abordar en BUE.
 - [ ] **App Store → región USA (desde el 24/6)** — suscripción Apple TV+ vence el 23/6. Recién el 24/6 se puede cambiar país/región en Ajustes → [nombre] → Multimedia y compras. Una vez en USA: buscar e instalar **Ticketmaster** (no disponible en Argentina). Después volver a Argentina.
-- [ ] **Apps a instalar:** Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo (registrarse antes) · GuideAlong · AllTrails · Turo (verificar licencia) · Yelp · Google Translate
+- [ ] **Apps a instalar:** Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo (registrarse antes) · GuideAlong · AllTrails · Yelp · Google Translate
 - [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
