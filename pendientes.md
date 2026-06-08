@@ -17,3 +17,9 @@
 - [ ] **Tarjetas de memoria** — formatear todas las tarjetas desde la cámara antes de viajar. Liberar el material existente al disco duro externo (o dejarlo en Lightroom hasta volver y decidir).
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
+
+---
+
+## Opcional — Seattle Sounders vs. Querétaro (9/8)
+
+- [ ] **Entradas partido Sounders** *(solo si deciden ir)* — Leagues Cup Fase 1, Lumen Field, 14:00h. Desde $31. Comprar antes del viaje en [Ticketmaster](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461) o [SeatGeek](https://seatgeek.com/seattle-sounders-fc-tickets/mls/2026-08-09-2-pm/18108049). Tickets digitales → QR en Ticketmaster app (ya la tienen en la lista de apps a instalar).
