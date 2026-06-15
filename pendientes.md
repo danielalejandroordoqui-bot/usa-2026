@@ -14,6 +14,7 @@
 - [ ] **RAV4 Jackson — solicitar extensión de devolución (julio)** — verificar que AA6336 siga en 13:58 y mandar mail a Economy Bookings para extender devolución de 10h a 13h el 18/8. Reserva B61007659. Mail ya redactado en memoria.
 - [ ] **Documentos digitales** — subir a Google Drive/WhatsApp: pasaportes, licencias, todas las reservas.
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
+- [ ] **Imprimir el Annual Pass de parques nacionales** — el mail de Recreation.gov tiene un botón para imprimir el pase. Conviene hacerlo antes de salir — en muchos parques no hay señal y no se puede mostrar el QR desde el celular.
 - [ ] **Tarjetas de memoria** — formatear todas las tarjetas desde la cámara antes de viajar. Liberar el material existente al disco duro externo (o dejarlo en Lightroom hasta volver y decidir).
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
