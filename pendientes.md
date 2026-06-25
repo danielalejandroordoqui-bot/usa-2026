@@ -14,13 +14,8 @@
 - [ ] **RAV4 Jackson — solicitar extensión de devolución (julio)** — verificar que AA6336 siga en 13:58 y mandar mail a Economy Bookings para extender devolución de 10h a 13h el 18/8. Reserva B61007659. Mail ya redactado en memoria.
 - [ ] **Documentos digitales** — subir a Google Drive/WhatsApp: pasaportes, licencias, todas las reservas.
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
-- [ ] **Imprimir el Annual Pass de parques nacionales** — el mail de Recreation.gov tiene un botón para imprimir el pase. Conviene hacerlo antes de salir — en muchos parques no hay señal y no se puede mostrar el QR desde el celular.
 - [ ] **Tarjetas de memoria** — formatear todas las tarjetas desde la cámara antes de viajar. Liberar el material existente al disco duro externo (o dejarlo en Lightroom hasta volver y decidir).
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
+- [ ] **Cuidado de Cheeky — coordinar con Patricia y Julián (o quien sea)** — armar un calendario cubriendo todos los días del 2/8 al 22/8 para que no quede ningún día sin cubrir. Definir quién va cada día, horario de visita, y cómo acceden al departamento. Dejarles todo lo necesario: agua, piedras, alimento y cualquier insumo que ella use.
+- [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
-
----
-
-## Opcional — Seattle Sounders vs. Querétaro (9/8)
-
-- [ ] **Entradas partido Sounders** *(solo si deciden ir)* — Leagues Cup Fase 1, Lumen Field, 14:00h. Desde $31. Comprar antes del viaje en [Ticketmaster](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461) o [SeatGeek](https://seatgeek.com/seattle-sounders-fc-tickets/mls/2026-08-09-2-pm/18108049). Tickets digitales → QR en Ticketmaster app (ya la tienen en la lista de apps a instalar).
