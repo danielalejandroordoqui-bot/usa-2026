@@ -5,7 +5,7 @@
 
 - [ ] **PID (Permiso Internacional de Conducir)** — ACA 51 y 9, Lun–Vie 9–16:30. $33.000 (no socio). 2 fotos 4×4 · DNI original + fotocopia · Licencia física (no MiArgentina) + fotocopia.
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
-- [ ] **eSIM datos ilimitados** — proveedor a definir (Holafly, Holasim u otro). Activar antes de abordar en BUE.
+- [x] **eSIM datos ilimitados ✅** — Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
 - [x] **App Store → región USA** — hecho en junio 2026 ✅ Ticketmaster instalada.
 - [x] **Apps Daniel — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile · Uber · GuideAlong (tours Yellowstone+Grand Teton comprados ✅) · AllTrails · Yelp · Google Translate · Apple Pay configurado. ParkMobile sin cuenta activa (requiere SIM USA para OTP).
 - [ ] **Apps Melisa — transporte y estacionamiento (WhatsApp enviado 27/6)** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile + Apple Wallet como método de pago.
