@@ -6,8 +6,9 @@
 - [ ] **PID (Permiso Internacional de Conducir)** — ACA 51 y 9, Lun–Vie 9–16:30. $33.000 (no socio). 2 fotos 4×4 · DNI original + fotocopia · Licencia física (no MiArgentina) + fotocopia.
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
 - [ ] **eSIM datos ilimitados** — proveedor a definir (Holafly, Holasim u otro). Activar antes de abordar en BUE.
-- [ ] **App Store → región USA (desde el 24/6)** — suscripción Apple TV+ vence el 23/6. Recién el 24/6 se puede cambiar país/región en Ajustes → [nombre] → Multimedia y compras. Una vez en USA: buscar e instalar **Ticketmaster** (no disponible en Argentina). Después volver a Argentina.
-- [ ] **Apps a instalar:** Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo (registrarse antes) · GuideAlong · AllTrails · Yelp · Google Translate
+- [x] **App Store → región USA** — hecho en junio 2026 ✅ Ticketmaster instalada.
+- [x] **Apps Daniel — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile · Uber · GuideAlong · AllTrails · Yelp · Google Translate · Apple Pay configurado. ParkMobile sin cuenta activa (requiere SIM USA para OTP).
+- [ ] **Apps Melisa — transporte y estacionamiento (WhatsApp enviado 27/6)** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile + Apple Wallet como método de pago.
 - [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
