@@ -16,3 +16,12 @@ Las ramas de feature (`claude/...`) son solo para desarrollo. El destino final s
 
 ## Idioma
 Todo el contenido del proyecto está en español. Las respuestas al usuario también en español.
+
+## Estado al 28/6/2026
+- **GuideAlong** — comprado y configurado. Tour "Yellowstone & Grand Teton National Parks" descargado (196 MB). Funciona con CarPlay: abrir app, tocar "Start Touring" y el GPS dispara los audios automáticamente mientras se maneja.
+- **eSIM** — Holafly 23 días ilimitados USA, comprada para Daniel y Melisa.
+- **Apps Daniel** — todas instaladas ✅ (Uber, Lyft, Waymo, SpotHero, ParkWhiz, ParkMobile, GuideAlong, AllTrails, Yelp, Google Translate, Apple Pay). ParkMobile sin cuenta activa — requiere SIM USA para OTP.
+- **Apps Melisa** — pendiente (WhatsApp enviado el 27/6).
+- **Ticketmaster** — instalada en ambos celulares ✅. Tickets AC/DC visibles en la app.
+- **Partido Sounders vs. Querétaro (9/8, 14:00h, Lumen Field)** — decisión postergada para cuando estén en Seattle. No es partido de alta demanda, entradas disponibles last-minute es lo esperable. Link Ticketmaster guardado en el itinerario.
+- **Google Maps offline / My Maps** — pendiente. Crear mapas por ciudad y parques, descargar zonas offline para CarPlay.
