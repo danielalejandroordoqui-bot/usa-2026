@@ -8,7 +8,7 @@
 - [x] **eSIM datos ilimitados ✅** — Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
 - [x] **App Store → región USA** — hecho en junio 2026 ✅ Ticketmaster instalada.
 - [x] **Apps Daniel — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile · Uber · GuideAlong (tours Yellowstone+Grand Teton comprados ✅) · AllTrails · Yelp · Google Translate · Apple Pay configurado. ParkMobile sin cuenta activa (requiere SIM USA para OTP).
-- [ ] **Apps Melisa — transporte y estacionamiento (WhatsApp enviado 27/6)** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile + Apple Wallet como método de pago.
+- [x] **Apps Melisa — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile + Apple Wallet como método de pago.
 - [ ] **Google Maps offline — My Maps por ciudad y parques** — crear mapas personalizados con los puntos del itinerario (hoteles, atracciones, restaurants) para cada ciudad y para Yellowstone/Grand Teton. Descargar las zonas para uso offline antes de salir. Usar conectado a CarPlay en el auto como backup de navegación donde no haya señal.
 - [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
