@@ -5,11 +5,9 @@
 
 - [ ] **PID (Permiso Internacional de Conducir)** — ACA 51 y 9, Lun–Vie 9–16:30. $33.000 (no socio). 2 fotos 4×4 · DNI original + fotocopia · Licencia física (no MiArgentina) + fotocopia.
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
-- [x] **eSIM datos ilimitados ✅** — Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
-- [x] **App Store → región USA** — hecho en junio 2026 ✅ Ticketmaster instalada.
-- [x] **Apps Daniel — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile · Uber · GuideAlong (tours Yellowstone+Grand Teton comprados ✅) · AllTrails · Yelp · Google Translate · Apple Pay configurado. ParkMobile sin cuenta activa (requiere SIM USA para OTP).
-- [x] **Apps Melisa — todas instaladas ✅** — Lyft · Waymo · SpotHero · ParkWhiz · ParkMobile + Apple Wallet como método de pago.
-- [ ] **Google Maps offline — My Maps por ciudad y parques** — crear mapas personalizados con los puntos del itinerario (hoteles, atracciones, restaurants) para cada ciudad y para Yellowstone/Grand Teton. Descargar las zonas para uso offline antes de salir. Usar conectado a CarPlay en el auto como backup de navegación donde no haya señal.
+- [ ] **eSIM datos ilimitados** — proveedor a definir (Holafly, Holasim u otro). Activar antes de abordar en BUE.
+- [ ] **App Store → región USA (desde el 24/6)** — suscripción Apple TV+ vence el 23/6. Recién el 24/6 se puede cambiar país/región en Ajustes → [nombre] → Multimedia y compras. Una vez en USA: buscar e instalar **Ticketmaster** (no disponible en Argentina). Después volver a Argentina.
+- [ ] **Apps a instalar:** Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo (registrarse antes) · GuideAlong · AllTrails · Yelp · Google Translate
 - [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
@@ -21,3 +19,4 @@
 - [ ] **Cuidado de Cheeky — coordinar con Patricia y Julián (o quien sea)** — armar un calendario cubriendo todos los días del 2/8 al 22/8 para que no quede ningún día sin cubrir. Definir quién va cada día, horario de visita, y cómo acceden al departamento. Dejarles todo lo necesario: agua, piedras, alimento y cualquier insumo que ella use.
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
+- [ ] **Challenger LA (Turo) — seguimiento** — el host avisó el 29/6 que el auto sufrió un accidente (otro guest). El claim está abierto; la reparación puede tomar semanas. Puede que esté o no para el 2/8. Esperar novedades del host; si cancela, Turo cubre con reemplazo.
