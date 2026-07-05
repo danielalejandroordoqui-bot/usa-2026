@@ -86,8 +86,8 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 **Día 8:** Mañana libre. Opcional: Warm Puppy Café. Devolver Ram en STS 12 PM → AS1322 12:52 PM → SEA.
 
 ### Seattle (8–12 ago)
-**Día 8:** Link Light Rail SEA→centro ($3, 45 min). Pike Place Market · primera Starbucks · Waterfront · Pioneer Square.
-**Día 9:** MoPOP · Space Needle (combo ticket) · Chihuly Garden · Capitol Hill. *Opcional: ⚽ Seattle Sounders vs. Querétaro FC — Leagues Cup, Lumen Field, 14:00h. Encaja perfecto: mañana en Seattle Center (MoPOP/Needle/Chihuly) → estadio a las 13:30 → partido → Capitol Hill de tarde.*
+**Día 8:** Link Light Rail SEA→centro ($3, 45 min). Top Pot Doughnuts (flagship, 5th Ave & Blanchard) de camino. Pike Place Market · primera Starbucks · Waterfront · Pioneer Square.
+**Día 9:** Kerry Park · MoPOP · Space Needle (combo ticket) · Chihuly Garden — resolver antes del mediodía. **Seattle Sounders FC vs. Querétaro FC (Leagues Cup), Lumen Field, gates 1 PM / kickoff 2 PM** — Light Rail Westlake→Stadium (~15 min). [Tickets](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461). Noche: Capitol Hill (cena, bares) + Elliott Bay Book Company.
 **Día 10:** Acuario · Central Saloon · The Crocodile.
 **Día 11:** Gas Works Park (AIC) · Viretta Park (Nirvana) · Moore Theatre · Fremont Troll · Ballard. *Check-in online SEA→BZN esta noche — vuelo mañana 7:06 AM.*
 **Día 12:** Checkout hotel 5 AM · Uber al aeropuerto ($35). AS2141 7:06 AM → BZN 9:46 AM.

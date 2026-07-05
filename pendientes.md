@@ -3,7 +3,7 @@
 
 ---
 
-- [ ] **PID (Permiso Internacional de Conducir)** — ACA 51 y 9, Lun–Vie 9–16:30. $33.000 (no socio). 2 fotos 4×4 · DNI original + fotocopia · Licencia física (no MiArgentina) + fotocopia.
+- [x] **PID (Permiso Internacional de Conducir)** — ✅ hecho, de las primeras tareas resueltas.
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
 - [x] **eSIM datos ilimitados** — ✅ Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
 - [x] **App Store → región USA / Ticketmaster** — ✅ hecho, Ticketmaster instalada en ambos celulares.
