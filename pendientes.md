@@ -5,9 +5,10 @@
 
 - [ ] **PID (Permiso Internacional de Conducir)** — ACA 51 y 9, Lun–Vie 9–16:30. $33.000 (no socio). 2 fotos 4×4 · DNI original + fotocopia · Licencia física (no MiArgentina) + fotocopia.
 - [ ] **Seguros de viaje** — obra social Mercado Libre. Gestionar **a partir del 2/7/2026** (30 días antes del vuelo, no antes).
-- [ ] **eSIM datos ilimitados** — proveedor a definir (Holafly, Holasim u otro). Activar antes de abordar en BUE.
-- [ ] **App Store → región USA (desde el 24/6)** — suscripción Apple TV+ vence el 23/6. Recién el 24/6 se puede cambiar país/región en Ajustes → [nombre] → Multimedia y compras. Una vez en USA: buscar e instalar **Ticketmaster** (no disponible en Argentina). Después volver a Argentina.
-- [ ] **Apps a instalar:** Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo (registrarse antes) · GuideAlong · AllTrails · Yelp · Google Translate
+- [x] **eSIM datos ilimitados** — ✅ Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
+- [x] **App Store → región USA / Ticketmaster** — ✅ hecho, Ticketmaster instalada en ambos celulares.
+- [x] **Apps a instalar:** ✅ instaladas en ambos celulares — Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo · GuideAlong (+ tours Yellowstone/Grand Teton comprados y descargados) · AllTrails · Yelp · Google Translate.
+- [ ] **Google Maps offline — My Maps por ciudad y parques** — crear mapas personalizados (LA, SF, Seattle, Jackson Hole + Yellowstone/Grand Teton) y descargar zonas offline antes de salir de BUE.
 - [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
@@ -20,3 +21,4 @@
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
 - [ ] **Challenger LA (Turo) — seguimiento** — el host avisó el 29/6 que el auto sufrió un accidente (otro guest). El claim está abierto; la reparación puede tomar semanas. Puede que esté o no para el 2/8. Esperar novedades del host; si cancela, Turo cubre con reemplazo.
+- [ ] **Comprar tickets Sounders FC vs. Querétaro FC** — Leagues Cup, Lumen Field, domingo 9/8, gates 1 PM / kickoff 2 PM. Link en `links.md` (Ticketmaster) — comprar con anticipación antes de que suba el precio o se agote.
