@@ -9,7 +9,7 @@
 - [x] **App Store → región USA / Ticketmaster** — ✅ hecho, Ticketmaster instalada en ambos celulares.
 - [x] **Apps a instalar:** ✅ instaladas en ambos celulares — Uber · Lyft · SpotHero/ParkWhiz · ParkMobile · Waymo · GuideAlong (+ tours Yellowstone/Grand Teton comprados y descargados) · AllTrails · Yelp · Google Translate.
 - [ ] **Google Maps offline — My Maps por ciudad y parques** — crear mapas personalizados (LA, SF, Seattle, Jackson Hole + Yellowstone/Grand Teton) y descargar zonas offline antes de salir de BUE.
-- [ ] **Adaptador de enchufes** — Tipo A (2 patas planas). Opción confirmada: adaptador universal 2 USB + 2 Tipo-C 20W (MercadoLibre). Voltaje 100–250V, no necesita transformador.
+- [x] **Adaptador de enchufes** — ✅ comprado. Tipo A (2 patas planas), adaptador universal 2 USB + 2 Tipo-C 20W. Voltaje 100–250V, no necesita transformador. Recordar meterlo en la valija.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
 - [ ] **RAV4 Jackson — solicitar extensión de devolución (julio)** — verificar que AA6336 siga en 13:58 y mandar mail a Economy Bookings para extender devolución de 10h a 13h el 18/8. Reserva B61007659. Mail ya redactado en memoria.
