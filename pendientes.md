@@ -15,7 +15,7 @@
 - [ ] **RAV4 Jackson — solicitar extensión de devolución (julio)** — verificar que AA6336 siga en 13:58 y mandar mail a Economy Bookings para extender devolución de 10h a 13h el 18/8. Reserva B61007659. Mail ya redactado en memoria.
 - [ ] **Documentos digitales** — subir a Google Drive/WhatsApp: pasaportes, licencias, todas las reservas.
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
-- [ ] **Tarjetas de memoria** — formatear todas las tarjetas desde la cámara antes de viajar. Liberar el material existente al disco duro externo (o dejarlo en Lightroom hasta volver y decidir).
+- [x] **Tarjetas de memoria** — ✅ hecho, material liberado y tarjetas formateadas.
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
 - [ ] **Adaptador SD a USB-C** — para descargar las fotos de la cámara a celular/laptop durante el viaje sin necesidad de una compu con lector SD integrado.
 - [ ] **Cuidado de Cheeky — coordinar con Patricia y Julián (o quien sea)** — armar un calendario cubriendo todos los días del 2/8 al 22/8 para que no quede ningún día sin cubrir. Definir quién va cada día, horario de visita, y cómo acceden al departamento. Dejarles todo lo necesario: agua, piedras, alimento y cualquier insumo que ella use.
