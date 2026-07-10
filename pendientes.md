@@ -17,6 +17,7 @@
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
 - [ ] **Tarjetas de memoria** — formatear todas las tarjetas desde la cámara antes de viajar. Liberar el material existente al disco duro externo (o dejarlo en Lightroom hasta volver y decidir).
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
+- [ ] **Adaptador SD a USB-C** — para descargar las fotos de la cámara a celular/laptop durante el viaje sin necesidad de una compu con lector SD integrado.
 - [ ] **Cuidado de Cheeky — coordinar con Patricia y Julián (o quien sea)** — armar un calendario cubriendo todos los días del 2/8 al 22/8 para que no quede ningún día sin cubrir. Definir quién va cada día, horario de visita, y cómo acceden al departamento. Dejarles todo lo necesario: agua, piedras, alimento y cualquier insumo que ella use.
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
