@@ -16,6 +16,7 @@
 - [ ] **Documentos digitales** — subir a Google Drive/WhatsApp: pasaportes, licencias, todas las reservas.
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
 - [x] **Tarjetas de memoria** — ✅ hecho, material liberado y tarjetas formateadas.
+- [ ] **Café instantáneo + termo — para las salidas de madrugada en Gardiner** — en Gardiner nada abre antes de las 6 AM (Cowboy Up Coffee abre justo a las 6, no llega para la salida 5:45 AM del Día 14). Llevar sobres de café instantáneo y armar un termo la noche anterior (o usar la cafetera de la habitación si tiene) para no salir sin café.
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
 - [x] **Adaptador SD a USB-C** — ✅ comprado, recordar meterlo en la valija al empacar.
 - [ ] **Cuidado de Cheeky — coordinar con Patricia y Julián (o quien sea)** — armar un calendario cubriendo todos los días del 2/8 al 22/8 para que no quede ningún día sin cubrir. Definir quién va cada día, horario de visita, y cómo acceden al departamento. Dejarles todo lo necesario: agua, piedras, alimento y cualquier insumo que ella use. Calendario en curso (WIP): https://danielalejandroordoqui-bot.github.io/cheeky-cuidado/
