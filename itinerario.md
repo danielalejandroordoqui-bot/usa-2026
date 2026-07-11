@@ -87,7 +87,7 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 
 ### Seattle (8–12 ago)
 **Día 8:** Link Light Rail SEA→centro ($3, 45 min). Top Pot Doughnuts (flagship, 5th Ave & Blanchard) de camino. Pike Place Market · primera Starbucks · Waterfront · Pioneer Square.
-**Día 9:** Kerry Park (mañana) → 11:15 AM Light Rail Westlake→Stadium (~15 min) → **Seattle Sounders FC vs. Querétaro FC (Leagues Cup), Lumen Field, gates 11:30 AM / kickoff 12:30 PM**, termina ~2:30-3 PM. [Tickets](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461). Vuelta a Seattle Center: MoPOP · Space Needle (combo ticket) · Chihuly Garden (última entrada 7 PM) · International Fountain, con calma. Noche: Capitol Hill (cena, bares) + Elliott Bay Book Company.
+**Día 9:** Kerry Park (mañana) → 11:15 AM Light Rail Westlake→Stadium (~5 min) → **Seattle Sounders FC vs. Querétaro FC (Leagues Cup), Lumen Field, gates 11:30 AM / kickoff 12:30 PM**, termina ~2:30-3 PM. [Tickets](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461). Vuelta a Seattle Center: MoPOP · Space Needle (combo ticket) · Chihuly Garden (última entrada 7 PM) · International Fountain, con calma. Noche: Capitol Hill (cena, bares) + Elliott Bay Book Company.
 **Día 10:** Acuario · Central Saloon · The Crocodile.
 **Día 11:** Gas Works Park (AIC) · Viretta Park (Nirvana) · Moore Theatre · Fremont Troll · Ballard. *Check-in online SEA→BZN esta noche — vuelo mañana 7:06 AM.*
 **Día 12:** Checkout hotel 5 AM · Uber al aeropuerto ($35). AS2141 7:06 AM → BZN 9:46 AM.
