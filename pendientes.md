@@ -12,7 +12,7 @@
 - [x] **Adaptador de enchufes** — ✅ comprado. Tipo A (2 patas planas), adaptador universal 2 USB + 2 Tipo-C 20W. Voltaje 100–250V, no necesita transformador. Recordar meterlo en la valija.
 - [ ] **Avisar al banco** — notificar VISA Galicia de consumos en USA del 2/8 al 22/8.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
-- [ ] **RAV4 Jackson — solicitar extensión de devolución (julio)** — verificar que AA6336 siga en 13:58 y mandar mail a Economy Bookings para extender devolución de 10h a 13h el 18/8. Reserva B61007659. Mail ya redactado en memoria.
+- [ ] **RAV4 Jackson — extensión de devolución: enviada, esperando respuesta** — vuelo AA6336 confirmado en 13:58. Se envió solicitud vía formulario de Economy Bookings (11/7) pidiendo extender la devolución del 18/8 de 10 AM a **12:30 PM** (no 13h, para dejar colchón antes del vuelo). Reserva B61007659, supplier Budget (devolución en el counter del aeropuerto JAC, 24hs). Confirmación de recepción enviada a daordoqui@gmail.com. Falta: respuesta de Budget/Economy Bookings confirmando el nuevo horario (auto-reply indica 2-4 días hábiles).
 - [ ] **Documentos digitales** — subir a Google Drive/WhatsApp: pasaportes, licencias, todas las reservas.
 - [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
 - [x] **Tarjetas de memoria** — ✅ hecho, material liberado y tarjetas formateadas.
