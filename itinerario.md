@@ -87,7 +87,7 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 
 ### Seattle (8–12 ago)
 **Día 8:** Link Light Rail SEA→centro ($3, 45 min). Top Pot Doughnuts (flagship, 5th Ave & Blanchard) de camino. Pike Place Market · primera Starbucks · Waterfront · Pioneer Square.
-**Día 9:** Kerry Park · MoPOP · Space Needle (combo ticket) · Chihuly Garden — resolver y salir hacia Westlake Station antes de las 11:15 AM. **Seattle Sounders FC vs. Querétaro FC (Leagues Cup), Lumen Field, gates 11:30 AM / kickoff 12:30 PM** — Light Rail Westlake→Stadium (~15 min). [Tickets](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461). Noche: Capitol Hill (cena, bares) + Elliott Bay Book Company.
+**Día 9:** Kerry Park (mañana) → 11:15 AM Light Rail Westlake→Stadium (~15 min) → **Seattle Sounders FC vs. Querétaro FC (Leagues Cup), Lumen Field, gates 11:30 AM / kickoff 12:30 PM**, termina ~2:30-3 PM. [Tickets](https://www.ticketmaster.com/seattle-sounders-fc-vs-queretaro-fc-seattle-washington-08-09-2026/event/0F006383C4678461). Vuelta a Seattle Center: MoPOP · Space Needle (combo ticket) · Chihuly Garden (última entrada 7 PM) · International Fountain, con calma. Noche: Capitol Hill (cena, bares) + Elliott Bay Book Company.
 **Día 10:** Acuario · Central Saloon · The Crocodile.
 **Día 11:** Gas Works Park (AIC) · Viretta Park (Nirvana) · Moore Theatre · Fremont Troll · Ballard. *Check-in online SEA→BZN esta noche — vuelo mañana 7:06 AM.*
 **Día 12:** Checkout hotel 5 AM · Uber al aeropuerto ($35). AS2141 7:06 AM → BZN 9:46 AM.
@@ -109,6 +109,6 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 ### LA — cierre (18–22 ago)
 **Día 18:** Llegada LAX 15:27. Uber/Lyft al Ocean Park Hotel (~30-45 min). Lewis entrega Honda Accord ~16:30-17h (avisar a Lewis el día anterior). Fotografiar daños.
 **Día 19:** Santa Mónica Pier · Venice Beach · Muscle Beach · Abbott Kinney · Canales de Venice.
-**Día 20:** El Matador Beach (Malibu) · Getty Center (reservar online, parking $20) · LACMA + La Brea Tar Pits.
+**Día 20:** El Matador Beach (Malibu) · Getty Center (reservar online, parking $20) · LACMA + La Brea Tar Pits. Opcional noche: Chargers vs. 49ers (NFL preseason), SoFi Stadium, kickoff 7 PM — [tickets](https://www.sofistadium.com/events/detail/chargers-49ers-preseason-2026).
 **Día 21:** Manhattan Beach · El Segundo · Compras finales (Citadel Outlets / Ontario Mills / Walmart/Ross para valija). Traslado a Studio 6 Gardena. Empacar + pesar valija (máx 23 kg). *Check-in online LAX→BUE esta noche.*
 **Día 22:** Lewis retira Accord en Studio 6 (dejarlo en parking). Salir hotel 8 AM → LAX. LA2479 11:35 AM → LIM → EZE (aterrizaje 23/8 6:10 AM).
