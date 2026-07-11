@@ -109,6 +109,6 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 ### LA — cierre (18–22 ago)
 **Día 18:** Llegada LAX 15:27. Uber/Lyft al Ocean Park Hotel (~30-45 min). Lewis entrega Honda Accord ~16:30-17h (avisar a Lewis el día anterior). Fotografiar daños.
 **Día 19:** Santa Mónica Pier · Venice Beach · Muscle Beach · Abbott Kinney · Canales de Venice.
-**Día 20:** El Matador Beach (Malibu) · Getty Center (reservar online, parking $20) · LACMA + La Brea Tar Pits. Opcional noche: Chargers vs. 49ers (NFL preseason), SoFi Stadium, kickoff 7 PM — [tickets](https://www.sofistadium.com/events/detail/chargers-49ers-preseason-2026).
+**Día 20:** El Matador Beach (Malibu) · Getty Center (reservar online, parking $20) · LACMA + La Brea Tar Pits. Opcional noche: Chargers vs. 49ers (NFL preseason), SoFi Stadium, kickoff 7 PM — [tickets](https://www.ticketmaster.com/event/0A00646BA4E2E54B?brand=chargers&artistid=806013&landing=s&wt.mc_id=NFL_TEAM_LAC_BASE_HOME_PR1&utm_source=sofi&utm_medium=site&utm_campaign=).
 **Día 21:** Manhattan Beach · El Segundo · Compras finales (Citadel Outlets / Ontario Mills / Walmart/Ross para valija). Traslado a Studio 6 Gardena. Empacar + pesar valija (máx 23 kg). *Check-in online LAX→BUE esta noche.*
 **Día 22:** Lewis retira Accord en Studio 6 (dejarlo en parking). Salir hotel 8 AM → LAX. LA2479 11:35 AM → LIM → EZE (aterrizaje 23/8 6:10 AM).
