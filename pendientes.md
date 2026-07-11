@@ -13,8 +13,7 @@
 - [x] **Avisar al banco** — ✅ configurado el aviso de viaje para las tarjetas Galicia desde el home banking.
 - [ ] **Cash en dólares** — ~$200–300 USD. Propinas: 18–20% restaurantes · $1–2 por bebida en bares · $2–5/noche hotel · ~10% Uber opcional.
 - [ ] **RAV4 Jackson — extensión de devolución: enviada, esperando respuesta** — vuelo AA6336 confirmado en 13:58. Se envió solicitud vía formulario de Economy Bookings (11/7) pidiendo extender la devolución del 18/8 de 10 AM a **12:30 PM** (no 13h, para dejar colchón antes del vuelo). Reserva B61007659, supplier Budget (devolución en el counter del aeropuerto JAC, 24hs). Confirmación de recepción enviada a daordoqui@gmail.com. Falta: respuesta de Budget/Economy Bookings confirmando el nuevo horario (auto-reply indica 2-4 días hábiles).
-- [x] **Documentos digitales** — ✅ carpeta de Drive organizada (Vuelos, Hoteles, Autos, Parques y Eventos) con PDFs reales de reservas y resúmenes de las que no tenían adjunto. Falta solo subir fotos de pasaportes/licencias/PID a "Documentos Personales".
-- [ ] **Carpeta impresa** — pasajes internacionales, vuelos internos, hospedajes, tickets (AC/DC, parques), Annual Pass.
+- [x] **Documentos digitales** — ✅ cerrado. Carpeta de Drive armada con las reservas (parcial, algunas como resumen en vez de PDF real), pero Daniel ya tiene todo accesible por mail/apps igual, así que no hace falta perfeccionarla más. Pasaporte y PID se llevan físicos (ya cubierto en la mochila de mano), no se digitalizan.
 - [x] **Tarjetas de memoria** — ✅ hecho, material liberado y tarjetas formateadas.
 - [ ] **Kit de limpieza de cámara** — llevar balón de aire y pincel de limpieza de lentes. Con tantos días de uso en polvo/arena/viento es imprescindible; sin esto la alternativa son remeras y trapos que rayan el lente.
 - [x] **Adaptador SD a USB-C** — ✅ comprado, recordar meterlo en la valija al empacar.
