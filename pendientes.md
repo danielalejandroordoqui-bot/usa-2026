@@ -15,11 +15,11 @@
   - Gorras
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$200–300, para propinas y otros) — ⚠️ falta conseguir
-- [ ] **Google Maps guardado — listas por ciudad (con internet, no offline):** mismo sistema que los parques ("Guardado" en Google Maps normal, no My Maps), pero sin descargar área offline — en las ciudades hay señal de sobra con Holafly. Se van armando de a una por sesión de Cowork para no agotar el límite:
-  - [x] Los Ángeles — ✅ 38 lugares guardados y verificados (24 exactos, 14 con variante — "The Last Bookstore" y "SoFi Stadium" quedaron con nombre en español, confirmado que son el lugar correcto).
-  - [ ] San Francisco
-  - [ ] Santa Rosa
-  - [ ] Seattle
+- [x] **Google Maps guardado — listas por ciudad** — ✅ resuelto. Mismo sistema que los parques ("Guardado" en Google Maps normal, no My Maps), pero sin descargar área offline — en las ciudades hay señal de sobra con Holafly. Las 4 listas armadas y verificadas vía Cowork, con link a cada una insertado en `index.html`:
+  - [x] Los Ángeles — 38 lugares
+  - [x] San Francisco — 27 lugares
+  - [x] Santa Rosa — 4 lugares
+  - [x] Seattle — 27 lugares
 - [ ] **Seguros de viaje — solicitado, esperando respuesta** — OSDE, por convenio laboral. Trámite iniciado (11/7); en espera de novedades, se estiman esta semana.
 - [x] **Google Maps offline** — ✅ resuelto. Ciudades (LA/SF/Santa Rosa/Seattle) sin necesidad de offline, Holafly cubre señal urbana. Para el corredor de parques (Gardiner-Yellowstone-Cooke City-Grand Teton-Jackson): lista de 58 lugares guardada en Google Maps ("Guardado", no My Maps) vía Cowork, más zona offline descargada con auto-actualización activada.
 - [ ] **RAV4 Jackson — extensión de devolución: enviada, esperando respuesta** — vuelo AA6336 confirmado en 13:58. Se envió solicitud vía formulario de Economy Bookings (11/7) pidiendo extender la devolución del 18/8 de 10 AM a **12:30 PM** (no 13h, para dejar colchón antes del vuelo). Reserva B61007659, supplier Budget (devolución en el counter del aeropuerto JAC, 24hs). Confirmación de recepción enviada a daordoqui@gmail.com. Falta: respuesta de Budget/Economy Bookings confirmando el nuevo horario (auto-reply indica 2-4 días hábiles).
