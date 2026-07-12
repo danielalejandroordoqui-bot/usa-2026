@@ -169,6 +169,11 @@
     .check-item.done .check-status { background: var(--green-light); color: var(--green); }
     .check-item.pending .check-status { background: var(--amber-light); color: var(--amber); }
     .check-body { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+    .check-body strong.check-group { display: block; color: var(--navy); margin: 10px 0 4px; }
+    .check-body strong.check-group:first-child { margin-top: 0; }
+    .check-list { list-style: none; margin: 0 0 4px; padding: 0; }
+    .check-list li { padding-left: 14px; position: relative; }
+    .check-list li::before { content: '•'; position: absolute; left: 0; color: var(--terracotta); }
 
     /* ─── ZONES ─── */
     .zones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
@@ -1116,10 +1121,26 @@ function checkPw(){
         <span class="check-status">Pendiente</span>
       </div>
       <div class="check-body">
-        <strong>Documentos (mochila de mano):</strong> DNI · Pasaporte (con visa) · Libreta celeste PID · Carnet de conducir argentino<br><br>
-        <strong>Fotografía:</strong> Tarjetas de memoria ✅ formateadas · Adaptador SD a USB-C ✅ comprado · Kit de limpieza de cámara (balón de aire + pincel) ✅ ya tiene<br><br>
-        <strong>Otros:</strong> Cargador de celular · Gorras · Adaptador de enchufes (2 USB + 2 Tipo-C) ✅ comprado<br><br>
-        <strong>Efectivo en dólares</strong> ⚠️ falta conseguir — ~$200–300 USD para propinas (18–20% restaurantes, $1–2/bebida en bares, $2–5/noche housekeeping, ~10–15% Uber/Lyft) y emergencias donde no acepten tarjeta.
+        <strong class="check-group">Documentos (mochila de mano)</strong>
+        <ul class="check-list">
+          <li>DNI</li>
+          <li>Pasaporte (con visa)</li>
+          <li>Libreta celeste PID</li>
+          <li>Carnet de conducir argentino</li>
+        </ul>
+        <strong class="check-group">Fotografía</strong>
+        <ul class="check-list">
+          <li>Tarjetas de memoria ✅ formateadas</li>
+          <li>Adaptador SD a USB-C ✅ comprado</li>
+          <li>Kit de limpieza de cámara (balón de aire + pincel) ✅ ya tiene</li>
+        </ul>
+        <strong class="check-group">Otros</strong>
+        <ul class="check-list">
+          <li>Cargador de celular</li>
+          <li>Gorras</li>
+          <li>Adaptador de enchufes (2 USB + 2 Tipo-C) ✅ comprado</li>
+          <li>Efectivo en dólares ⚠️ falta conseguir — ~$200–300 USD para propinas (18–20% restaurantes, $1–2/bebida en bares, $2–5/noche housekeeping, ~10–15% Uber/Lyft) y emergencias donde no acepten tarjeta</li>
+        </ul>
       </div>
     </div>
 
