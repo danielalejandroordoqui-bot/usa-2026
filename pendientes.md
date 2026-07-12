@@ -16,7 +16,7 @@
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$200–300, para propinas y otros) — ⚠️ falta conseguir
 - [ ] **Google Maps guardado — listas por ciudad (con internet, no offline):** mismo sistema que los parques ("Guardado" en Google Maps normal, no My Maps), pero sin descargar área offline — en las ciudades hay señal de sobra con Holafly. Se van armando de a una por sesión de Cowork para no agotar el límite:
-  - [ ] Los Ángeles
+  - [x] Los Ángeles — ✅ 38 lugares guardados (24 exactos, 14 con variante; 2 a verificar: "The Last Bookstore" y "SoFi Stadium" guardaron nombres raros, pendiente de confirmar que el pin cae en la dirección correcta)
   - [ ] San Francisco
   - [ ] Santa Rosa
   - [ ] Seattle
