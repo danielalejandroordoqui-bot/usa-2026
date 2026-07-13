@@ -51,7 +51,7 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 
 | Fechas | Auto | Retiro | Devolución |
 |---|---|---|---|
-| 2–4/8 | Dodge Challenger 2023 · Turo #55808650 | Delivery hotel 2/8 13h | Dejar en parking hotel 4/8 7 AM (host retira solo) |
+| 2–3/8 | Dodge Challenger 2023 · Turo #59295187 (Jackie) | Delivery hotel 2/8 11:30 AM | Dejar en parking hotel 3/8 23:30 (host retira solo) |
 | 7–8/8 | Hertz Dodge Ram 1500 | SFO 7/8 9 AM (ir en BART desde hotel, ~35 min $10) | STS 8/8 12 PM |
 | 12–18/8 | Toyota RAV4 · Economy Bookings B61007659 | BZN 12/8 10 AM | JAC 18/8 10 AM |
 | 18–22/8 | Honda Accord 2018 · Turo #55824109 (Lewis) | Delivery Ocean Park Hotel 18/8 16h | Lewis retira en Studio 6 Gardena 22/8 mañana |
@@ -71,9 +71,9 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 ## Día a día
 
 ### LA — llegada (2–4 ago)
-**Día 2:** Llegada LAX 7:50 AM. Uber/Lyft al hotel (LAX-it, no en terminal). Reserva arranca el 1/8 → early check-in confirmado ✅ por el hotel (Booking), entrás directo a la habitación al llegar. Challenger 13h. Alfred Coffee o Urth Caffé → Rodeo Drive + Beverly Gardens Park → Beverly Hills Hotel (drive-by, Sunset Blvd) → mansiones Holmby Hills/Bel Air → Sunset Strip (Whisky a Go Go · The Roxy · Viper Room) → Rainbow Bar & Grill (cena).
-**Día 3:** The Last Bookstore (Downtown, 453 S Spring St, 10 AM) → Walk of Fame (estrella Ozzy) · Teatro Chino · Amoeba Music (6200 Hollywood Blvd) → Guitar Center (7425 W Sunset Blvd — Rock Walk) → **Kavat Coffee, Eagle Rock (1638 Colorado Blvd) — café de Serj Tankian (System of a Down)** → Griffith Observatory (tarde, de vuelta) → Mulholland Drive → Laurel Canyon (bajada histórica) → cena West Hollywood. *Check-in online LAX→SFO esta noche.*
-**Día 4:** Dejar Challenger en parking 7 AM. Uber al aeropuerto. AS1607 10:03 AM → SFO.
+**Día 2:** Llegada LAX 7:50 AM. Uber/Lyft al hotel (LAX-it, no en terminal). Reserva arranca el 1/8 → early check-in confirmado ✅ por el hotel (Booking), entrás directo a la habitación al llegar. Challenger 11:30 AM. Alfred Coffee o Urth Caffé → Rodeo Drive + Beverly Gardens Park → Beverly Hills Hotel (drive-by, Sunset Blvd) → mansiones Holmby Hills/Bel Air → Sunset Strip (Whisky a Go Go · The Roxy · Viper Room) → Rainbow Bar & Grill (cena).
+**Día 3:** The Last Bookstore (Downtown, 453 S Spring St, 10 AM) → Walk of Fame (estrella Ozzy) · Teatro Chino · Amoeba Music (6200 Hollywood Blvd) → Guitar Center (7425 W Sunset Blvd — Rock Walk) → **Kavat Coffee, Eagle Rock (1638 Colorado Blvd) — café de Serj Tankian (System of a Down)** → Griffith Observatory (tarde, de vuelta) → Mulholland Drive → Laurel Canyon (bajada histórica) → cena West Hollywood → volver al hotel y dejar el Challenger en el parking antes de las 23:30 (host retira solo). *Check-in online LAX→SFO esta noche.*
+**Día 4:** Uber al aeropuerto. AS1607 10:03 AM → SFO.
 
 ### San Francisco (4–7 ago)
 **Día 4:** BART desde SFO al centro ($10, 30 min). Fisherman's Wharf · Ghirardelli Square · Lombard Street (bajar a pie, foto) · North Beach · Caffe Trieste (601 Vallejo St) · City Lights · Coit Tower · Chinatown.
