@@ -71,7 +71,7 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 ## Día a día
 
 ### LA — llegada (2–4 ago)
-**Día 2:** Llegada LAX 7:50 AM. Uber/Lyft al hotel (LAX-it, no en terminal). Reserva arranca el 1/8 → pedir early check-in al llegar (buenas chances de entrar directo); si no, dejar valijas. Challenger 13h. Alfred Coffee o Urth Caffé → Rodeo Drive + Beverly Gardens Park → Beverly Hills Hotel (drive-by, Sunset Blvd) → mansiones Holmby Hills/Bel Air → Sunset Strip (Whisky a Go Go · The Roxy · Viper Room) → Rainbow Bar & Grill (cena).
+**Día 2:** Llegada LAX 7:50 AM. Uber/Lyft al hotel (LAX-it, no en terminal). Reserva arranca el 1/8 → early check-in confirmado ✅ por el hotel (Booking), entrás directo a la habitación al llegar. Challenger 13h. Alfred Coffee o Urth Caffé → Rodeo Drive + Beverly Gardens Park → Beverly Hills Hotel (drive-by, Sunset Blvd) → mansiones Holmby Hills/Bel Air → Sunset Strip (Whisky a Go Go · The Roxy · Viper Room) → Rainbow Bar & Grill (cena).
 **Día 3:** The Last Bookstore (Downtown, 453 S Spring St, 10 AM) → Walk of Fame (estrella Ozzy) · Teatro Chino · Amoeba Music (6200 Hollywood Blvd) → Guitar Center (7425 W Sunset Blvd — Rock Walk) → **Kavat Coffee, Eagle Rock (1638 Colorado Blvd) — café de Serj Tankian (System of a Down)** → Griffith Observatory (tarde, de vuelta) → Mulholland Drive → Laurel Canyon (bajada histórica) → cena West Hollywood. *Check-in online LAX→SFO esta noche.*
 **Día 4:** Dejar Challenger en parking 7 AM. Uber al aeropuerto. AS1607 10:03 AM → SFO.
 
