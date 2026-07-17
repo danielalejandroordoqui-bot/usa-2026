@@ -103,7 +103,7 @@ BUE (1/8) → LA (2/8) → SF (4/8) → Santa Rosa (7/8) → Seattle (8/8) → B
 ### Jackson Hole (15–18 ago)
 **Día 15 (tarde):** Town Square (foto arcos de astas) · Jackson Mercantile · Kemo Sabe (sombreros/botas) · Million Dollar Cowboy Bar · Cowboy Coffee Co. (125 N. Cache St, 6 AM–6 PM).
 **Día 16:** Oxbow Bend 5:30 AM · Antelope Flats · Snake River Overlook · Mormon Row · Moose-Wilson Road (atardecer). Mediodía: pueblo si no se hizo el 15. En Teton hay estaciones cerca (Moose, Dornans) — no hace falta cargar llena a la noche, alcanza con no bajar de medio tanque.
-**Día 17:** Schwabacher Landing (amanecer) · Jackson Lake Dam · Willow Flats · Jenny Lake ferry (si sobra tiempo 12-15h). Checkout Cache House 11 AM · maletas en el RAV4. *Check-in online JAC→LAX esta noche.*
+**Día 17:** Schwabacher Landing (amanecer) · Jackson Lake Dam · Willow Flats · Jenny Lake ferry (si sobra tiempo 12-15h). Checkout Cache House 11 AM · maletas en el RAV4. *Check-in online JAC→LAX esta noche.* Antes de dormir: cargar nafta al nivel del contrato (probablemente lleno), listo para la devolución de mañana.
 **Día 18:** Cowboy Coffee Co. si no se pudo antes (abre 6 AM). Regalar bear spray (grupos de Facebook de visitantes de los parques) antes de salir. Cargar nafta (devolver RAV4 según contrato). Devolver RAV4 en JAC — **12:30 PM si se confirmó la extensión al retirar en Bozeman, si no 10 AM original**. AA6336 13:58 PM → LAX 15:27.
 
 ### LA — cierre (18–22 ago)
