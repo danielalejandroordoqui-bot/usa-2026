@@ -28,6 +28,7 @@
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
 - [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
 - [ ] **Comprar tickets Sounders FC vs. Querétaro FC** — Leagues Cup, Lumen Field, domingo 9/8, gates **11:30 AM** / kickoff **12:30 PM** (confirmado en Lumen Field y Ticketmaster — corregido, antes decía 1 PM/2 PM). Link en `links.md` (Ticketmaster) — comprar con anticipación antes de que suba el precio o se agote.
+- [ ] **Imprimir el Annual Pass de parques nacionales** — ya está guardado en PDF, Apple Wallet y mail (funciona offline desde Wallet), pero como backup físico conviene tener una hoja impresa para las entradas/salidas de Yellowstone y Grand Teton, donde no hay señal.
 - [x] **PID (Permiso Internacional de Conducir)** — ✅ hecho, de las primeras tareas resueltas.
 - [x] **eSIM datos ilimitados** — ✅ Holafly 23 días ilimitados USA, comprada para Daniel y Melisa. Activar antes de abordar en BUE.
 - [x] **App Store → región USA / Ticketmaster** — ✅ hecho, Ticketmaster instalada en ambos celulares.
