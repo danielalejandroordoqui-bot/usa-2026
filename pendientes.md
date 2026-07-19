@@ -13,8 +13,11 @@
   - Cargador de celular
   - Tarjetas de memoria — ✅ formateadas
   - Gorras
+  - Anteojos de sol
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$200–300, para propinas y otros) — ⚠️ falta conseguir
+  - Ibuprofeno
+  - Flexicamin
 - [x] **Google Maps guardado — listas por ciudad** — ✅ resuelto. Mismo sistema que los parques ("Guardado" en Google Maps normal, no My Maps), pero sin descargar área offline — en las ciudades hay señal de sobra con Holafly. Las 4 listas armadas y verificadas vía Cowork, con link a cada una insertado en `index.html`:
   - [x] Los Ángeles — 38 lugares
   - [x] San Francisco — 27 lugares
