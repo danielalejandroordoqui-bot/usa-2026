@@ -30,6 +30,7 @@
   - Cepillo de dientes + pasta dental
   - Desodorante
   - Máquina/kit de afeitar
+  - Cortaúñas
 - [ ] **Coordinar entrega de llaves — Clari → Patricia, y Sari** — Clari le tiene que dar a Daniel su copia de la llave del departamento para pasársela a Patricia (definir cómo). Además, en estos días ver a Sari en persona y darle la copia ya sacada en la cerrajería.
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
