@@ -29,7 +29,6 @@
   - Tarritos con shampoo y acondicionador
   - Perfume
   - Peine
-- [ ] **Coordinar entrega de llaves — Clari → Patricia, y Sari** — Clari le tiene que dar a Daniel su copia de la llave del departamento para pasársela a Patricia (definir cómo). Además, en estos días ver a Sari en persona y darle la copia ya sacada en la cerrajería.
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
 - [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
@@ -47,5 +46,5 @@
   - [x] San Francisco — 27 lugares
   - [x] Santa Rosa — 4 lugares
   - [x] Seattle — 27 lugares
-- [x] **Sacar copia de llaves para Sari (cerrajería)** — ✅ hecho. Copia de la llave del edificio y del departamento (51 N°1135, Piso 2 Dto. A) ya sacada. Falta solo entregársela en persona (ver pendiente de coordinación de llaves).
-- [x] **Cuidado de Cheeky — calendario cerrado (26/7)** — ✅ Julián cubre 1-3/8, Patricia 4-13/8 y 18-22/8, Sari 14-17/8. https://danielalejandroordoqui-bot.github.io/cheeky-cuidado/
+- [x] **Sacar copia de llaves para Sari (cerrajería)** — ✅ hecho. Copia de la llave del edificio y del departamento (51 N°1135, Piso 2 Dto. A) ya sacada y entregada en persona.
+- [x] **Cuidado de Cheeky — calendario cerrado (26/7)** — ✅ Julián cubre 1-3/8, Patricia 4-13/8 y 18-22/8, Sari 14-17/8. Los 3 ya tienen su llave, confirmado 28/7. https://danielalejandroordoqui-bot.github.io/cheeky-cuidado/
