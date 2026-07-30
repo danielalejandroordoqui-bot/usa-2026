@@ -30,7 +30,6 @@
   - Perfume
   - Peine
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
-- [ ] **Check-in BUE→LAX** — hacer la noche del 1/8 antes de salir al aeropuerto.
 - [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
 - [x] **Imprimir el Annual Pass de parques nacionales** — ✅ hecho. Hoja impresa como backup físico para las entradas/salidas de Yellowstone y Grand Teton, donde no hay señal (además del PDF, Apple Wallet y mail). Agregada a la lista de equipaje para no olvidarla.
 - [x] **Seguro de viaje — OSDE / Universal Assistance** — ✅ resuelto. Voucher T034770627, cobertura anual vigente 1/8/2026 al 31/7/2027, asistencia médica hasta USD 50.000. App "Universal Assistance" ya descargada. PDF del voucher en `seguro-viaje-universal-assistance.pdf` (link en `index.html`).
@@ -48,3 +47,4 @@
   - [x] Seattle — 27 lugares
 - [x] **Sacar copia de llaves para Sari (cerrajería)** — ✅ hecho. Copia de la llave del edificio y del departamento (51 N°1135, Piso 2 Dto. A) ya sacada y entregada en persona.
 - [x] **Cuidado de Cheeky — calendario cerrado (26/7)** — ✅ Julián cubre 1-3/8, Patricia 4-13/8 y 18-22/8, Sari 14-17/8. Los 3 ya tienen su llave, confirmado 28/7. https://danielalejandroordoqui-bot.github.io/cheeky-cuidado/
+- [x] **Check-in BUE→LAX** — ✅ hecho, 30/7. Tarjetas de embarque emitidas para el primer tramo (AEP→LIM, vuelo LA2368, 1/8 20:05, asientos 13D/13E). PDFs: `tarjeta-embarque-daniel-LA2368.pdf` y `tarjeta-embarque-melisa-LA2368.pdf` (link en `index.html`).
