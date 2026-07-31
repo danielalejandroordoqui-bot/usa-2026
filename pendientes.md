@@ -47,4 +47,4 @@
   - [x] Seattle — 27 lugares
 - [x] **Sacar copia de llaves para Sari (cerrajería)** — ✅ hecho. Copia de la llave del edificio y del departamento (51 N°1135, Piso 2 Dto. A) ya sacada y entregada en persona.
 - [x] **Cuidado de Cheeky — calendario cerrado (26/7)** — ✅ Julián cubre 1-3/8, Patricia 4-13/8 y 18-22/8, Sari 14-17/8. Los 3 ya tienen su llave, confirmado 28/7. https://danielalejandroordoqui-bot.github.io/cheeky-cuidado/
-- [x] **Check-in BUE→LAX** — ✅ hecho, 30/7. Tarjetas de embarque emitidas para el primer tramo (AEP→LIM, vuelo LA2368, 1/8 20:05, asientos 13D/13E). PDFs: `tarjeta-embarque-daniel-LA2368.pdf` y `tarjeta-embarque-melisa-LA2368.pdf` (link en `index.html`).
+- [x] **Check-in BUE→LAX** — ✅ hecho, 30/7. Tarjetas de embarque emitidas para el primer tramo (AEP→LIM, vuelo LA2368, 1/8 20:05, asientos 13D/13E). PDFs: `tarjeta-embarque-daniel-LA2368.pdf` y `tarjeta-embarque-melisa-LA2368.pdf` — botones en el primer bloque del itinerario en `index.html` (Los Ángeles — llegada, día 2/8), no en la sección de pendientes.
