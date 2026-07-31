@@ -28,6 +28,7 @@
   - Crema Lidherma (en pote celeste)
   - Protector solar gel y rostro
   - Tarritos con shampoo y acondicionador
+  - Jabón
   - Perfume
   - Peine
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
