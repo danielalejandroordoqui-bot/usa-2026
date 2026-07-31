@@ -14,7 +14,7 @@
   - Cargador de celular
   - Tarjetas de memoria — ✅ formateadas
   - Gorras
-  - Anteojos de sol
+  - Anteojos de sol — ✅ guardados
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$300 USD, para propinas y otros) — ✅ ya tiene
   - Ibuprofeno
