@@ -174,6 +174,8 @@
     .check-list { list-style: none; margin: 0 0 4px; padding: 0; }
     .check-list li { padding-left: 14px; position: relative; }
     .check-list li::before { content: '•'; position: absolute; left: 0; color: var(--terracotta); }
+    .check-list li.packed { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--green); opacity: 0.75; }
+    .check-list li.packed::before { content: '✓'; color: var(--green); }
 
     /* ─── ZONES ─── */
     .zones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
@@ -1146,28 +1148,28 @@ function checkPw(){
         <strong class="check-group">Documentos (mochila de mano)</strong>
         <ul class="check-list">
           <li>DNI</li>
-          <li>Pasaporte (con visa) ✅ guardado</li>
-          <li>Libreta celeste PID ✅ guardado</li>
+          <li class="packed">Pasaporte (con visa) ✅ guardado</li>
+          <li class="packed">Libreta celeste PID ✅ guardado</li>
           <li>Carnet de conducir argentino</li>
-          <li>Hoja impresa del Annual Pass de parques nacionales ✅ guardada</li>
+          <li class="packed">Hoja impresa del Annual Pass de parques nacionales ✅ guardada</li>
         </ul>
         <strong class="check-group">Fotografía</strong>
         <ul class="check-list">
-          <li>Cámaras y lentes ✅ guardados</li>
-          <li>Tarjetas de memoria ✅ formateadas</li>
-          <li>Adaptador SD a USB-C ✅ comprado y guardado</li>
-          <li>Kit de limpieza de cámara (balón de aire + pincel) ✅ ya tiene</li>
+          <li class="packed">Cámaras y lentes ✅ guardados</li>
+          <li class="packed">Tarjetas de memoria ✅ formateadas</li>
+          <li class="packed">Adaptador SD a USB-C ✅ comprado y guardado</li>
+          <li class="packed">Kit de limpieza de cámara (balón de aire + pincel) ✅ ya tiene</li>
         </ul>
         <strong class="check-group">Otros</strong>
         <ul class="check-list">
           <li>Cargador de celular</li>
           <li>Gorras</li>
           <li>Anteojos de sol</li>
-          <li>Adaptador de enchufes (2 USB + 2 Tipo-C) ✅ comprado</li>
-          <li>Efectivo en dólares (~$300 USD) — ✅ ya tiene, para propinas (18–20% restaurantes, $1–2/bebida en bares, $2–5/noche housekeeping, ~10–15% Uber/Lyft) y emergencias donde no acepten tarjeta</li>
-          <li>iPhone 11 con cargador y música de Spotify descargada offline (para el vuelo) ✅ guardado</li>
-          <li>Auriculares Bluetooth Bose cargados, con estuche y cargador ✅ guardados</li>
-          <li>Libro para leer ✅ guardado</li>
+          <li class="packed">Adaptador de enchufes (2 USB + 2 Tipo-C) ✅ comprado</li>
+          <li class="packed">Efectivo en dólares (~$300 USD) — ✅ ya tiene, para propinas (18–20% restaurantes, $1–2/bebida en bares, $2–5/noche housekeeping, ~10–15% Uber/Lyft) y emergencias donde no acepten tarjeta</li>
+          <li class="packed">iPhone 11 con cargador y música de Spotify descargada offline (para el vuelo) ✅ guardado</li>
+          <li class="packed">Auriculares Bluetooth Bose cargados, con estuche y cargador ✅ guardados</li>
+          <li class="packed">Libro para leer ✅ guardado</li>
         </ul>
         <strong class="check-group">Salud e higiene</strong>
         <ul class="check-list">
