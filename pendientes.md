@@ -5,11 +5,12 @@
 
 - [ ] **Lista de equipaje esencial — no olvidar al armar la valija/mochila de mano:**
   - DNI
-  - PID (libreta celeste)
-  - Pasaporte (con visa)
+  - PID (libreta celeste) — ✅ guardado
+  - Pasaporte (con visa) — ✅ guardado
   - Carnet de conducir argentino
+  - Cámaras y lentes — ✅ guardados
   - Kit de limpieza de cámara (balón de aire + pincel) — ✅ ya tiene
-  - Adaptador SD a USB-C — ✅ comprado
+  - Adaptador SD a USB-C — ✅ comprado y guardado
   - Cargador de celular
   - Tarjetas de memoria — ✅ formateadas
   - Gorras
@@ -18,10 +19,10 @@
   - Efectivo en dólares (~$300 USD, para propinas y otros) — ✅ ya tiene
   - Ibuprofeno
   - Flexicamin
-  - Hoja impresa del Annual Pass de parques nacionales
-  - iPhone 11 con cargador y música de Spotify descargada offline (para escuchar en el vuelo)
-  - Auriculares Bluetooth Bose cargados, con su estuche y su cargador
-  - Libro para leer
+  - Hoja impresa del Annual Pass de parques nacionales — ✅ guardada
+  - iPhone 11 con cargador y música de Spotify descargada offline (para escuchar en el vuelo) — ✅ guardado
+  - Auriculares Bluetooth Bose cargados, con su estuche y su cargador — ✅ guardados
+  - Libro para leer — ✅ guardado
   - Cepillo de dientes + pasta dental
   - Desodorante
   - Crema Lidherma (en pote celeste)
