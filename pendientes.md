@@ -3,15 +3,17 @@
 
 ---
 
-- [ ] **Lista de equipaje esencial — no olvidar al armar la valija/mochila de mano:**
-  - DNI
+- [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
+- [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
+- [x] **Lista de equipaje esencial** — ✅ todo guardado.
+  - DNI — ✅ guardado
   - PID (libreta celeste) — ✅ guardado
   - Pasaporte (con visa) — ✅ guardado
-  - Carnet de conducir argentino
+  - Carnet de conducir argentino — ✅ guardado
   - Cámaras y lentes — ✅ guardados
   - Kit de limpieza de cámara (balón de aire + pincel) — ✅ ya tiene
   - Adaptador SD a USB-C — ✅ comprado y guardado
-  - Cargador de celular
+  - Cargador de celular — ✅ guardado
   - Tarjetas de memoria — ✅ formateadas
   - Gorras — ✅ guardadas
   - Anteojos de sol — ✅ guardados
@@ -32,8 +34,6 @@
   - Perfume — ✅ guardado
   - Protectores bucales — ✅ guardados
   - Peine — ✅ guardado
-- [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
-- [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
 - [x] **Imprimir el Annual Pass de parques nacionales** — ✅ hecho. Hoja impresa como backup físico para las entradas/salidas de Yellowstone y Grand Teton, donde no hay señal (además del PDF, Apple Wallet y mail). Agregada a la lista de equipaje para no olvidarla.
 - [x] **Seguro de viaje — OSDE / Universal Assistance** — ✅ resuelto. Voucher T034770627, cobertura anual vigente 1/8/2026 al 31/7/2027, asistencia médica hasta USD 50.000. App "Universal Assistance" ya descargada. PDF del voucher en `seguro-viaje-universal-assistance.pdf` (link en `index.html`).
 - [x] **PID (Permiso Internacional de Conducir)** — ✅ hecho, de las primeras tareas resueltas.
