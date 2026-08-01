@@ -4,7 +4,7 @@
 ---
 
 - [x] **Stock para cuidadores de Cheeky** — ✅ dado por hecho. El cupón de MercadoPago no se pudo aplicar (no lo tomaban en el pago), pero el stock de arena/alimento/agua queda resuelto igual, con o sin descuento.
-- [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
+- [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir. Se habilita 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → ventana desde 1/8 11:30 AM), pero el **deadline duro es 2hs antes: 2/8 ~9:30 AM** — si no aparece nada justo a las 24hs no hay apuro, hay margen hasta esa hora. Se hace desde la pestaña **Trips** de la app, entrando a la reserva del Dodge Challenger (no desde el buscador de Ayuda — ahí solo está el artículo genérico "Trip check-in guide", no el flujo real de carga). Contacto del asistente que entrega el auto: (310) 525-0255.
 - [x] **Lista de equipaje esencial** — ✅ todo guardado.
   - DNI — ✅ guardado
   - PID (libreta celeste) — ✅ guardado
