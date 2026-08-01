@@ -24,12 +24,12 @@
   - Auriculares Bluetooth Bose cargados, con su estuche y su cargador — ✅ guardados
   - Libro para leer — ✅ guardado
   - Cepillo de dientes + pasta dental — ✅ guardado
-  - Desodorante
-  - Crema Lidherma (en pote celeste)
+  - Desodorante — ✅ guardado
+  - Crema Lidherma (en pote celeste) — ✅ guardada
   - Protector solar gel y rostro — ✅ guardado
-  - Tarritos con shampoo y acondicionador
-  - Jabón
-  - Perfume
+  - Tarritos con shampoo y acondicionador — ✅ guardados
+  - Jabón — ✅ guardado
+  - Perfume — ✅ guardado
   - Protectores bucales — ✅ guardados
   - Peine — ✅ guardado
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
