@@ -13,7 +13,7 @@
   - Adaptador SD a USB-C — ✅ comprado y guardado
   - Cargador de celular
   - Tarjetas de memoria — ✅ formateadas
-  - Gorras
+  - Gorras — ✅ guardadas
   - Anteojos de sol — ✅ guardados
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$300 USD, para propinas y otros) — ✅ ya tiene
