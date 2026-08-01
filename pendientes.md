@@ -3,7 +3,7 @@
 
 ---
 
-- [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
+- [x] **Stock para cuidadores de Cheeky** — ✅ dado por hecho. El cupón de MercadoPago no se pudo aplicar (no lo tomaban en el pago), pero el stock de arena/alimento/agua queda resuelto igual, con o sin descuento.
 - [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
 - [x] **Lista de equipaje esencial** — ✅ todo guardado.
   - DNI — ✅ guardado
