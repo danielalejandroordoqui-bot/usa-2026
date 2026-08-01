@@ -17,20 +17,21 @@
   - Anteojos de sol — ✅ guardados
   - Adaptador de enchufes (2 USB + 2 Tipo-C) — ✅ comprado
   - Efectivo en dólares (~$300 USD, para propinas y otros) — ✅ ya tiene
-  - Ibuprofeno
-  - Flexicamin
+  - Ibuprofeno — ✅ guardado
+  - Flexicamin — ✅ guardado
   - Hoja impresa del Annual Pass de parques nacionales — ✅ guardada
   - iPhone 11 con cargador y música de Spotify descargada offline (para escuchar en el vuelo) — ✅ guardado
   - Auriculares Bluetooth Bose cargados, con su estuche y su cargador — ✅ guardados
   - Libro para leer — ✅ guardado
-  - Cepillo de dientes + pasta dental
+  - Cepillo de dientes + pasta dental — ✅ guardado
   - Desodorante
   - Crema Lidherma (en pote celeste)
-  - Protector solar gel y rostro
+  - Protector solar gel y rostro — ✅ guardado
   - Tarritos con shampoo y acondicionador
   - Jabón
   - Perfume
-  - Peine
+  - Protectores bucales — ✅ guardados
+  - Peine — ✅ guardado
 - [ ] **Stock para cuidadores de Cheeky — aprovechar cupones MercadoPago** — antes de viajar, usar los cupones de descuento en alimentos de MercadoPago para comprar arena, alimento y agua en cantidad. Dejar todo stockeado y accesible para que las personas que vengan a cuidarla no tengan que comprar nada.
 - [ ] **Turo — check-in con licencia (Challenger, Bloque 1)** — la app de Turo pide subir/confirmar la licencia de conducir 24hs antes del inicio del viaje (Turo #59295187 arranca 2/8 11:30 AM → hacerlo el 1/8 antes de las 11:30 AM). Probablemente Turo mande mail/notificación como recordatorio, pero conviene dejarlo hecho antes de salir de Argentina. Contacto del asistente que entrega el auto: (310) 525-0255.
 - [x] **Imprimir el Annual Pass de parques nacionales** — ✅ hecho. Hoja impresa como backup físico para las entradas/salidas de Yellowstone y Grand Teton, donde no hay señal (además del PDF, Apple Wallet y mail). Agregada a la lista de equipaje para no olvidarla.
